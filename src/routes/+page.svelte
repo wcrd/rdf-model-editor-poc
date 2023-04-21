@@ -4,6 +4,10 @@
     import "ag-grid-community/styles/ag-grid.css"; // Core grid CSS, always needed
     import "ag-grid-community/styles/ag-theme-alpine.css"; // Optional theme CSS
 
+    const cellClassRules = {
+        'hover-over': (params) => {return params.node === potentialParent}
+    };
+
     const columnDefs = [
         // { rowDrag: true }, // drag handle
         { field: "subject_path" }, 
@@ -19,6 +23,8 @@
             .then((data) => (rowData = data));
     }
 
+
+
     let gridOptions = {
         treeData: true,
         // getDataPath: (data) => {
@@ -28,10 +34,11 @@
         // },
         getDataPath: (data) => data.subject_path,
         defaultColDef: {
-            sortable: true
+            sortable: true,
+            cellClassRules: cellClassRules
         },
         autoGroupColumnDef: {
-            rowDrag: true
+            rowDrag: true,
         },
         // Row Dragging Config (Event Handlers for native Grid Events)
         // onRowDragEnter: e => {
@@ -179,8 +186,16 @@
             });
         }
     }
+
+    
 </script>
 
 <div class="ag-theme-alpine h-screen w-full flex flex-col">
     <AgGridSvelte {rowData} {columnDefs} {onGridReady} {gridOptions} class=""/>
 </div>
+
+<style>
+    :global(.hover-over) {
+        background-color:lemonchiffon;
+    }
+</style>
