@@ -12,3 +12,6 @@
     * Entity under next entity above
 * Pressing {X} + TAB will create a new entity to nest under
 * Drag and drop to nest as well
+    * pnts can only be dragged to an entity
+    * entities can only be dragged to an entity
+    * in future; have list of allowable components to prevent un-auth entity nesting
