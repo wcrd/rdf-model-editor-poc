@@ -21,15 +21,14 @@
 
 * Add row highligh fade style to rows that have just been moved. ~3s.
 * Selection
-  * Row Selected on Click, Ctrl/Shift Click
-  * Cell celected on double click
-  * Cell selected on keyboard arrow movement
-  * Rows unselect on keyboard arrow movement or cell double click
+  * [x] Row Selected on Click, Ctrl/Shift Click
+  * [x] Cell celected on double click
+  * [x] Cell selected on keyboard arrow movement
+  * [x] Rows unselect on keyboard arrow movement or cell double click
 * New Rows
   * Shift+Enter creates new row at selection level (selected cell; i.e. last click)
   * Ctrl+Shift+Enter creates new entity and moves anything selected inside as child.
 * Highlighting <- Needs to happen before New Rows work
-  * Update moving with arrows to select whole row
   * Shift+arrows should also highlight
 * Tab
   * Tabbing highlighted rows nests or unnested them, if available.

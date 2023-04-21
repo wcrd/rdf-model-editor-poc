@@ -36,3 +36,15 @@ npm run build
 You can preview the production build with `npm run preview`.
 
 > To deploy your app, you may need to install an [adapter](https://kit.svelte.dev/docs/adapters) for your target environment.
+
+
+# How to use
+
+## Model Builder
+
+* Select multiple rows with click + shift / ctrl
+* Drag and drop selected rows using the handle
+* Press Shift+Enter to add a new entity at selection.
+  * If en entity is selected, the new entity will be nested inside
+* Press Ctrl+Shift+Enter to add a new entity at selection and nest all selected rows within
+  * Selected rows must have the same parent for this operation to work
