@@ -1,0 +1,38 @@
+[
+    {
+        "subject_path": "vav_1",
+        "subject": "pnt_1",
+        "label": "Point 1",
+        "class": "On_Off_Command"
+    },
+    {
+        "subject_path": "vav_1/fan_1",
+        "subject": "pnt_2",
+        "label": "Point 2",
+        "class": "On_Off_Command"
+    },
+    {
+        "subject_path": "",
+        "subject": "pnt_3",
+        "label": "Point 3",
+        "class": "On_Off_Command"
+    },
+    {
+        "subject_path": "",
+        "subject": "pnt_4",
+        "label": "Point 4",
+        "class": "On_Off_Command"
+    },
+    {
+        "subject_path": "",
+        "subject": "pnt_5",
+        "label": "Point 5",
+        "class": "On_Off_Command"
+    },
+    {
+        "subject_path": "",
+        "subject": "vav_1",
+        "label": "VAV 1",
+        "class": "VAV"
+    }
+]
