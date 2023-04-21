@@ -7,16 +7,26 @@
 
     const columnDefs = [
         { rowDrag: true, maxWidth: 40 }, // drag handle
-        { field: "subject_path", cellRenderer: params => { return `${params.value.join(" / ")}`} }, 
-        { field: "subject" }, 
-        { field: "label" },
-        { field: "class" },
-        { field: "type" },
+        { field: "IP Address" },
+        { field: "BACnet Network" },
+        { field: "BACnet Device Name" },
+        { field: "Device No" },
+        { field: "Object Type" },
+        { field: "Object Address" },
+        { field: "Object Name" },
+        { field: "Description" },
+        { field: "BACnet Unit Of Measure" },
+        { field: "Vendor" },
+        { field: "Model" },
+        { field: "Discovered Value" },
+        // system
+        { field: "row-id"},
+        { field: "source-for"}
     ];
 
     let rowData = [];
     function onGridReady() {
-        fetch("/fake-data.json")
+        fetch("/test-src-data.json")
             .then((resp) => resp.json())
             .then((data) => (rowData = data));
     }

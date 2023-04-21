@@ -19,6 +19,8 @@
         { field: "label" },
         { field: "class" },
         { field: "type" },
+        // internal fields
+        { field: "source"}
     ];
 
     let rowData = [];
