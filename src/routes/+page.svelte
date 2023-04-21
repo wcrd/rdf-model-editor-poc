@@ -56,10 +56,28 @@
         },
         onRowDragMove: onRowDragMove,
         onRowDragEnd: onRowDragEnd,
-        getContextMenuItems: getContextMenuItems
+        getContextMenuItems: getContextMenuItems,
+        onCellKeyDown: onCellKeyDown
 
     };
 
+    // custom keypress capture and handler
+    function onCellKeyDown(e){
+        // SHIFT + ENTER
+        if ( e.event.keyCode == 13 && e.event.shiftKey == true ){
+            // console.log("Shift+Enter: Create new entity!", e)
+            addNewEntityRow(e.api, e.node)
+        }
+    }
+
+    // HELPER: Insert new row
+    function addNewEntityRow(api, overNode){
+        api.applyTransaction({
+            add: [generateNewEntity(overNode)],
+        })
+    }
+
+    // Context Menu
     function getContextMenuItems(params){
         const result = [
             {
@@ -73,10 +91,12 @@
             'separator',
             {
                 name: "Add selection to new Entity",
+                disabled: true,
                 action: () => console.log("Created new entity and added selected items.")
             },
             {
                 name: "Add selected to System",
+                disabled: true,
                 action: () => console.log("Adding selected to selected system from modal.")
             }
         ]

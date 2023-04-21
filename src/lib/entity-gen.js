@@ -19,7 +19,7 @@ function generateNewEntity(overNode){
     return {
         "subject_path": newPath,
         "subject": subject,
-        "label": `Ent ${id_str}`,
+        "label": "",
         "class": "Not Set",
         "type": "entity"
     }
