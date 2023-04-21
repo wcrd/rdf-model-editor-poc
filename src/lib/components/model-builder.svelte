@@ -4,10 +4,14 @@
     import "ag-grid-community/styles/ag-grid.css"; // Core grid CSS, always needed
     import "ag-grid-community/styles/ag-theme-alpine.css"; // Optional theme CSS
 
+    import { createEventDispatcher } from 'svelte'
+
     import { potentialParent, onRowDragEnd, onRowDragMove, onRowDragEnter } from '$lib/js/row-dragging.js'
     import { addNewEntityRow } from '$lib/js/grid-operations.js'
     import { onCellKeyDown } from '$lib/js/keydown-handlers.js'
     import { SrcCellRenderer } from '$lib/ag-grid-components/srcCellRenderer.js'
+
+    const dispatch = createEventDispatcher()
 
     const cellClassRules = {
         'hover-over': (params) => {return params.node === potentialParent}
@@ -65,7 +69,8 @@
         onRowDragEnd: onRowDragEnd,
         onRowDragEnter: onRowDragEnter,
         getContextMenuItems: getContextMenuItems,
-        onCellKeyDown: onCellKeyDown
+        onCellKeyDown: onCellKeyDown,
+        onSelectionChanged: onSelectionChanged
 
     };
 
@@ -94,6 +99,12 @@
         return result
 
     }
+
+    // on selection send event (used for filtering by source grid)
+    function onSelectionChanged(event) {
+      const selectedNodes = event.api.getSelectedNodes();
+      dispatch("select", selectedNodes);
+    };
     
 </script>
 

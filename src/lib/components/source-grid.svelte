@@ -13,7 +13,24 @@
     // filter button state
     export let filterMode;
     $: externalFilterChanged(filterMode)
-
+    // model selection filtering
+    export let modelNodesToFilter = [];
+    let nodesToFilter=[];
+    // if filterMode, then action
+    $: {
+        if(filterMode=="model"){
+            // get all leaf nodes
+            nodesToFilter = []
+            modelNodesToFilter.forEach((node) => {
+                nodesToFilter.push(...node.allLeafChildren)
+            })
+            // lets extract just the id
+            nodesToFilter = nodesToFilter.map((node) => node.data.source).filter(item => item)
+            // console.debug(nodesToFilter)
+            externalFilterChanged(modelNodesToFilter)
+        }
+    }
+    
     const rowClassRules = {
         "row-assigned": params => !!params.node.data['source-for']
     }
@@ -88,6 +105,8 @@
                     return !!node.data['source-for']
                 case 'unassigned':
                     return !node.data['source-for']
+                case 'model':
+                    return nodesToFilter.length ? nodesToFilter.includes(node.id) : true
                 default:
                     return true
             }
