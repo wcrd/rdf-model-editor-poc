@@ -7,6 +7,7 @@
     import { potentialParent, onRowDragEnd, onRowDragMove, onRowDragEnter } from '$lib/js/row-dragging.js'
     import { addNewEntityRow } from '$lib/js/grid-operations.js'
     import { onCellKeyDown } from '$lib/js/keydown-handlers.js'
+    import { SrcCellRenderer } from '$lib/ag-grid-components/srcCellRenderer.js'
 
     const cellClassRules = {
         'hover-over': (params) => {return params.node === potentialParent}
@@ -20,7 +21,7 @@
         { field: "class" },
         { field: "type" },
         // internal fields
-        { field: "source"}
+        { field: "source", cellRenderer: SrcCellRenderer}
     ];
 
     let rowData = [];

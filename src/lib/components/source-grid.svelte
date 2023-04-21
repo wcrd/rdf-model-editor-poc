@@ -6,12 +6,17 @@
 
     import { addGridDropZone } from '$lib/js/drag-and-drop.js'
     import { onRowDragEnter } from '$lib/js/row-dragging.js'
+    import { SrcCellRenderer } from '$lib/ag-grid-components/srcCellRenderer.js'
 
     // get target grid dropzone
     export let targetGrid;
     // filter button state
     export let filterMode;
     $: externalFilterChanged(filterMode)
+
+    const rowClassRules = {
+        "row-assigned": params => !!params.node.data['source-for']
+    }
 
     const columnDefs = [
         { rowDrag: true, valueGetter: 'node.id', headerName: 'src-id'}, // drag handle
@@ -28,7 +33,7 @@
         { field: "Model" },
         { field: "Discovered Value" },
         // system
-        { field: "source-for"},
+        { field: "source-for", cellRenderer: SrcCellRenderer},
         { field: "type" }
     ];
 
@@ -38,8 +43,10 @@
             .then((resp) => resp.json())
             .then((data) => (rowData = data.map(row => ({...row, type: "src"}) ))); // add the type to the imported data. In future will run dedicated import function here.
         // add row drop zone
-        addGridDropZone(params, targetGrid.api)
-    }
+        // setting delay to make sure other grid is intitalised
+        // TODO: update this to be more robust.
+        setTimeout(() => addGridDropZone(params, targetGrid.api), 1000)   
+    };
 
     let gridOptions = {
         treeData: false,
@@ -54,7 +61,8 @@
         defaultColDef: {
             sortable: true,
             resizable: true,
-            filter: true
+            filter: true,
+            rowDrag: true, // all row drag from any cell
         },
         autoGroupColumnDef: {
             rowDrag: true,
@@ -66,6 +74,7 @@
         animateRows: true,
         isExternalFilterPresent: isExternalFilterPresent,
         doesExternalFilterPass: doesExternalFilterPass,
+        rowClassRules: rowClassRules
     };
     
     function isExternalFilterPresent(){
