@@ -9,6 +9,9 @@
 
     // get target grid dropzone
     export let targetGrid;
+    // filter button state
+    export let filterMode;
+    $: externalFilterChanged(filterMode)
 
     const columnDefs = [
         { rowDrag: true, valueGetter: 'node.id', headerName: 'src-id'}, // drag handle
@@ -59,9 +62,33 @@
         },
         getRowId: (params) => `${params.data['BACnet Network']}-${params.data['Device No']}-${params.data['Object Address']}`,
         // Row Dragging Config (Event Handlers for native Grid Events)
-        onRowDragEnter: onRowDragEnter
+        onRowDragEnter: onRowDragEnter,
+        animateRows: true,
+        isExternalFilterPresent: isExternalFilterPresent,
+        doesExternalFilterPass: doesExternalFilterPass,
     };
     
+    function isExternalFilterPresent(){
+        return filterMode != 'all'
+    }
+
+    function doesExternalFilterPass(node){
+        if (node.data){
+            switch (filterMode){
+                case 'assigned':
+                    return !!node.data['source-for']
+                case 'unassigned':
+                    return !node.data['source-for']
+                default:
+                    return true
+            }
+        }
+    }
+
+    function externalFilterChanged(trigger){
+        if(gridOptions?.api) gridOptions.api.onFilterChanged();
+    }
+
 </script>
 
 <div class="ag-theme-alpine h-full w-full">

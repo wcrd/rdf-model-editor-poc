@@ -48,10 +48,10 @@
 
 src-view
 * [ ] Update buttons to filter grid
-* [ ] generate row-id on load
-* [ ] drag into model grid
-  * [ ] simple drag create new point
-  * [ ] ctrl + drag add to existing point\
+* [x] generate row-id on load
+* [x] drag into model grid
+  * [x] simple drag single - associate with point
+  * [ ] single+ctrl/multiple drag - create new rows and associate
 * [ ] Click model row to filter src-grid; add button above model grid: 'Filter source grid when I select'
 
 * [ ] force unique on model subject column
