@@ -35,6 +35,7 @@
   * THIS IS MORE COMPLEX THAN THIS; parking for now. See branch: tab-captures
 * Undo
 
+* need to suppress shift enter opening drop downs
 ---
 
 * Storage
@@ -43,3 +44,12 @@
 * Export 'save file'
 * Load 'save file'
 * Export model to ttl
+
+
+src-view
+* [ ] Update buttons to filter grid
+* [ ] generate row-id on load
+* [ ] drag into model grid
+  * [ ] simple drag create new point
+  * [ ] ctrl + drag add to existing point\
+* [ ] Click model row to filter src-grid; add button above model grid: 'Filter source grid when I select'

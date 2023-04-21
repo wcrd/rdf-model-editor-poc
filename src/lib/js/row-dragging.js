@@ -1,4 +1,4 @@
-import { moveToPath } from "$lib/entity-operations";
+import { moveToPath } from "$lib/js/entity-operations";
 
 // ###################################################
 // Row moving controllers
