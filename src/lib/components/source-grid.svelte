@@ -4,9 +4,14 @@
     import "ag-grid-community/styles/ag-grid.css"; // Core grid CSS, always needed
     import "ag-grid-community/styles/ag-theme-alpine.css"; // Optional theme CSS
 
+    import { addGridDropZone } from '$lib/js/drag-and-drop.js'
+    import { onRowDragEnter } from '$lib/js/row-dragging.js'
+
+    // get target grid dropzone
+    export let targetGrid;
 
     const columnDefs = [
-        { rowDrag: true, maxWidth: 40 }, // drag handle
+        { rowDrag: true, valueGetter: 'node.id', headerName: 'src-id'}, // drag handle
         { field: "IP Address" },
         { field: "BACnet Network" },
         { field: "BACnet Device Name" },
@@ -20,15 +25,17 @@
         { field: "Model" },
         { field: "Discovered Value" },
         // system
-        { field: "row-id"},
-        { field: "source-for"}
+        { field: "source-for"},
+        { field: "type" }
     ];
 
     let rowData = [];
-    function onGridReady() {
+    function onGridReady(params) {
         fetch("/test-src-data.json")
             .then((resp) => resp.json())
-            .then((data) => (rowData = data));
+            .then((data) => (rowData = data.map(row => ({...row, type: "src"}) ))); // add the type to the imported data. In future will run dedicated import function here.
+        // add row drop zone
+        addGridDropZone(params, targetGrid.api)
     }
 
     let gridOptions = {
@@ -50,8 +57,9 @@
             rowDrag: true,
             groupSelectsChildren: false
         },
+        getRowId: (params) => `${params.data['BACnet Network']}-${params.data['Device No']}-${params.data['Object Address']}`,
         // Row Dragging Config (Event Handlers for native Grid Events)
-
+        onRowDragEnter: onRowDragEnter
     };
     
 </script>

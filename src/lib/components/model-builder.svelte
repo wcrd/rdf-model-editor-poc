@@ -4,7 +4,7 @@
     import "ag-grid-community/styles/ag-grid.css"; // Core grid CSS, always needed
     import "ag-grid-community/styles/ag-theme-alpine.css"; // Optional theme CSS
 
-    import { potentialParent, onRowDragEnd, onRowDragMove } from '$lib/js/row-dragging.js'
+    import { potentialParent, onRowDragEnd, onRowDragMove, onRowDragEnter } from '$lib/js/row-dragging.js'
     import { addNewEntityRow } from '$lib/js/grid-operations.js'
     import { onCellKeyDown } from '$lib/js/keydown-handlers.js'
 
@@ -32,7 +32,7 @@
 
 
 
-    let gridOptions = {
+    export let gridOptions = {
         treeData: true,
         // getDataPath: (data) => {
         //     // return data.subject_path ? [...data.subject_path.split("/"), data.subject] : [data.subject]
@@ -52,6 +52,7 @@
             rowDrag: true,
             groupSelectsChildren: false
         },
+        getRowId: (params) => params.data.subject,
         // Row Dragging Config (Event Handlers for native Grid Events)
         // onRowDragEnter: e => {
         //     console.debug("Row Drag Begin: ", e)
@@ -61,6 +62,7 @@
         },
         onRowDragMove: onRowDragMove,
         onRowDragEnd: onRowDragEnd,
+        onRowDragEnter: onRowDragEnter,
         getContextMenuItems: getContextMenuItems,
         onCellKeyDown: onCellKeyDown
 
