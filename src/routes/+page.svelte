@@ -63,10 +63,16 @@
 
     // custom keypress capture and handler
     function onCellKeyDown(e){
+        const kc = e.event.keyCode; // easier to reference multiple times
         // SHIFT + ENTER
-        if ( e.event.keyCode == 13 && e.event.shiftKey == true ){
+        if ( kc == 13 && e.event.shiftKey == true ){
             // console.log("Shift+Enter: Create new entity!", e)
             addNewEntityRow(e.api, e.node)
+        }
+        // ARROWS (clear selection when arrows are used; user is cell editing)
+        // Left: 37 Up: 38 Right: 39 Down: 40
+        else if ( kc == 37 || kc == 38 || kc == 39 || kc == 40 ){
+            e.api.deselectAll();
         }
     }
 
