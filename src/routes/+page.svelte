@@ -27,7 +27,7 @@
                 <button class="btn-default" class:btn-selected={srcViewFilterMode=="assigned"} on:click={()=>{srcViewFilterMode="assigned"}}>Assigned</button>
                 <button class="btn-default" class:btn-selected={srcViewFilterMode=="all"} on:click={()=>{srcViewFilterMode="all"}}>All</button>
             </div>
-            <SourceGrid bind:gridOptions={sourceGrid} targetGrid={modelGrid}/>
+            <SourceGrid bind:gridOptions={sourceGrid} targetGrid={modelGrid} filterMode={srcViewFilterMode}/>
         </div>
     </div>
 </div>
