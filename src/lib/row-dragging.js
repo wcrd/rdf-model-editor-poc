@@ -1,3 +1,5 @@
+import { moveToPath } from "$lib/entity-operations";
+
 // ###################################################
 // Row moving controllers
 //
@@ -149,23 +151,5 @@ function isSelectionParentOfTarget(selectedNode, targetNode) {
     return false;
 }
 
-function moveToPath(newParentPath, node, allUpdatedNodes) {
-    // last part of the file path is the file name
-    const oldPath = node.data.subject_path;
-    const leafName = oldPath.pop();
-    const newChildPath = newParentPath.slice();
-    newChildPath.push(leafName);
-
-    node.data.subject_path = newChildPath;
-
-    allUpdatedNodes.push(node.data);
-    
-    // if the node we move has children of its own, they need to be updated.
-    if (node.childrenAfterGroup) {
-        node.childrenAfterGroup.forEach((childNode) => {
-            moveToPath(newChildPath, childNode, allUpdatedNodes);
-        });
-    }
-}
 
 export { potentialParent, onRowDragEnd, onRowDragMove }

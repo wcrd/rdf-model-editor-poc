@@ -5,6 +5,8 @@
     import "ag-grid-community/styles/ag-theme-alpine.css"; // Optional theme CSS
 
     import { potentialParent, onRowDragEnd, onRowDragMove } from '$lib/row-dragging.js'
+    import { addNewEntityRow } from '$lib/grid-operations.js'
+    import { onCellKeyDown } from '$lib/keydown-handlers.js'
 
     const cellClassRules = {
         'hover-over': (params) => {return params.node === potentialParent}
@@ -15,7 +17,8 @@
         { field: "subject_path", cellRenderer: params => { return `${params.value.join(" / ")}`} }, 
         { field: "subject" }, 
         { field: "label" },
-        { field: "class" }
+        { field: "class" },
+        { field: "type" },
     ];
 
     let rowData = [];
@@ -39,10 +42,13 @@
         rowDragMultiRow: true,
         defaultColDef: {
             sortable: true,
-            cellClassRules: cellClassRules
+            cellClassRules: cellClassRules,
+            resizable: true,
+            filter: true
         },
         autoGroupColumnDef: {
             rowDrag: true,
+            groupSelectsChildren: false
         },
         // Row Dragging Config (Event Handlers for native Grid Events)
         // onRowDragEnter: e => {
@@ -52,9 +58,37 @@
             console.debug("You left the grid yo stupid fok")
         },
         onRowDragMove: onRowDragMove,
-        onRowDragEnd: onRowDragEnd
+        onRowDragEnd: onRowDragEnd,
+        getContextMenuItems: getContextMenuItems,
+        onCellKeyDown: onCellKeyDown
 
     };
+
+    
+
+    // Context Menu
+    function getContextMenuItems(params){
+        const result = [
+            {
+                name: "Add Entity Here",
+                action: () => addNewEntityRow(params.api, params.node)
+            },
+            'separator',
+            {
+                name: "Add selection to new Entity",
+                disabled: true,
+                action: () => console.log("Created new entity and added selected items.")
+            },
+            {
+                name: "Add selected to System",
+                disabled: true,
+                action: () => console.log("Adding selected to selected system from modal.")
+            }
+        ]
+
+        return result
+
+    }
     
 </script>
 
