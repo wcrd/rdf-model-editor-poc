@@ -33,6 +33,14 @@ function onCellKeyDown(e){
         e.api.clearFocusedCell();
 
     }
+    // TAB
+    else if ( kc == 9 && !e.event.shiftKey ){
+        console.debug("I'm tabbin away here")
+    }
+    // SHIFT-TAB
+    else if ( kc == 9 && e.event.shiftKey ){
+        console.debug("I'm shift-tabbin away here")
+    }
     // ARROWS (clear selection when arrows are used; user is cell editing)
     // Left: 37 Up: 38 Right: 39 Down: 40
     else if ( kc == 37 || kc == 38 || kc == 39 || kc == 40 ){

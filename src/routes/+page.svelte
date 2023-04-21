@@ -44,7 +44,9 @@
             sortable: true,
             cellClassRules: cellClassRules,
             resizable: true,
-            filter: true
+            filter: true,
+            // Suppress TAB handling; we have custom function for that
+            suppressKeyboardEvent: (params) => { if(params.event.keyCode == 9){ params.event.preventDefault(); return true} }
         },
         autoGroupColumnDef: {
             rowDrag: true,

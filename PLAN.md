@@ -26,12 +26,13 @@
   * [x] Cell selected on keyboard arrow movement
   * [x] Rows unselect on keyboard arrow movement or cell double click
 * New Rows
-  * Shift+Enter creates new row at selection level (selected cell; i.e. last click)
-  * Ctrl+Shift+Enter creates new entity and moves anything selected inside as child.
+  * [x] Shift+Enter creates new row at selection level (selected cell; i.e. last click)
+  * [x] Ctrl+Shift+Enter creates new entity and moves anything selected inside as child.
 * Highlighting <- Needs to happen before New Rows work
   * Shift+arrows should also highlight
 * Tab
   * Tabbing highlighted rows nests or unnested them, if available.
+  * THIS IS MORE COMPLEX THAN THIS; parking for now. See branch: tab-captures
 * Undo
 
 ---
