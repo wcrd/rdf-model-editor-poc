@@ -5,6 +5,7 @@
     import "ag-grid-community/styles/ag-theme-alpine.css"; // Optional theme CSS
 
     import { potentialParent, onRowDragEnd, onRowDragMove } from '$lib/row-dragging.js'
+    import { generateNewEntity } from '$lib/entity-gen.js'
 
     const cellClassRules = {
         'hover-over': (params) => {return params.node === potentialParent}
@@ -39,7 +40,9 @@
         rowDragMultiRow: true,
         defaultColDef: {
             sortable: true,
-            cellClassRules: cellClassRules
+            cellClassRules: cellClassRules,
+            resizable: true,
+            filter: true
         },
         autoGroupColumnDef: {
             rowDrag: true,
@@ -52,9 +55,35 @@
             console.debug("You left the grid yo stupid fok")
         },
         onRowDragMove: onRowDragMove,
-        onRowDragEnd: onRowDragEnd
+        onRowDragEnd: onRowDragEnd,
+        getContextMenuItems: getContextMenuItems
 
     };
+
+    function getContextMenuItems(params){
+        const result = [
+            {
+                name: "Add Entity Here",
+                action: () => {
+                    params.api.applyTransaction({
+                        add: [generateNewEntity(params.node)],
+                    })
+                }
+            },
+            'separator',
+            {
+                name: "Add selection to new Entity",
+                action: () => console.log("Created new entity and added selected items.")
+            },
+            {
+                name: "Add selected to System",
+                action: () => console.log("Adding selected to selected system from modal.")
+            }
+        ]
+
+        return result
+
+    }
     
 </script>
 
