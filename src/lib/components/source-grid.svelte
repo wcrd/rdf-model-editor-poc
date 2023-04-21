@@ -13,6 +13,10 @@
     export let filterMode;
     $: externalFilterChanged(filterMode)
 
+    const rowClassRules = {
+        "row-assigned": params => !!params.node.data['source-for']
+    }
+
     const columnDefs = [
         { rowDrag: true, valueGetter: 'node.id', headerName: 'src-id'}, // drag handle
         { field: "IP Address" },
@@ -38,8 +42,10 @@
             .then((resp) => resp.json())
             .then((data) => (rowData = data.map(row => ({...row, type: "src"}) ))); // add the type to the imported data. In future will run dedicated import function here.
         // add row drop zone
-        addGridDropZone(params, targetGrid.api)
-    }
+        // setting delay to make sure other grid is intitalised
+        // TODO: update this to be more robust.
+        setTimeout(() => addGridDropZone(params, targetGrid.api), 1000)   
+    };
 
     let gridOptions = {
         treeData: false,
@@ -66,6 +72,7 @@
         animateRows: true,
         isExternalFilterPresent: isExternalFilterPresent,
         doesExternalFilterPass: doesExternalFilterPass,
+        rowClassRules: rowClassRules
     };
     
     function isExternalFilterPresent(){

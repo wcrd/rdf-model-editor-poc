@@ -9,3 +9,7 @@
 .btn-selected {
     @apply bg-blue-700 text-white;
 }
+
+.row-assigned {
+    @apply bg-green-50 !important;
+}
