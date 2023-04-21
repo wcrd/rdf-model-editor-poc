@@ -15,3 +15,8 @@
     * pnts can only be dragged to an entity
     * entities can only be dragged to an entity
     * in future; have list of allowable components to prevent un-auth entity nesting
+
+
+## To Do
+
+* Add row highligh fade style to rows that have just been moved. ~3s.
