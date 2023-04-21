@@ -3,6 +3,7 @@
     import SourceGrid from "$lib/components/source-grid.svelte";
 
     let srcViewFilterMode = 'all'
+    let modelNodesToFilter;
 
     // variables for each grid;
     let modelGrid;
@@ -19,15 +20,17 @@
             <div id="model-button-bar" class="h-12 w-full flex flex-row align-middle p-2">
                 <p>Model button bar</p>
             </div>
-            <ModelBuilder bind:gridOptions={modelGrid} />
+            <ModelBuilder bind:gridOptions={modelGrid} on:select={(m)=>modelNodesToFilter=m.detail} />
         </div>
         <div id="src-grid-container" class="w-1/2 h-full flex flex-col">
             <div id="source-button-bar" class="h-12 w-full flex flex-row align-middle p-2 space-x-2">
                 <button class="btn-default" class:btn-selected={srcViewFilterMode=="unassigned"} on:click={()=>{srcViewFilterMode="unassigned"}}>Unassigned</button>
                 <button class="btn-default" class:btn-selected={srcViewFilterMode=="assigned"} on:click={()=>{srcViewFilterMode="assigned"}}>Assigned</button>
                 <button class="btn-default" class:btn-selected={srcViewFilterMode=="all"} on:click={()=>{srcViewFilterMode="all"}}>All</button>
+                <span>|</span>
+                <button class="btn-default" class:btn-selected={srcViewFilterMode=="model"} on:click={()=>{srcViewFilterMode="model"}}>Model Selection</button>
             </div>
-            <SourceGrid bind:gridOptions={sourceGrid} targetGrid={modelGrid} filterMode={srcViewFilterMode}/>
+            <SourceGrid bind:gridOptions={sourceGrid} targetGrid={modelGrid} filterMode={srcViewFilterMode} {modelNodesToFilter}/>
         </div>
     </div>
 </div>
