@@ -6,6 +6,7 @@
 
     import { addGridDropZone } from '$lib/js/drag-and-drop.js'
     import { onRowDragEnter } from '$lib/js/row-dragging.js'
+    import { SrcCellRenderer } from '$lib/ag-grid-components/srcCellRenderer.js'
 
     // get target grid dropzone
     export let targetGrid;
@@ -32,7 +33,7 @@
         { field: "Model" },
         { field: "Discovered Value" },
         // system
-        { field: "source-for"},
+        { field: "source-for", cellRenderer: SrcCellRenderer},
         { field: "type" }
     ];
 
@@ -60,7 +61,8 @@
         defaultColDef: {
             sortable: true,
             resizable: true,
-            filter: true
+            filter: true,
+            rowDrag: true, // all row drag from any cell
         },
         autoGroupColumnDef: {
             rowDrag: true,
