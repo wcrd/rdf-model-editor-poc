@@ -17,7 +17,8 @@
         { field: "subject_path", cellRenderer: params => { return `${params.value.join(" / ")}`} }, 
         { field: "subject" }, 
         { field: "label" },
-        { field: "class" }
+        { field: "class" },
+        { field: "type" },
     ];
 
     let rowData = [];
