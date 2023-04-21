@@ -1,5 +1,4 @@
 // simple function to generate new entity row data
-
 function generateNewEntity(overNode){
     const id_str = generateString(5)
     
@@ -12,7 +11,7 @@ function generateNewEntity(overNode){
             overNode.parent;
     
     // if no data, parent is root. Otherwise an entity
-    const newPath = newPotentialParent.data ? newPotentialParent.data.subject_path.slice() : []
+    const newPath = newPotentialParent?.data ? newPotentialParent.data.subject_path.slice() : []
     const subject = `ent_${id_str}`
     newPath.push(subject)
 
@@ -27,7 +26,6 @@ function generateNewEntity(overNode){
 
 
 // program to generate random strings
-
 // declare all characters
 const characters ='ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
 
@@ -41,4 +39,26 @@ function generateString(length) {
     return result;
 }
 
-export { generateNewEntity }
+
+
+// Change entity path
+function moveToPath(newParentPath, node, allUpdatedNodes) {
+    // last part of the file path is the file name
+    const oldPath = node.data.subject_path;
+    const leafName = oldPath.pop();
+    const newChildPath = newParentPath.slice();
+    newChildPath.push(leafName);
+
+    node.data.subject_path = newChildPath;
+
+    allUpdatedNodes.push(node.data);
+    
+    // if the node we move has children of its own, they need to be updated.
+    if (node.childrenAfterGroup) {
+        node.childrenAfterGroup.forEach((childNode) => {
+            moveToPath(newChildPath, childNode, allUpdatedNodes);
+        });
+    }
+}
+
+export { generateNewEntity, moveToPath }

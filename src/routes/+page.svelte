@@ -5,7 +5,8 @@
     import "ag-grid-community/styles/ag-theme-alpine.css"; // Optional theme CSS
 
     import { potentialParent, onRowDragEnd, onRowDragMove } from '$lib/row-dragging.js'
-    import { generateNewEntity } from '$lib/entity-gen.js'
+    import { addNewEntityRow } from '$lib/grid-operations.js'
+    import { onCellKeyDown } from '$lib/keydown-handlers.js'
 
     const cellClassRules = {
         'hover-over': (params) => {return params.node === potentialParent}
@@ -62,84 +63,14 @@
 
     };
 
-    // custom keypress capture and handler
-    function onCellKeyDown(e){
-        const kc = e.event.keyCode; // easier to reference multiple times
-        // SHIFT + ENTER
-        if ( kc == 13 && e.event.shiftKey && !e.event.ctrlKey ){
-            addNewEntityRow(e.api, e.node)
-        }
-        // CTRL + SHIFT + ENTER
-        else if (kc == 13 && e.event.shiftKey && e.event.ctrlKey ){
-            // console.debug(e)
-            // Gather selected
-            const selectedNodes = e.api.getSelectedNodes();
-            // console.debug("Selected Nodes: ", selectedNodes)
-            // Check that all have same parent
-            const parents = new Set(selectedNodes.map(node => node?.parent))
-            // console.debug("Parents: ", parents)
-            if ( parents.size != 1) { console.log("Auto nesting entities with different parents not allowed."); return }
-            const [newParent] = parents; // extract parent from set 
-            // Write new node
-            const newNode = addNewEntityRow(e.api, newParent)
-            // console.debug("New Node: ", newNode)
-            // Add selected as children of node
-            // REFACTOR - this is same code as row-dragging; make new module row-operations
-            const updatedRows = [];
-            selectedNodes.forEach(node => {
-                moveToPath2(newNode.data.subject_path, node, updatedRows);
-            });
-            e.api.applyTransaction({
-                update: updatedRows,
-            });
-            e.api.clearFocusedCell();
-
-        }
-        // ARROWS (clear selection when arrows are used; user is cell editing)
-        // Left: 37 Up: 38 Right: 39 Down: 40
-        else if ( kc == 37 || kc == 38 || kc == 39 || kc == 40 ){
-            e.api.deselectAll();
-        }
-    }
-
-    // REFACTOR - this is same code as row-dragging; make new module row-operations
-    function moveToPath2(newParentPath, node, allUpdatedNodes) {
-        // last part of the file path is the file name
-        const oldPath = node.data.subject_path;
-        const leafName = oldPath.pop();
-        const newChildPath = newParentPath.slice();
-        newChildPath.push(leafName);
-
-        node.data.subject_path = newChildPath;
-
-        allUpdatedNodes.push(node.data);
-        
-        // if the node we move has children of its own, they need to be updated.
-        if (node.childrenAfterGroup) {
-            node.childrenAfterGroup.forEach((childNode) => {
-                moveToPath2(newChildPath, childNode, allUpdatedNodes);
-            });
-        }
-    }
-
-    // HELPER: Insert new row
-    function addNewEntityRow(api, overNode){
-        const transactionResults = api.applyTransaction({
-            add: [generateNewEntity(overNode)],
-        })
-        return transactionResults.add[0]
-    }
+    
 
     // Context Menu
     function getContextMenuItems(params){
         const result = [
             {
                 name: "Add Entity Here",
-                action: () => {
-                    params.api.applyTransaction({
-                        add: [generateNewEntity(params.node)],
-                    })
-                }
+                action: () => addNewEntityRow(params.api, params.node)
             },
             'separator',
             {
