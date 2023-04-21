@@ -10,7 +10,7 @@
 
     const columnDefs = [
         // { rowDrag: true }, // drag handle
-        { field: "subject_path" }, 
+        { field: "subject_path", cellRenderer: params => { return `${params.value.join(" / ")}`} }, 
         { field: "subject" }, 
         { field: "label" },
         { field: "class" }
