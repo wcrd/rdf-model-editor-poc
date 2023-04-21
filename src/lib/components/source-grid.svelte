@@ -106,7 +106,7 @@
                 case 'unassigned':
                     return !node.data['source-for']
                 case 'model':
-                    return nodesToFilter.length ? nodesToFilter.includes(node.id) : true
+                    return modelNodesToFilter.length ? nodesToFilter.includes(node.id) : true // check if any nodes are selected in model grid; if so try and filter, if not, show all.
                 default:
                     return true
             }
