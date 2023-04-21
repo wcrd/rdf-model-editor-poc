@@ -1,103 +1,25 @@
 <script>
-    import AgGridSvelte from "ag-grid-svelte";
-    import 'ag-grid-enterprise'
-    import "ag-grid-community/styles/ag-grid.css"; // Core grid CSS, always needed
-    import "ag-grid-community/styles/ag-theme-alpine.css"; // Optional theme CSS
-
-    import { potentialParent, onRowDragEnd, onRowDragMove } from '$lib/row-dragging.js'
-    import { addNewEntityRow } from '$lib/grid-operations.js'
-    import { onCellKeyDown } from '$lib/keydown-handlers.js'
-
-    const cellClassRules = {
-        'hover-over': (params) => {return params.node === potentialParent}
-    };
-
-    const columnDefs = [
-        // { rowDrag: true }, // drag handle
-        { field: "subject_path", cellRenderer: params => { return `${params.value.join(" / ")}`} }, 
-        { field: "subject" }, 
-        { field: "label" },
-        { field: "class" },
-        { field: "type" },
-    ];
-
-    let rowData = [];
-    function onGridReady() {
-        fetch("/fake-data.json")
-            .then((resp) => resp.json())
-            .then((data) => (rowData = data));
-    }
-
-
-
-    let gridOptions = {
-        treeData: true,
-        // getDataPath: (data) => {
-        //     // return data.subject_path ? [...data.subject_path.split("/"), data.subject] : [data.subject]
-        //     return data.subject_path.split("/")
-
-        // },
-        getDataPath: (data) => data.subject_path,
-        rowSelection: 'multiple',
-        rowDragMultiRow: true,
-        defaultColDef: {
-            sortable: true,
-            cellClassRules: cellClassRules,
-            resizable: true,
-            filter: true
-        },
-        autoGroupColumnDef: {
-            rowDrag: true,
-            groupSelectsChildren: false
-        },
-        // Row Dragging Config (Event Handlers for native Grid Events)
-        // onRowDragEnter: e => {
-        //     console.debug("Row Drag Begin: ", e)
-        // },
-        onRowDragLeave: e => {
-            console.debug("You left the grid yo stupid fok")
-        },
-        onRowDragMove: onRowDragMove,
-        onRowDragEnd: onRowDragEnd,
-        getContextMenuItems: getContextMenuItems,
-        onCellKeyDown: onCellKeyDown
-
-    };
-
-    
-
-    // Context Menu
-    function getContextMenuItems(params){
-        const result = [
-            {
-                name: "Add Entity Here",
-                action: () => addNewEntityRow(params.api, params.node)
-            },
-            'separator',
-            {
-                name: "Add selection to new Entity",
-                disabled: true,
-                action: () => console.log("Created new entity and added selected items.")
-            },
-            {
-                name: "Add selected to System",
-                disabled: true,
-                action: () => console.log("Adding selected to selected system from modal.")
-            }
-        ]
-
-        return result
-
-    }
-    
+    import ModelBuilder from "$lib/components/model-builder.svelte";
+    import SourceGrid from "$lib/components/source-grid.svelte";
 </script>
 
-<div class="ag-theme-alpine h-screen w-full flex flex-col">
-    <AgGridSvelte {rowData} {columnDefs} {onGridReady} {gridOptions} class=""/>
+<div class="h-screen w-full flex flex-col">
+    <div id="controller-bar-container" class="h-8 bg-red-100">
+        <p>main button bar</p>
+    </div>
+    <div id="grids-container" class="h-full flex flex-row">
+        <div id="model-grid-container" class="w-1/2 h-full flex flex-col">
+            <div id="model-button-bar" class="h-12 w-full flex flex-row align-middle p-2">
+                <p>Model button bar</p>
+            </div>
+            <ModelBuilder />
+        </div>
+        <div id="src-grid-container" class="w-1/2 h-full flex flex-col">
+            <div id="source-button-bar" class="h-12 w-full flex flex-row align-middle p-2 space-x-2">
+                <button class="btn-default">Unassigned</button>
+                <button class="btn-default">Assigned</button>
+            </div>
+            <SourceGrid />
+        </div>
+    </div>
 </div>
-
-<style>
-    :global(.hover-over) {
-        background-color:lemonchiffon;
-    }
-</style>

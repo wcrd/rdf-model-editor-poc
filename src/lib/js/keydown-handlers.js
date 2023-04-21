@@ -1,5 +1,5 @@
-import { generateNewEntity, moveToPath } from '$lib/entity-operations.js'
-import { addNewEntityRow } from '$lib/grid-operations';
+import { generateNewEntity, moveToPath } from '$lib/js/entity-operations.js'
+import { addNewEntityRow } from '$lib/js/grid-operations';
 
 // custom keypress capture and handler
 function onCellKeyDown(e){
@@ -32,6 +32,17 @@ function onCellKeyDown(e){
         });
         e.api.clearFocusedCell();
 
+    }
+    // TAB
+    else if ( kc == 9 && !e.event.shiftKey ){
+        console.debug("I'm tabbin away here")
+        // if at root
+        // > if entity: nest under new entity
+        // > if point
+    }
+    // SHIFT-TAB
+    else if ( kc == 9 && e.event.shiftKey ){
+        console.debug("I'm shift-tabbin away here")
     }
     // ARROWS (clear selection when arrows are used; user is cell editing)
     // Left: 37 Up: 38 Right: 39 Down: 40

@@ -1,4 +1,4 @@
-import { generateNewEntity } from "$lib/entity-operations"
+import { generateNewEntity } from "$lib/js/entity-operations"
 
 // HELPER: Insert new row
 function addNewEntityRow(api, overNode){

@@ -35,6 +35,7 @@
   * THIS IS MORE COMPLEX THAN THIS; parking for now. See branch: tab-captures
 * Undo
 
+* need to suppress shift enter opening drop downs
 ---
 
 * Storage
