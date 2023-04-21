@@ -11,7 +11,7 @@
     export let targetGrid;
 
     const columnDefs = [
-        { rowDrag: true, maxWidth: 40 }, // drag handle
+        { rowDrag: true, valueGetter: 'node.id', headerName: 'src-id'}, // drag handle
         { field: "IP Address" },
         { field: "BACnet Network" },
         { field: "BACnet Device Name" },
@@ -25,7 +25,6 @@
         { field: "Model" },
         { field: "Discovered Value" },
         // system
-        { field: "row-id"},
         { field: "source-for"},
         { field: "type" }
     ];

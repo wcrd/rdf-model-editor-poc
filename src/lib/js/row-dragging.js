@@ -100,8 +100,6 @@ function onRowDragEnd(event){
 
     // if src point from other grid; do extra checks & options
     if(srcDragMode=="single"){
-        console.debug("Special src dragging end!!")
-
         // Need to update
         // 1. If point already has source; update that source in src table
         // 2. If source already has point; update that point in pnt table
