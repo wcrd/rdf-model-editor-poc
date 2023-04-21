@@ -33,6 +33,8 @@
 
         // },
         getDataPath: (data) => data.subject_path,
+        rowSelection: 'multiple',
+        rowDragMultiRow: true,
         defaultColDef: {
             sortable: true,
             cellClassRules: cellClassRules
@@ -41,9 +43,9 @@
             rowDrag: true,
         },
         // Row Dragging Config (Event Handlers for native Grid Events)
-        // onRowDragEnter: e => {
-        //     console.debug("Row Drag Begin: ", e)
-        // },
+        onRowDragEnter: e => {
+            console.debug("Row Drag Begin: ", e)
+        },
         onRowDragLeave: e => {
             console.debug("You left the grid yo stupid fok")
         },
@@ -61,6 +63,9 @@
     function onRowDragMove(event){
         setPotentialParentForNode(event.api, event.overNode)
     }
+
+
+    // Single Selection Only
 
     function setPotentialParentForNode(gridApi, overNode){
         let newPotentialParent;
@@ -117,31 +122,63 @@
             return
         }
 
-        const rowDataToMove = event.node.data;
-        // console.debug("Row data to move: ", rowDataToMove, "Potential Parent: ", potentialParent)
-        // take new parent path from parent, if data is missing, means it's the root node,
-        // which has no data.
+        // Updated to support multiple selection dragging
         const newParentPath = potentialParent.data ? potentialParent.data.subject_path : [];
-        const needToChangeParent = !arePathsEqual(newParentPath, rowDataToMove.subject_path);
-    
-        // check we are not moving a folder into a child folder
-        const invalidMode = isSelectionParentOfTarget(event.node, potentialParent);
+        // filter to just nodes that need parents updated
+        const nodesToChangeParent = event.nodes.filter((node) => {
+            if(!arePathsEqual(newParentPath, node.data.subject_path)){
+                return true
+            };
+            return false
+        });
+
+        // check if any nodes that are being updated are being moved into their own child
+        const invalidMode = nodesToChangeParent.some(node => isSelectionParentOfTarget(node, potentialParent));
         if (invalidMode) {
             console.log('Not allowed.');
         }
-  
-        if (needToChangeParent && !invalidMode) {
+
+        if (nodesToChangeParent.length>0 && !invalidMode) {
             const updatedRows = [];
-            moveToPath(newParentPath, event.node, updatedRows);
-        
+            // for each node, lets move path
+            nodesToChangeParent.forEach(node => {
+                moveToPath(newParentPath, node, updatedRows);
+            });
             event.api.applyTransaction({
                 update: updatedRows,
             });
             event.api.clearFocusedCell();
         }
+        
+        // OLD - Single selection dragging ONLY
+        // const rowDataToMove = event.node.data;
+        // // console.debug("Row data to move: ", rowDataToMove, "Potential Parent: ", potentialParent)
+        // // take new parent path from parent, if data is missing, means it's the root node,
+        // // which has no data.
+        // const newParentPath = potentialParent.data ? potentialParent.data.subject_path : [];
+        // const needToChangeParent = !arePathsEqual(newParentPath, rowDataToMove.subject_path);
     
+        // // check we are not moving a entity into a child entity
+        // const invalidMode = isSelectionParentOfTarget(event.node, potentialParent);
+        // if (invalidMode) {
+        //     console.log('Not allowed.');
+        // }
+  
+        // if (needToChangeParent && !invalidMode) {
+        //     const updatedRows = [];
+        //     moveToPath(newParentPath, event.node, updatedRows);
+        
+        //     event.api.applyTransaction({
+        //         update: updatedRows,
+        //     });
+        //     event.api.clearFocusedCell();
+        // }
+
+
         // clear node to highlight
         setPotentialParentForNode(event.api, null);
+
+    
     }
 
     function arePathsEqual(path1, path2) {
