@@ -1,4 +1,5 @@
-import { moveToPath } from "$lib/js/entity-operations";
+import { moveToPath, createNewPointAtNode } from "$lib/js/entity-operations";
+import { addRowsToGrid } from "$lib/js/grid-operations";
 
 // ###################################################
 // Row moving controllers
@@ -6,54 +7,68 @@ import { moveToPath } from "$lib/js/entity-operations";
 
 let potentialParent = null;
 let srcDragMode = null;
+let potentialInsertNode= null;
 
-function onRowDragEnter(event){
-    if(event.nodes.some(node => node?.data.type == "src")){
-        if(event.nodes.length==1) srcDragMode = 'single';
+function onRowDragEnter(event) {
+    if (event.nodes.some(node => node?.data.type == "src")) {
+        if (event.nodes.length == 1) srcDragMode = 'single';
         else srcDragMode = 'multiple';
     } else {
         srcDragMode = null;
     }
 }
 
-function onRowDragMove(event){
+function onRowDragMove(event) {
     // console.debug("drg mode: ", srcDragMode)
     // if src point from other grid; do extra checks & options
-    if(srcDragMode){
+    if (srcDragMode) {
         // if one row selected, we are going to assign to an existing point
-        if(srcDragMode=='single') setPotentialParentForSource(event.api, event.overNode);
+        if (srcDragMode == 'single') setPotentialParentForSource(event.api, event.overNode);
         // if more that one row selected, CTRL must also be held, as we will be
         // creating new point records at the parent
         else {
-            console.debug("More than one source being moved; insert mode.")
-            // make new function set 'insert' point
+            // console.debug("More than one source being moved; insert mode.")
+            if (event.overNode && event.overNode != potentialInsertNode) {
+                setPotentialInsertNode(event.api, event.overNode)
+            }
         }
-    } 
+    }
     // if model drag, do normal    
     else {
         setPotentialParentForNode(event.api, event.overNode)
     }
 }
 
-// Not needed, just testing
-function onRowDragMove_srcRow(event){
-    console.debug("Src: ", event)
+
+function onRowDragLeave(event){
+    // reset all potential variables
+    console.debug("You left the grid yo stupid fok")
+    setPotentialParentForNode(event.api, null);
+    setPotentialInsertNode(event.api, null);
+    return
 }
 
+function setPotentialInsertNode(gridApi, overNode){
+    const rowsToRefresh = []
+    if(overNode) rowsToRefresh.push(overNode)
+    if(potentialInsertNode) rowsToRefresh.push(potentialInsertNode)
+    potentialInsertNode = overNode
+    refreshRows(gridApi, rowsToRefresh)
+}
 
 // Single Selection Only
 
-function setPotentialParentForNode(gridApi, overNode){
+function setPotentialParentForNode(gridApi, overNode) {
     let newPotentialParent;
-    
+
     // set parent to node we are hovering near
     if (overNode) {
-    newPotentialParent =
-        overNode.data?.type === 'entity'
-        ? // if over an entity, we take the immediate row
-            overNode
-        : // if over a point, we take the parent row (which will be an entity, or root)
-            overNode.parent;
+        newPotentialParent =
+            overNode.data?.type === 'entity'
+                ? // if over an entity, we take the immediate row
+                overNode
+                : // if over a point, we take the parent row (which will be an entity, or root)
+                overNode.parent;
     } else {
         newPotentialParent = null;
     }
@@ -82,24 +97,24 @@ function setPotentialParentForNode(gridApi, overNode){
 
 function refreshRows(api, rowsToRefresh) {
     var params = {
-    // refresh these rows only.
-    rowNodes: rowsToRefresh,
-    // because the grid does change detection, the refresh
-    // will not happen because the underlying value has not
-    // changed. to get around this, we force the refresh,
-    // which skips change detection.
-    force: true,
+        // refresh these rows only.
+        rowNodes: rowsToRefresh,
+        // because the grid does change detection, the refresh
+        // will not happen because the underlying value has not
+        // changed. to get around this, we force the refresh,
+        // which skips change detection.
+        force: true,
     };
     api.refreshCells(params);
 }
 
-function onRowDragEnd(event){
-    if(!potentialParent){
+function onRowDragEnd(event) {
+    if (!potentialParent && !potentialInsertNode) {
         return
     }
 
     // if src point from other grid; do extra checks & options
-    if(srcDragMode=="single"){
+    if (srcDragMode == "single") {
         // Need to update
         // 1. If point already has source; update that source in src table
         // 2. If source already has point; update that point in pnt table
@@ -108,22 +123,22 @@ function onRowDragEnd(event){
 
         const srcGridApi = event.node.beans.gridApi
         // 1. if point has source already, remove that association in source grid
-        if(potentialParent.data.source){
+        if (potentialParent.data.source) {
             let oldSource = srcGridApi.getRowNode(potentialParent.data.source);
             console.debug("Pnt removed from Src: ", potentialParent.data.source, oldSource.data['source-for'])
             oldSource.data['source-for'] = null
             srcGridApi.applyTransaction({
-                update: [ oldSource.data ],
+                update: [oldSource.data],
             });
             srcGridApi.clearFocusedCell()
         }
         // 2. source has point already, remove that association in points grid
-        if(event.node.data['source-for']){
+        if (event.node.data['source-for']) {
             let oldPoint = event.api.getRowNode(event.node.data['source-for'])
             console.debug("Src removed from Pnt: ", event.node.data['source-for'], oldPoint.data.source)
             oldPoint.data.source = null;
             event.api.applyTransaction({
-                update: [ oldPoint.data ]
+                update: [oldPoint.data]
             });
             event.api.clearFocusedCell();
         }
@@ -132,26 +147,66 @@ function onRowDragEnd(event){
         potentialParent.data.source = event.node.id
         // console.debug(event)
         event.api.applyTransaction({
-            update: [ potentialParent.data ],
+            update: [potentialParent.data],
         });
         event.api.clearFocusedCell();
 
         // 4. finally update source grid again
         event.node.data['source-for'] = potentialParent.id
         srcGridApi.applyTransaction({
-            update: [ event.node.data ],
+            update: [event.node.data],
         });
         srcGridApi.clearFocusedCell()
 
         // clear node to highlight
         setPotentialParentForSource(event.api, null);
-    } 
+    }
+    else if(srcDragMode == "multiple"){
+        console.debug("inserting multiple new points")
+        // console.debug(event.nodes)
+
+        // lots of potential for refactoring here with code in if clause above
+        // TODO
+
+        // block if any node has a point assigned already
+        if( event.nodes.some(node => node.data['source-for'])) {
+            console.log("NOT ALLOWED: Some selected src points are already assigned to model points.")
+        } else {
+        // for each dragged src node
+        // 1. create model point node
+        // 1a. assign class (if available from src grid) // do this later
+        // 2. link to src point (do steps 2 from clause above)\
+            const srcGridApi = event.node.beans.gridApi;
+            // const insertIndex = event.overNode.rowIndex;
+
+            // need to insert at same path as overnode
+            const newRows = [] 
+            event.nodes.forEach(node => {
+                let newRow = createNewPointAtNode(event.overNode);
+                newRow.source = node.id;
+                newRows.push(newRow)
+
+                node.data['source-for'] = newRow.subject
+            })
+            // console.debug(newRows)
+            // add to model grid
+            addRowsToGrid(event.api, newRows)
+            // refresh source grid
+            srcGridApi.applyTransaction({
+                update: event.nodes.map(node => node.data),
+            });
+            srcGridApi.deselectAll()
+
+        }
+        // clear highlight
+        setPotentialInsertNode(event.api, null)
+    }
     // if internal model drag, do normal    
     else {
         const newParentPath = potentialParent.data ? potentialParent.data.subject_path : [];
         // filter to just nodes that need parents updated
         const nodesToChangeParent = event.nodes.filter((node) => {
-            if(!arePathsEqual(newParentPath, node.data.subject_path)){
+            if (!arePathsEqual(newParentPath, node.data.subject_path)) {
                 return true
             };
             return false
@@ -163,7 +218,7 @@ function onRowDragEnd(event){
             console.log('Not allowed.');
         }
 
-        if (nodesToChangeParent.length>0 && !invalidMode) {
+        if (nodesToChangeParent.length > 0 && !invalidMode) {
             const updatedRows = [];
             // for each node, lets move path
             nodesToChangeParent.forEach(node => {
@@ -199,24 +254,24 @@ function isSelectionParentOfTarget(selectedNode, targetNode) {
     const children = selectedNode.childrenAfterGroup || [];
     for (let i = 0; i < children.length; i++) {
         if (targetNode && children[i].key === targetNode.key) return true;
-            isSelectionParentOfTarget(children[i], targetNode);
-        }
+        isSelectionParentOfTarget(children[i], targetNode);
+    }
     return false;
 }
 
 /////////////////////////////////////////////
 
-function setPotentialParentForSource(gridApi, overNode){
+function setPotentialParentForSource(gridApi, overNode) {
     let newPotentialParent;
-    
+
     // set parent to node we are hovering near
     if (overNode) {
-    newPotentialParent =
-        overNode.data?.type === 'point'
-        ? // if over an point, we take the immediate row
-            overNode
-        : // if over an entity, keep as null; src can't belong to an entity
-            null;
+        newPotentialParent =
+            overNode.data?.type === 'point'
+                ? // if over an point, we take the immediate row
+                overNode
+                : // if over an entity, keep as null; src can't belong to an entity
+                null;
     } else {
         newPotentialParent = null;
     }
@@ -244,4 +299,7 @@ function setPotentialParentForSource(gridApi, overNode){
 }
 
 
-export { potentialParent, onRowDragEnd, onRowDragMove, onRowDragEnter }
+export { 
+    potentialParent, potentialInsertNode, 
+    onRowDragEnd, onRowDragMove, onRowDragEnter, onRowDragLeave,
+}

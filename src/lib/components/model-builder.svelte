@@ -6,7 +6,7 @@
 
     import { createEventDispatcher } from 'svelte'
 
-    import { potentialParent, onRowDragEnd, onRowDragMove, onRowDragEnter } from '$lib/js/row-dragging.js'
+    import { potentialParent, onRowDragEnd, onRowDragMove, onRowDragEnter, onRowDragLeave, potentialInsertNode } from '$lib/js/row-dragging.js'
     import { addNewEntityRow } from '$lib/js/grid-operations.js'
     import { onCellKeyDown } from '$lib/js/keydown-handlers.js'
     import { SrcCellRenderer } from '$lib/ag-grid-components/srcCellRenderer.js'
@@ -14,7 +14,8 @@
     const dispatch = createEventDispatcher()
 
     const cellClassRules = {
-        'hover-over': (params) => {return params.node === potentialParent}
+        'hover-over': (params) => {return params.node === potentialParent},
+        'insert-at': (params) => { return params.node === potentialInsertNode }
     };
 
     const columnDefs = [
@@ -62,9 +63,7 @@
         // onRowDragEnter: e => {
         //     console.debug("Row Drag Begin: ", e)
         // },
-        onRowDragLeave: e => {
-            console.debug("You left the grid yo stupid fok")
-        },
+        onRowDragLeave: onRowDragLeave,
         onRowDragMove: onRowDragMove,
         onRowDragEnd: onRowDragEnd,
         onRowDragEnter: onRowDragEnter,
@@ -115,5 +114,8 @@
 <style>
     :global(.hover-over) {
         background-color:lemonchiffon;
+    }
+    :global(.insert-at) {
+        border-top: 3px solid red !important;
     }
 </style>

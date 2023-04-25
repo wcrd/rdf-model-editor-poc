@@ -30,7 +30,7 @@ function generateNewEntity(overNode){
 const characters ='ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
 
 function generateString(length) {
-    let result = ' ';
+    let result = '';
     const charactersLength = characters.length;
     for ( let i = 0; i < length; i++ ) {
         result += characters.charAt(Math.floor(Math.random() * charactersLength));
@@ -61,4 +61,24 @@ function moveToPath(newParentPath, node, allUpdatedNodes) {
     }
 }
 
-export { generateNewEntity, moveToPath }
+
+// create point at node
+// TODO: similarity with above functions
+function createNewPointAtNode(overNode){
+    const id_str = generateString(5)
+    const newPath = overNode?.data ? overNode.data.subject_path.slice() : []
+    newPath.pop();
+    const subject = `pnt_${id_str}`
+    newPath.push(subject)
+
+    return {
+        "subject_path": newPath,
+        "subject": subject,
+        "label": "",
+        "class": "Not Set",
+        "type": "point"
+    }
+
+}
+
+export { generateNewEntity, moveToPath, createNewPointAtNode }
