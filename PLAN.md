@@ -55,3 +55,5 @@ src-view
 * [ ] Click model row to filter src-grid; add button above model grid: 'Filter source grid when I select'
 
 * [ ] force unique on model subject column
+
+* [ ] refresh model filter on drag-and-drop

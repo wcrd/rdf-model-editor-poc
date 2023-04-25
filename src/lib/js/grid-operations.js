@@ -1,4 +1,4 @@
-import { generateNewEntity } from "$lib/js/entity-operations"
+import { generateNewEntity, createNewPointAtNode } from "$lib/js/entity-operations"
 
 // HELPER: Insert new row
 function addNewEntityRow(api, overNode){
@@ -8,4 +8,19 @@ function addNewEntityRow(api, overNode){
     return transactionResults.add[0]
 }
 
-export { addNewEntityRow }
+// HELPER: Insert new point row
+function addNewPointRow(api, atNode){
+    const transactionResults = api.applyTransaction({
+        add: [createNewPointAtNode(overNode)]
+    })
+    return transactionResults.add[0]
+}
+
+function addRowsToGrid(api, rows){
+    const transactionResults = api.applyTransaction({
+        add: rows
+    })
+    return transactionResults.add[0]
+}
+
+export { addNewEntityRow, addRowsToGrid }

@@ -1,4 +1,5 @@
-import { moveToPath } from "$lib/js/entity-operations";
+import { moveToPath, createNewPointAtNode } from "$lib/js/entity-operations";
+import { addRowsToGrid } from "$lib/js/grid-operations";
 
 // ###################################################
 // Row moving controllers
@@ -162,7 +163,41 @@ function onRowDragEnd(event) {
     }
     else if(srcDragMode == "multiple"){
         console.debug("inserting multiple new points")
-        
+        // console.debug(event.nodes)
+
+        // lots of potential for refactoring here with code in if clause above
+        // TODO
+
+        // block if any node has a point assigned already
+        if( event.nodes.some(node => node.data['source-for'])) {
+            console.log("NOT ALLOWED: Some selected src points are already assigned to model points.")
+        } else {
+        // for each dragged src node
+        // 1. create model point node
+        // 1a. assign class (if available from src grid) // do this later
+        // 2. link to src point (do steps 2 from clause above)\
+            const srcGridApi = event.node.beans.gridApi;
+            // const insertIndex = event.overNode.rowIndex;
+
+            // need to insert at same path as overnode
+            const newRows = [] 
+            event.nodes.forEach(node => {
+                let newRow = createNewPointAtNode(event.overNode);
+                newRow.source = node.id;
+                newRows.push(newRow)
+
+                node.data['source-for'] = newRow.subject
+            })
+            // console.debug(newRows)
+            // add to model grid
+            addRowsToGrid(event.api, newRows)
+            // refresh source grid
+            srcGridApi.applyTransaction({
+                update: event.nodes.map(node => node.data),
+            });
+            srcGridApi.deselectAll()
+
+        }
         // clear highlight
         setPotentialInsertNode(event.api, null)
     }

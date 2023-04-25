@@ -116,6 +116,6 @@
         background-color:lemonchiffon;
     }
     :global(.insert-at) {
-        border-bottom: 3px solid red !important;
+        border-top: 3px solid red !important;
     }
 </style>
