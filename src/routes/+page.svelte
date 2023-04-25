@@ -17,8 +17,11 @@
     </div>
     <div id="grids-container" class="h-full flex flex-row">
         <div id="model-grid-container" class="w-1/2 h-full flex flex-col">
-            <div id="model-button-bar" class="h-12 w-full flex flex-row align-middle p-2">
-                <p>Model button bar</p>
+            <div id="model-button-bar" class="h-12 w-full flex flex-row align-middle p-2 justify-between">
+                <div>Buttons</div>
+                <div id="src-panel-slide">
+                    <button class="btn-default">|></button>
+                </div>
             </div>
             <ModelBuilder bind:gridOptions={modelGrid} on:select={(m)=>modelNodesToFilter=m.detail} />
         </div>
