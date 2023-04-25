@@ -15,7 +15,8 @@
 
     const cellClassRules = {
         'hover-over': (params) => {return params.node === potentialParent},
-        'insert-at': (params) => { return params.node === potentialInsertNode }
+        'insert-at': (params) => { return params.node === potentialInsertNode },
+        'entity-row': (params) => { return params.node.data.type == "entity" }
     };
 
     const columnDefs = [
@@ -107,7 +108,7 @@
     
 </script>
 
-<div class="ag-theme-alpine h-full w-full">
+<div id="modelGrid" class="ag-theme-alpine h-full w-full">
     <AgGridSvelte {rowData} {columnDefs} {onGridReady} {gridOptions} class=""/>
 </div>
 
@@ -117,5 +118,12 @@
     }
     :global(.insert-at) {
         border-top: 3px solid red !important;
+    }
+    /*  customise theme */
+    :global(#modelGrid.ag-theme-alpine){
+        --ag-odd-row-background-color: white;
+    }
+    :global(.entity-row){
+        background-color: #f5f3f3;
     }
 </style>
