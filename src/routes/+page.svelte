@@ -23,7 +23,7 @@
                     <button class="btn-default">|></button>
                 </div>
             </div>
-            <ModelBuilder bind:gridOptions={modelGrid} on:select={(m)=>modelNodesToFilter=m.detail} />
+            <ModelBuilder bind:gridOptions={modelGrid} srcGrid={sourceGrid} on:select={(m)=>modelNodesToFilter=m.detail} />
         </div>
         <div id="src-grid-container" class="w-1/2 h-full flex flex-col">
             <div id="source-button-bar" class="h-12 w-full flex flex-row align-middle p-2 space-x-2">

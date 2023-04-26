@@ -57,3 +57,8 @@ src-view
 * [ ] force unique on model subject column
 
 * [ ] refresh model filter on drag-and-drop
+
+## Editing
+- [ ] enable class and label editing
+  - [ ] add handlers to allow path and subject editing
+- [ ] 

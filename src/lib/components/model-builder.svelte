@@ -7,7 +7,8 @@
     import { createEventDispatcher } from 'svelte'
 
     import { potentialParent, onRowDragEnd, onRowDragMove, onRowDragEnter, onRowDragLeave, potentialInsertNode } from '$lib/js/row-dragging.js'
-    import { addNewEntityRow } from '$lib/js/grid-operations.js'
+    import { addNewEntityRow, removeRowsFromGrid } from '$lib/js/grid-operations.js'
+    import { removeSourceFor } from '$lib/js/entity-operations.js'
     import { onCellKeyDown } from '$lib/js/keydown-handlers.js'
     import { SrcCellRenderer } from '$lib/ag-grid-components/srcCellRenderer.js'
 
@@ -15,15 +16,19 @@
 
     const cellClassRules = {
         'hover-over': (params) => {return params.node === potentialParent},
-        'insert-at': (params) => { return params.node === potentialInsertNode }
+        'insert-at': (params) => { return params.node === potentialInsertNode },
     };
+    const rowClassRules = {
+        'entity-row': (params) => { return params.node.data.type == "entity" }
+
+    }
 
     const columnDefs = [
         // { rowDrag: true }, // drag handle
         { field: "subject_path", cellRenderer: params => { return `${params.value.join(" / ")}`} }, 
         { field: "subject" }, 
-        { field: "label" },
-        { field: "class" },
+        { field: "label", editable: true },
+        { field: "class", editable: true },
         { field: "type" },
         // internal fields
         { field: "source", cellRenderer: SrcCellRenderer}
@@ -36,7 +41,7 @@
             .then((data) => (rowData = data));
     }
 
-
+    export let srcGrid;
 
     export let gridOptions = {
         treeData: true,
@@ -58,6 +63,7 @@
             rowDrag: true,
             groupSelectsChildren: false
         },
+        rowClassRules: rowClassRules,
         getRowId: (params) => params.data.subject,
         // Row Dragging Config (Event Handlers for native Grid Events)
         // onRowDragEnter: e => {
@@ -69,7 +75,8 @@
         onRowDragEnter: onRowDragEnter,
         getContextMenuItems: getContextMenuItems,
         onCellKeyDown: onCellKeyDown,
-        onSelectionChanged: onSelectionChanged
+        onSelectionChanged: onSelectionChanged,
+        onCellContextMenu: (event) => { event.node.isSelected() ? null : event.node.setSelected(true) }
 
     };
 
@@ -81,6 +88,23 @@
             {
                 name: "Add Entity Here",
                 action: () => addNewEntityRow(params.api, params.node)
+            },
+            {
+                name: "Delete selected rows",
+                action: () => { 
+                    const nodes = params.api.getSelectedNodes()
+                    const allNodes = nodes.flatMap(node => node.allLeafChildren)
+                    const allRows = allNodes.map(node => node.data)
+                    removeRowsFromGrid(params.api, allRows)
+                    // update source grid to remove associations
+                    removeSourceFor(srcGrid.api, allRows)
+                }
+            },
+            'separator',
+            {
+                name: "Remove associated sources",
+                disabled: true,
+                action: () => { console.debug("removing sources. ", params)}
             },
             'separator',
             {
@@ -107,7 +131,7 @@
     
 </script>
 
-<div class="ag-theme-alpine h-full w-full">
+<div id="modelGrid" class="ag-theme-alpine h-full w-full">
     <AgGridSvelte {rowData} {columnDefs} {onGridReady} {gridOptions} class=""/>
 </div>
 
@@ -117,5 +141,12 @@
     }
     :global(.insert-at) {
         border-top: 3px solid red !important;
+    }
+    /*  customise theme */
+    :global(#modelGrid.ag-theme-alpine){
+        --ag-odd-row-background-color: white;
+    }
+    :global(.entity-row){
+        background-color: #f5f3f3;
     }
 </style>

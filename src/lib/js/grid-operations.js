@@ -23,4 +23,11 @@ function addRowsToGrid(api, rows){
     return transactionResults.add[0]
 }
 
-export { addNewEntityRow, addRowsToGrid }
+function removeRowsFromGrid(api, rows){
+    const transactionResults = api.applyTransaction({
+        remove: rows
+    })
+    return transactionResults.remove[0]
+}
+
+export { addNewEntityRow, addRowsToGrid, removeRowsFromGrid }
