@@ -65,7 +65,7 @@
         setTimeout(() => addGridDropZone(params, targetGrid.api), 1000)   
     };
 
-    let gridOptions = {
+    export let gridOptions = {
         treeData: false,
         // getDataPath: (data) => {
         //     // return data.subject_path ? [...data.subject_path.split("/"), data.subject] : [data.subject]

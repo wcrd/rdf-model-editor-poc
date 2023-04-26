@@ -81,4 +81,19 @@ function createNewPointAtNode(overNode){
 
 }
 
-export { generateNewEntity, moveToPath, createNewPointAtNode }
+// clear linked sources
+function removeSourceFor(gridApi, rows){
+    const srcIds = rows.map(row => row.source).filter(Boolean)
+    const rowsToRefresh = []
+    srcIds.forEach(id => {
+        const node = gridApi.getRowNode(id)
+        node.data['source-for'] = null
+        rowsToRefresh.push(node.data)
+    })
+    const res = gridApi.applyTransaction({
+            update: rowsToRefresh
+    });
+    return res.update[0]
+}
+
+export { generateNewEntity, moveToPath, createNewPointAtNode, removeSourceFor }

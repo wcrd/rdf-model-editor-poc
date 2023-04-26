@@ -7,7 +7,8 @@
     import { createEventDispatcher } from 'svelte'
 
     import { potentialParent, onRowDragEnd, onRowDragMove, onRowDragEnter, onRowDragLeave, potentialInsertNode } from '$lib/js/row-dragging.js'
-    import { addNewEntityRow } from '$lib/js/grid-operations.js'
+    import { addNewEntityRow, removeRowsFromGrid } from '$lib/js/grid-operations.js'
+    import { removeSourceFor } from '$lib/js/entity-operations.js'
     import { onCellKeyDown } from '$lib/js/keydown-handlers.js'
     import { SrcCellRenderer } from '$lib/ag-grid-components/srcCellRenderer.js'
 
@@ -23,8 +24,8 @@
         // { rowDrag: true }, // drag handle
         { field: "subject_path", cellRenderer: params => { return `${params.value.join(" / ")}`} }, 
         { field: "subject" }, 
-        { field: "label" },
-        { field: "class" },
+        { field: "label", editable: true },
+        { field: "class", editable: true },
         { field: "type" },
         // internal fields
         { field: "source", cellRenderer: SrcCellRenderer}
@@ -37,7 +38,7 @@
             .then((data) => (rowData = data));
     }
 
-
+    export let srcGrid;
 
     export let gridOptions = {
         treeData: true,
@@ -70,7 +71,8 @@
         onRowDragEnter: onRowDragEnter,
         getContextMenuItems: getContextMenuItems,
         onCellKeyDown: onCellKeyDown,
-        onSelectionChanged: onSelectionChanged
+        onSelectionChanged: onSelectionChanged,
+        onCellContextMenu: (event) => { event.node.isSelected() ? null : event.node.setSelected(true) }
 
     };
 
@@ -82,6 +84,23 @@
             {
                 name: "Add Entity Here",
                 action: () => addNewEntityRow(params.api, params.node)
+            },
+            {
+                name: "Delete selected rows",
+                action: () => { 
+                    const nodes = params.api.getSelectedNodes()
+                    const allNodes = nodes.flatMap(node => node.allLeafChildren)
+                    const allRows = allNodes.map(node => node.data)
+                    removeRowsFromGrid(params.api, allRows)
+                    // update source grid to remove associations
+                    removeSourceFor(srcGrid.api, allRows)
+                }
+            },
+            'separator',
+            {
+                name: "Remove associated sources",
+                disabled: true,
+                action: () => { console.debug("removing sources. ", params)}
             },
             'separator',
             {
@@ -124,6 +143,6 @@
         --ag-odd-row-background-color: white;
     }
     :global(.entity-row){
-        background-color: #f5f3f3;
+        --ag-background-color: #f5f3f3;
     }
 </style>
