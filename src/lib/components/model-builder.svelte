@@ -29,7 +29,8 @@
         { field: "subject" }, 
         { field: "label", editable: true },
         { field: "class", editable: true },
-        { field: "type" },
+        { field: "pointName", editable: true},
+        { field: "type", hide: true },
         // internal fields
         { field: "source", cellRenderer: SrcCellRenderer}
     ];
