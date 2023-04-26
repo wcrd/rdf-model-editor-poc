@@ -23,8 +23,8 @@
         // { rowDrag: true }, // drag handle
         { field: "subject_path", cellRenderer: params => { return `${params.value.join(" / ")}`} }, 
         { field: "subject" }, 
-        { field: "label" },
-        { field: "class" },
+        { field: "label", editable: true },
+        { field: "class", editable: true },
         { field: "type" },
         // internal fields
         { field: "source", cellRenderer: SrcCellRenderer}
