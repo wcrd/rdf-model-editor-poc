@@ -10,6 +10,11 @@
     @apply bg-blue-700 text-white;
 }
 
+.btn-subtle {
+    @apply border border-slate-500 hover:bg-slate-700 hover:text-white text-slate-500 font-bold py-1 px-1 rounded
+
+}
+
 .row-assigned {
     @apply bg-green-50 !important;
 }
