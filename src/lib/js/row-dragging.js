@@ -302,4 +302,5 @@ function setPotentialParentForSource(gridApi, overNode) {
 export { 
     potentialParent, potentialInsertNode, 
     onRowDragEnd, onRowDragMove, onRowDragEnter, onRowDragLeave,
+    refreshRows
 }

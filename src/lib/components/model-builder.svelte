@@ -8,6 +8,7 @@
 
     import { potentialParent, onRowDragEnd, onRowDragMove, onRowDragEnter, onRowDragLeave, potentialInsertNode } from '$lib/js/row-dragging.js'
     import { addNewEntityRow, removeRowsFromGrid } from '$lib/js/grid-operations.js'
+    import { removeSourceFor } from '$lib/js/entity-operations.js'
     import { onCellKeyDown } from '$lib/js/keydown-handlers.js'
     import { SrcCellRenderer } from '$lib/ag-grid-components/srcCellRenderer.js'
 
@@ -37,7 +38,7 @@
             .then((data) => (rowData = data));
     }
 
-
+    export let srcGrid;
 
     export let gridOptions = {
         treeData: true,
@@ -91,7 +92,8 @@
                     const allNodes = nodes.flatMap(node => node.allLeafChildren)
                     const allRows = allNodes.map(node => node.data)
                     removeRowsFromGrid(params.api, allRows)
-                    // console.debug(allRows)
+                    // update source grid to remove associations
+                    removeSourceFor(srcGrid.api, allRows)
                 }
             },
             'separator',
