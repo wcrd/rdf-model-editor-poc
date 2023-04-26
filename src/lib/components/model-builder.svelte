@@ -17,8 +17,11 @@
     const cellClassRules = {
         'hover-over': (params) => {return params.node === potentialParent},
         'insert-at': (params) => { return params.node === potentialInsertNode },
-        'entity-row': (params) => { return params.node.data.type == "entity" }
     };
+    const rowClassRules = {
+        'entity-row': (params) => { return params.node.data.type == "entity" }
+
+    }
 
     const columnDefs = [
         // { rowDrag: true }, // drag handle
@@ -60,6 +63,7 @@
             rowDrag: true,
             groupSelectsChildren: false
         },
+        rowClassRules: rowClassRules,
         getRowId: (params) => params.data.subject,
         // Row Dragging Config (Event Handlers for native Grid Events)
         // onRowDragEnter: e => {
@@ -143,6 +147,6 @@
         --ag-odd-row-background-color: white;
     }
     :global(.entity-row){
-        --ag-background-color: #f5f3f3;
+        background-color: #f5f3f3;
     }
 </style>
