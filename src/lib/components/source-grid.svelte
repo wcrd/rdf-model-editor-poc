@@ -37,21 +37,38 @@
 
     const columnDefs = [
         { rowDrag: true, valueGetter: 'node.id', headerName: 'src-id'}, // drag handle
-        { field: "IP Address" },
-        { field: "BACnet Network" },
+        { field: "IP Address", hide: true },
+        { field: "BACnet Network", hide: true },
         { field: "BACnet Device Name" },
         { field: "Device No" },
-        { field: "Object Type" },
+        { field: "Object Type", hide: true },
         { field: "Object Address" },
         { field: "Object Name" },
         { field: "Description" },
         { field: "BACnet Unit Of Measure" },
-        { field: "Vendor" },
-        { field: "Model" },
-        { field: "Discovered Value" },
+        { field: "Vendor", hide: true },
+        { field: "Model", hide: true },
+        { field: "Discovered Value", hide: true },
         // system
         { field: "source-for", cellRenderer: SrcCellRenderer},
-        { field: "type" }
+        { field: "type", hide: true },
+        // linked
+        { field: "linked-class", valueGetter: (params)=>{ return params.data['source-for'] ? targetGrid.api.getRowNode(params.data['source-for']).data.class : null } },
+        { field: "linked-root-parent", valueGetter: (params)=>{ 
+                if(params.data['source-for']){
+                    const path = targetGrid.api.getRowNode(params.data['source-for']).data.subject_path
+                    return path.length == 1 ? "(not set)" : path[0]
+                } else return null;
+            }
+        },
+        { field: "linked-parent", valueGetter: (params)=>{ 
+                if(params.data['source-for']){ 
+                    // get last two elements; if only one returned then no parent
+                    const path = targetGrid.api.getRowNode(params.data['source-for']).data.subject_path.slice(-2); 
+                    return path.length == 1 ? "(not set)" : path[0] 
+                } else return null
+            },
+        },
     ];
 
     let rowData = [];
