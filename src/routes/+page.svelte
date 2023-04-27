@@ -1,6 +1,7 @@
 <script>
     import ModelBuilder from "$lib/components/model-builder.svelte";
     import SourceGrid from "$lib/components/source-grid.svelte";
+    import jsonImportExport from '$lib/js/json-import-export.js'
 
     let srcViewFilterMode = 'all'
     let modelNodesToFilter;
@@ -23,7 +24,7 @@
         <div id="model-grid-container" class="w-1/2 h-full flex flex-col flex-grow" class:hidden={model_hidden}>
             <div id="model-button-bar" class="h-12 w-full flex flex-row align-middle p-2 justify-between">
                 <div>
-                    <button class="btn-default">Export JSON</button>
+                    <button class="btn-default" on:click={()=>jsonImportExport.export_all(modelGrid.api, sourceGrid.api)}>Export JSON</button>
                     <button class="btn-default">Import JSON</button>
                 </div>
                 <div id="src-panel-slide">
