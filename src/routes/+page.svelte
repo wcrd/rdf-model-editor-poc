@@ -22,7 +22,10 @@
     <div id="grids-container" class="h-full flex flex-row">
         <div id="model-grid-container" class="w-1/2 h-full flex flex-col flex-grow" class:hidden={model_hidden}>
             <div id="model-button-bar" class="h-12 w-full flex flex-row align-middle p-2 justify-between">
-                <div>Buttons</div>
+                <div>
+                    <button class="btn-default">Export JSON</button>
+                    <button class="btn-default">Import JSON</button>
+                </div>
                 <div id="src-panel-slide">
                     <button class="btn-subtle" on:click={()=>src_hidden=!src_hidden}>
                         {#if src_hidden}
