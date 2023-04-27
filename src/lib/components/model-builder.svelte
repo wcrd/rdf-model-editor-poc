@@ -104,8 +104,17 @@
             'separator',
             {
                 name: "Remove associated sources",
-                disabled: true,
-                action: () => { console.debug("removing sources. ", params)}
+                disabled: params.api.getSelectedNodes().some(node => node.data?.source ? false : true),
+                action: () => { 
+                    const allNodes = params.api.getSelectedNodes();
+                    const allRows = allNodes.map(node => node.data)
+                    // remove from src grid first, before updating model (otherwise this function doesn't work)
+                    removeSourceFor(srcGrid.api, allRows)
+                    // now remove the src from the model row
+                    params.api.applyTransaction({
+                        update: allRows.map(row => { row.source = null; return row })
+                    });
+                }
             },
             'separator',
             {
