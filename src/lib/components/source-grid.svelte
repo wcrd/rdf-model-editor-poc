@@ -136,6 +136,8 @@
         if(gridOptions?.api) gridOptions.api.onFilterChanged();
     }
 
+    // DEBUG
+    // $: console.debug('srcData', rowData)
 </script>
 
 <div class="ag-theme-alpine h-full w-full">

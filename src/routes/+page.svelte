@@ -1,6 +1,11 @@
 <script>
     import ModelBuilder from "$lib/components/model-builder.svelte";
     import SourceGrid from "$lib/components/source-grid.svelte";
+    import jsonImportExport from '$lib/js/json-import-export.js'
+    
+    import Modal from "$lib/components/modal.svelte";
+    import SimpleModal from "$lib/components/modals/modal-simple.svelte"
+    import JsonUploadModal from "$lib/components/modals/modal-upload-json.svelte"
 
     import { modelGridAPI, sourceGridAPI } from '$lib/stores/store-grid-manager.js'
 
@@ -11,6 +16,21 @@
     let src_hidden = false;
     let model_hidden = false;
 
+    // Modal control
+    let showModal = false;
+    let modalContent = SimpleModal;
+    let modalContentProps = { value: 7 };
+
+    // Modal launcher
+    function launchModal(modalComponent=null, modalProps={}){
+        // open json uploader module
+        modalContent = modalComponent;
+        modalContentProps = modalProps;
+        showModal = true;
+        return
+    }
+
+
 </script>
 
 <div class="h-screen w-full flex flex-col">
@@ -20,7 +40,11 @@
     <div id="grids-container" class="h-full flex flex-row">
         <div id="model-grid-container" class="w-1/2 h-full flex flex-col flex-grow" class:hidden={model_hidden}>
             <div id="model-button-bar" class="h-12 w-full flex flex-row align-middle p-2 justify-between">
-                <div>Buttons</div>
+                <div>
+                    <button class="btn-default" on:click={()=>jsonImportExport.export_all()}>Export JSON</button>
+                    <button class="btn-default"on:click={() => launchModal(JsonUploadModal)}>Import JSON</button>
+                    <button class="btn-subtle" on:click={()=>showModal=true}>Test Modal</button>
+                </div>
                 <div id="src-panel-slide">
                     <button class="btn-subtle" on:click={()=>src_hidden=!src_hidden}>
                         {#if src_hidden}
@@ -56,3 +80,7 @@
         </div>
     </div>
 </div>
+
+<Modal bind:showModal {modalContent} {modalContentProps}>
+    <p slot="header">This is a modal container</p>
+</Modal>
