@@ -8,7 +8,7 @@
 
     import { addGridDropZone } from '$lib/js/drag-and-drop.js'
     import { onRowDragEnter } from '$lib/js/row-dragging.js'
-    import { SrcCellRenderer } from '$lib/ag-grid-components/srcCellRenderer.js'
+    import { SrcCellRenderer, ParentCellRenderer } from '$lib/ag-grid-components/gridCellRenderers.js'
     import { get_linked_class, get_linked_parent, get_linked_root_parent } from '$lib/js/grid-data-helpers'
 
     // get target grid dropzone
@@ -65,8 +65,8 @@
         { field: "edit-parent", hide: true, editable: false, suppressColumnsToolPanel: true },
         // linked
         { field: "linked-class", valueGetter: (params)=> get_linked_class(params)},
-        { field: "linked-root-parent", valueGetter: (params) => get_linked_root_parent(params) },
-        { field: "linked-parent", valueGetter: (params) => get_linked_parent(params) },
+        { field: "linked-parent", valueGetter: (params) => get_linked_parent(params), cellRenderer: ParentCellRenderer},
+        { field: "linked-root-parent", valueGetter: (params) => get_linked_root_parent(params), cellRenderer: ParentCellRenderer },
     ];
 
     // let rowData = [];

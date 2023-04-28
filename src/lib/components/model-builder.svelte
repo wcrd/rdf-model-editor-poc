@@ -12,7 +12,7 @@
     import { addNewEntityRow, removeRowsFromGrid } from '$lib/js/grid-operations.js'
     import { removeSourceFor } from '$lib/js/entity-operations.js'
     import { onCellKeyDown } from '$lib/js/keydown-handlers.js'
-    import { SrcCellRenderer } from '$lib/ag-grid-components/srcCellRenderer.js'
+    import { SrcCellRenderer } from '$lib/ag-grid-components/gridCellRenderers.js'
 
     const dispatch = createEventDispatcher()
 
