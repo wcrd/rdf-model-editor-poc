@@ -6,6 +6,8 @@
 
     import { createEventDispatcher } from 'svelte'
 
+    import { modelData } from '$lib/stores/store-grid-manager.js'
+
     import { potentialParent, onRowDragEnd, onRowDragMove, onRowDragEnter, onRowDragLeave, potentialInsertNode } from '$lib/js/row-dragging.js'
     import { addNewEntityRow, removeRowsFromGrid } from '$lib/js/grid-operations.js'
     import { removeSourceFor } from '$lib/js/entity-operations.js'
@@ -35,11 +37,11 @@
         { field: "source", cellRenderer: SrcCellRenderer}
     ];
 
-    export let rowData = []; // exposing so main app can modify for now. Will update when store is in place.
+    // let rowData = [];
     function onGridReady() {
         fetch("/fake-data.json")
             .then((resp) => resp.json())
-            .then((data) => (rowData = data));
+            .then((data) => ($modelData = data));
     }
 
     export let srcGrid;
@@ -142,7 +144,7 @@
 </script>
 
 <div id="modelGrid" class="ag-theme-alpine h-full w-full">
-    <AgGridSvelte bind:rowData={rowData} {columnDefs} {onGridReady} {gridOptions} class=""/>
+    <AgGridSvelte bind:rowData={$modelData} {columnDefs} {onGridReady} {gridOptions} class=""/>
 </div>
 
 <style>
