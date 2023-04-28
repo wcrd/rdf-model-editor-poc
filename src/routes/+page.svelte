@@ -3,7 +3,8 @@
     import SourceGrid from "$lib/components/source-grid.svelte";
     import jsonImportExport from '$lib/js/json-import-export.js'
     
-    import Modal from "$lib/components/modals/modal.svelte";
+    import Modal from "$lib/components/modal.svelte";
+    import SimpleModal from "$lib/components/modals/modal-simple.svelte"
 
     let srcViewFilterMode = 'all'
     let modelNodesToFilter;
@@ -18,6 +19,8 @@
 
     // Modal control
     let showModal = false;
+    let modalContent = SimpleModal;
+    let modalContentProps = { value: 7 };
 
 </script>
 
@@ -69,7 +72,6 @@
     </div>
 </div>
 
-<Modal bind:showModal>
-    <!-- <p slot="header">This is a test</p> -->
-    <p>Test content</p>
+<Modal bind:showModal {modalContent} {modalContentProps}>
+    <p slot="header">This is a modal container</p>
 </Modal>

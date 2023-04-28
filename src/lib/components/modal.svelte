@@ -1,5 +1,7 @@
 <script>
 	export let showModal; // boolean
+	export let modalContent; // element
+	export let modalContentProps = {}; // props for element
 
 	let dialog; // HTMLDialogElement
 
@@ -13,13 +15,14 @@
 	on:click|self={() => dialog.close()}
 >
 	<div on:click|stopPropagation>
-		<!-- <slot name="header" />
-		<hr /> -->
-		<slot />
-		<p>Test content, slots are playing up rn.</p>
-		<hr />
+		<slot name="header"/>
+		<hr class="py-2"/>
+		<div id="modal-component">
+			<svelte:component on:click this={modalContent} {...modalContentProps}/>
+		</div>
+		<hr class="py-2"/>
 		<!-- svelte-ignore a11y-autofocus -->
-		<button autofocus on:click={() => dialog.close()}>close modal</button>
+		<button class="btn-default" autofocus on:click={() => dialog.close()}>Close modal</button>
 	</div>
 </dialog>
 
