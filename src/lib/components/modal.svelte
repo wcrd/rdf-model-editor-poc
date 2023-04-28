@@ -24,7 +24,7 @@
 		</div>
 		<hr class="py-2"/>
 		<div id="modal-component">
-			<svelte:component on:click this={modalContent} {...modalContentProps}/>
+			<svelte:component on:click this={modalContent} {...modalContentProps} {dialog}/>
 		</div>
 	</div>
 </dialog>

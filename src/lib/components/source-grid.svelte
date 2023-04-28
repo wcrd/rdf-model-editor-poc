@@ -71,7 +71,7 @@
         },
     ];
 
-    let rowData = [];
+    export let rowData = []; // exposing so main app can modify for now. Will update when store is in place.
     function onGridReady(params) {
         fetch("/test-src-data.json")
             .then((resp) => resp.json())
@@ -134,10 +134,12 @@
         if(gridOptions?.api) gridOptions.api.onFilterChanged();
     }
 
+    // DEBUG
+    // $: console.debug('srcData', rowData)
 </script>
 
 <div class="ag-theme-alpine h-full w-full">
-    <AgGridSvelte {rowData} {columnDefs} {onGridReady} {gridOptions} class=""/>
+    <AgGridSvelte bind:rowData={rowData} {columnDefs} {onGridReady} {gridOptions} class=""/>
 </div>
 
 <style>

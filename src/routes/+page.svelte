@@ -14,6 +14,11 @@
     let modelGrid;
     let sourceGrid;
 
+    // TEMP: Refs to data for each grid; this should be in a store with proper methods.
+    // TODO: Update when store is done.
+    let modelGridData;
+    let sourceGridData;
+
     // vis control variables
     let src_hidden = false;
     let model_hidden = false;
@@ -27,10 +32,17 @@
     function jsonUploadHandler(){
         // open json uploader module
         modalContent = JsonUploadModal;
-        modalContentProps = {};
+        modalContentProps = {modelData: modelGridData, sourceData: sourceGridData};
         showModal = true;
         return
     }
+
+    // debug
+    $: {
+        console.debug({'modelApi': modelGrid, 'sourceApi': sourceGrid})
+        console.debug('modelData', modelGridData, 'sourceData', sourceGridData,)
+    }
+
 
 </script>
 
@@ -56,7 +68,7 @@
                     </button>
                 </div>
             </div>
-            <ModelBuilder bind:gridOptions={modelGrid} srcGrid={sourceGrid} on:select={(m)=>modelNodesToFilter=m.detail} />
+            <ModelBuilder bind:gridOptions={modelGrid} srcGrid={sourceGrid} on:select={(m)=>modelNodesToFilter=m.detail} bind:rowData={modelGridData}/>
         </div>
         <div id="src-grid-container" class="w-1/2 h-full flex flex-col flex-grow" class:hidden={src_hidden}>
             <div id="source-button-bar" class="h-12 w-full flex flex-row align-middle p-2 space-x-2 justify-between">
@@ -77,7 +89,7 @@
                     </button>
                 </div>
             </div>
-            <SourceGrid bind:gridOptions={sourceGrid} targetGrid={modelGrid} filterMode={srcViewFilterMode} {modelNodesToFilter}/>
+            <SourceGrid bind:gridOptions={sourceGrid} targetGrid={modelGrid} filterMode={srcViewFilterMode} {modelNodesToFilter} bind:rowData={sourceGridData}/>
         </div>
     </div>
 </div>

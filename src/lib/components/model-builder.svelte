@@ -35,7 +35,7 @@
         { field: "source", cellRenderer: SrcCellRenderer}
     ];
 
-    let rowData = [];
+    export let rowData = []; // exposing so main app can modify for now. Will update when store is in place.
     function onGridReady() {
         fetch("/fake-data.json")
             .then((resp) => resp.json())
@@ -142,7 +142,7 @@
 </script>
 
 <div id="modelGrid" class="ag-theme-alpine h-full w-full">
-    <AgGridSvelte {rowData} {columnDefs} {onGridReady} {gridOptions} class=""/>
+    <AgGridSvelte bind:rowData={rowData} {columnDefs} {onGridReady} {gridOptions} class=""/>
 </div>
 
 <style>
