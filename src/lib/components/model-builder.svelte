@@ -79,7 +79,11 @@
         getContextMenuItems: getContextMenuItems,
         onCellKeyDown: onCellKeyDown,
         onSelectionChanged: onSelectionChanged,
-        onCellContextMenu: (event) => { event.node.isSelected() ? null : event.node.setSelected(true) }
+        onCellContextMenu: (event) => { event.node.isSelected() ? null : event.node.setSelected(true) },
+        onCellValueChanged: (params) => {
+            // refresh source grid so linked-data fields are re-fetched
+            srcGrid.api.refreshCells({ columns: ['linked-class', 'linked-parent', 'linked-root-parent']});   
+        }
 
     };
 
