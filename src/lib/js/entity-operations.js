@@ -26,7 +26,7 @@ function generateNewEntity(overNode){
         "subject_path": newPath,
         "subject": subject,
         "label": "",
-        "class": "Not Set",
+        "class": "(not set)",
         "type": "entity"
     }
 }
@@ -82,7 +82,7 @@ function createNewPointAtNode(overNode){
         "subject_path": newPath,
         "subject": subject,
         "label": "",
-        "class": "Not Set",
+        "class": "(not set)",
         "type": "point"
     }
 
