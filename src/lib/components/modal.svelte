@@ -15,14 +15,17 @@
 	on:click|self={() => dialog.close()}
 >
 	<div on:click|stopPropagation>
-		<slot name="header"/>
+		<div class="flex flex-row w-full items-center align-middle pb-1">
+			<div class="w-full font-semibold">
+				<slot name="header"/>
+			</div>
+			<!-- svelte-ignore a11y-autofocus -->
+			<button class="btn-error grow-0 shrink-0 basis-8" autofocus on:click={() => dialog.close()}>X</button>
+		</div>
 		<hr class="py-2"/>
 		<div id="modal-component">
 			<svelte:component on:click this={modalContent} {...modalContentProps}/>
 		</div>
-		<hr class="py-2"/>
-		<!-- svelte-ignore a11y-autofocus -->
-		<button class="btn-default" autofocus on:click={() => dialog.close()}>Close modal</button>
 	</div>
 </dialog>
 

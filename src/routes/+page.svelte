@@ -5,6 +5,7 @@
     
     import Modal from "$lib/components/modal.svelte";
     import SimpleModal from "$lib/components/modals/modal-simple.svelte"
+    import JsonUploadModal from "$lib/components/modals/modal-upload-json.svelte"
 
     let srcViewFilterMode = 'all'
     let modelNodesToFilter;
@@ -22,6 +23,15 @@
     let modalContent = SimpleModal;
     let modalContentProps = { value: 7 };
 
+    // JSON upload
+    function jsonUploadHandler(){
+        // open json uploader module
+        modalContent = JsonUploadModal;
+        modalContentProps = {};
+        showModal = true;
+        return
+    }
+
 </script>
 
 <div class="h-screen w-full flex flex-col">
@@ -33,7 +43,7 @@
             <div id="model-button-bar" class="h-12 w-full flex flex-row align-middle p-2 justify-between">
                 <div>
                     <button class="btn-default" on:click={()=>jsonImportExport.export_all(modelGrid.api, sourceGrid.api)}>Export JSON</button>
-                    <button class="btn-default">Import JSON</button>
+                    <button class="btn-default"on:click={() => jsonUploadHandler()}>Import JSON</button>
                     <button class="btn-subtle" on:click={()=>showModal=true}>Modal</button>
                 </div>
                 <div id="src-panel-slide">
