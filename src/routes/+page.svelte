@@ -2,6 +2,9 @@
     import ModelBuilder from "$lib/components/model-builder.svelte";
     import SourceGrid from "$lib/components/source-grid.svelte";
     import jsonImportExport from '$lib/js/json-import-export.js'
+    
+    import Modal from "$lib/components/modal.svelte";
+    import SimpleModal from "$lib/components/modals/modal-simple.svelte"
 
     let srcViewFilterMode = 'all'
     let modelNodesToFilter;
@@ -13,6 +16,11 @@
     // vis control variables
     let src_hidden = false;
     let model_hidden = false;
+
+    // Modal control
+    let showModal = false;
+    let modalContent = SimpleModal;
+    let modalContentProps = { value: 7 };
 
 </script>
 
@@ -26,6 +34,7 @@
                 <div>
                     <button class="btn-default" on:click={()=>jsonImportExport.export_all(modelGrid.api, sourceGrid.api)}>Export JSON</button>
                     <button class="btn-default">Import JSON</button>
+                    <button class="btn-subtle" on:click={()=>showModal=true}>Modal</button>
                 </div>
                 <div id="src-panel-slide">
                     <button class="btn-subtle" on:click={()=>src_hidden=!src_hidden}>
@@ -62,3 +71,7 @@
         </div>
     </div>
 </div>
+
+<Modal bind:showModal {modalContent} {modalContentProps}>
+    <p slot="header">This is a modal container</p>
+</Modal>
