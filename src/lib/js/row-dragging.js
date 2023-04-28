@@ -1,5 +1,7 @@
+import { get } from "svelte/store";
 import { moveToPath, createNewPointAtNode } from "$lib/js/entity-operations";
 import { addRowsToGrid } from "$lib/js/grid-operations";
+import { sourceGridAPI } from "$lib/stores/store-grid-manager";
 
 // ###################################################
 // Row moving controllers
@@ -232,6 +234,9 @@ function onRowDragEnd(event) {
 
         // clear node to highlight
         setPotentialParentForNode(event.api, null);
+
+        // refresh source grid so linked-data fields are re-fetched
+        get(sourceGridAPI).api.refreshCells({ columns: ['linked-class', 'linked-parent', 'linked-root-parent']});
     }
 }
 
