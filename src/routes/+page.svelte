@@ -8,6 +8,7 @@
     import JsonUploadModal from "$lib/components/modals/modal-upload-json.svelte"
 
     import { modelGridAPI, sourceGridAPI } from '$lib/stores/store-grid-manager.js'
+    import { toggle_edit_mode } from '$lib/js/source-grid-controller'
 
     let srcViewFilterMode = 'all'
     let modelNodesToFilter;
@@ -15,6 +16,8 @@
     // vis control variables
     let src_hidden = false;
     let model_hidden = false;
+    // mode variables
+    let source_edit_mode = false;
 
     // Modal control
     let showModal = false;
@@ -65,6 +68,14 @@
                     <button class="btn-default" class:btn-selected={srcViewFilterMode=="all"} on:click={()=>{srcViewFilterMode="all"}}>All</button>
                     <span>|</span>
                     <button class="btn-default" class:btn-selected={srcViewFilterMode=="model"} on:click={()=>{srcViewFilterMode="model"}}>Model Selection</button>
+                    <span>| |</span>
+                    <button class={source_edit_mode ? "btn-error" : "btn-default"} on:click={() => { source_edit_mode = !source_edit_mode; toggle_edit_mode(source_edit_mode)}}>
+                        {#if source_edit_mode}
+                        Stop Editing
+                        {:else}
+                        Edit Mode
+                        {/if}
+                    </button>
                 </div>
                 <div>
                     <button class="btn-subtle" on:click={()=>model_hidden=!model_hidden}>
