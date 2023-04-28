@@ -12,4 +12,7 @@ export const sourceGridColumnDefs = writable();
 export const modelData = writable([]);
 export const sourceData = writable([]);
 
-console.debug({get, modelData, sourceData, modelGridAPI, sourceGridAPI})
+// change tracking
+export const sourceEditedNodes = writable()
+
+console.debug({get, modelData, sourceData, modelGridAPI, sourceGridAPI, sourceEditedNodes})

@@ -4,7 +4,7 @@
     import "ag-grid-community/styles/ag-grid.css"; // Core grid CSS, always needed
     import "ag-grid-community/styles/ag-theme-alpine.css"; // Optional theme CSS
 
-    import { sourceData, sourceGridColumnDefs, modelGridAPI } from '$lib/stores/store-grid-manager.js'
+    import { sourceData, sourceGridColumnDefs, modelGridAPI, sourceEditedNodes } from '$lib/stores/store-grid-manager.js'
 
     import { addGridDropZone } from '$lib/js/drag-and-drop.js'
     import { onRowDragEnter } from '$lib/js/row-dragging.js'
@@ -33,6 +33,10 @@
             externalFilterChanged(modelNodesToFilter)
         }
     }
+
+    // track edited nodes
+    // could also be done as data-column on rowData
+    $sourceEditedNodes = new Set();
     
     const rowClassRules = {
         "row-assigned": params => !!params.node.data['source-for']
@@ -55,6 +59,7 @@
         // system
         { field: "source-for", cellRenderer: SrcCellRenderer},
         { field: "type", hide: true },
+        // { field: "_edited", hide: true, editable: false, suppressColumnsToolPanel: true }, // for change tracking
         // editing
         { field: "edit-class", hide: true, editable: false, suppressColumnsToolPanel: true },
         { field: "edit-parent", hide: true, editable: false, suppressColumnsToolPanel: true },
@@ -103,7 +108,12 @@
         animateRows: true,
         isExternalFilterPresent: isExternalFilterPresent,
         doesExternalFilterPass: doesExternalFilterPass,
-        rowClassRules: rowClassRules
+        rowClassRules: rowClassRules,
+        onCellValueChanged: (event) => { 
+            // event.node.setDataValue('_edited', true)
+            $sourceEditedNodes.add(event.node)
+            // console.debug(event)
+        } 
     };
     
     function isExternalFilterPresent(){

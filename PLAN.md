@@ -61,4 +61,9 @@ src-view
 ## Editing
 - [ ] enable class and label editing
   - [ ] add handlers to allow path and subject editing
-- [ ] 
+
+
+## Source Edit Mode
+- [ ] Prevent drag-and-drop operations in edit mode
+- [ ] When exiting edit mode, need to process changes into the model
+- [ ] Add cellFormatter for parent, root parent showing "Class: Label". Cell data format could be class::label for editing...
