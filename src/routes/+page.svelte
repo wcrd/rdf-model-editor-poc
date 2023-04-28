@@ -2,12 +2,10 @@
     import ModelBuilder from "$lib/components/model-builder.svelte";
     import SourceGrid from "$lib/components/source-grid.svelte";
 
+    import { modelGridAPI, sourceGridAPI } from '$lib/stores/store-grid-manager.js'
+
     let srcViewFilterMode = 'all'
     let modelNodesToFilter;
-
-    // variables for each grid;
-    let modelGrid;
-    let sourceGrid;
 
     // vis control variables
     let src_hidden = false;
@@ -33,7 +31,7 @@
                     </button>
                 </div>
             </div>
-            <ModelBuilder bind:gridOptions={modelGrid} srcGrid={sourceGrid} on:select={(m)=>modelNodesToFilter=m.detail} />
+            <ModelBuilder bind:gridOptions={$modelGridAPI} srcGrid={$sourceGridAPI} on:select={(m)=>modelNodesToFilter=m.detail} />
         </div>
         <div id="src-grid-container" class="w-1/2 h-full flex flex-col flex-grow" class:hidden={src_hidden}>
             <div id="source-button-bar" class="h-12 w-full flex flex-row align-middle p-2 space-x-2 justify-between">
@@ -54,7 +52,7 @@
                     </button>
                 </div>
             </div>
-            <SourceGrid bind:gridOptions={sourceGrid} targetGrid={modelGrid} filterMode={srcViewFilterMode} {modelNodesToFilter}/>
+            <SourceGrid bind:gridOptions={$sourceGridAPI} targetGrid={$modelGridAPI} filterMode={srcViewFilterMode} {modelNodesToFilter}/>
         </div>
     </div>
 </div>
