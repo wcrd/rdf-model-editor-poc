@@ -4,6 +4,8 @@
     import "ag-grid-community/styles/ag-grid.css"; // Core grid CSS, always needed
     import "ag-grid-community/styles/ag-theme-alpine.css"; // Optional theme CSS
 
+    import { sourceData } from '$lib/stores/store-grid-manager.js'
+
     import { addGridDropZone } from '$lib/js/drag-and-drop.js'
     import { onRowDragEnter } from '$lib/js/row-dragging.js'
     import { SrcCellRenderer } from '$lib/ag-grid-components/srcCellRenderer.js'
@@ -71,11 +73,11 @@
         },
     ];
 
-    let rowData = [];
+    // let rowData = [];
     function onGridReady(params) {
         fetch("/test-src-data.json")
             .then((resp) => resp.json())
-            .then((data) => (rowData = data.map(row => ({...row, type: "src"}) ))); // add the type to the imported data. In future will run dedicated import function here.
+            .then((data) => ($sourceData = data.map(row => ({...row, type: "src"}) ))); // add the type to the imported data. In future will run dedicated import function here.
         // add row drop zone
         // setting delay to make sure other grid is intitalised
         // TODO: update this to be more robust.
@@ -137,7 +139,7 @@
 </script>
 
 <div class="ag-theme-alpine h-full w-full">
-    <AgGridSvelte {rowData} {columnDefs} {onGridReady} {gridOptions} class=""/>
+    <AgGridSvelte bind:rowData={$sourceData} {columnDefs} {onGridReady} {gridOptions} class=""/>
 </div>
 
 <style>
