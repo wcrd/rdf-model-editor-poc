@@ -1,5 +1,5 @@
 import { get } from 'svelte/store';
-import { modelGridAPI, sourceGridAPI } from '$lib/stores/store-grid-manager.js'
+import { modelGridAPI, sourceGridAPI, modelData, sourceData } from '$lib/stores/store-grid-manager.js'
 
 function test(){
     console.log("hello")
@@ -32,7 +32,7 @@ function export_all(){
 
 }
 
-async function import_json(file, modelData, sourceData){
+async function import_json(file){
     // read file data
     let fileData = await file.text();
     const data = await JSON.parse(fileData);
@@ -45,16 +45,8 @@ async function import_json(file, modelData, sourceData){
     } else console.debug("JSON validation passed.")
 
     // clear the grids and process new data;
-    // TODO: Update this when new storage/data handling is done.
-    // at the moment I am just crudley writing direct to grid. Should write to data store.
-    // NOTE: because I am passing references to the array, re-assigning it to a new array does not work
-    // I can only modify the array at this reference. If I re-assign, it won't update the original data!
-    // This is why I need to swap to stores now. I know this doesn't do what it is meant to, just testing that I can 'import' something.
-    // Hack to replace elements.
-    modelData.length = 0;
-    sourceData.length = 0;
-    modelData.push(...data.model.data);
-    sourceData.push(...data.sources.data);
+    modelData.set(data.model.data)
+    sourceData.set(data.sources.data)
 
     return true
 }

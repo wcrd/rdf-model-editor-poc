@@ -6,14 +6,11 @@
     let files;
 
     async function uploadJson(file){
-        console.debug(modelData, sourceData)
         const res = await import_json(file, modelData, sourceData)
-        // console.debug("Data in modal post func:", modelData, sourceData)
-        modelData = modelData; sourceData = sourceData;
         if(res) console.log("Import successful.")
         else console.log("There was an error when processing the import.")
-        // return
         dialog.close();
+        return
     }
 </script>
 
