@@ -21,10 +21,11 @@
     let modalContent = SimpleModal;
     let modalContentProps = { value: 7 };
 
-    // JSON upload
-    function jsonUploadHandler(){
+    // Modal launcher
+    function launchModal(modalComponent=null, modalProps={}){
         // open json uploader module
-        modalContent = JsonUploadModal;
+        modalContent = modalComponent;
+        modalContentProps = modalProps;
         showModal = true;
         return
     }
@@ -41,8 +42,8 @@
             <div id="model-button-bar" class="h-12 w-full flex flex-row align-middle p-2 justify-between">
                 <div>
                     <button class="btn-default" on:click={()=>jsonImportExport.export_all()}>Export JSON</button>
-                    <button class="btn-default"on:click={() => jsonUploadHandler()}>Import JSON</button>
-                    <button class="btn-subtle" on:click={()=>showModal=true}>Modal</button>
+                    <button class="btn-default"on:click={() => launchModal(JsonUploadModal)}>Import JSON</button>
+                    <button class="btn-subtle" on:click={()=>showModal=true}>Test Modal</button>
                 </div>
                 <div id="src-panel-slide">
                     <button class="btn-subtle" on:click={()=>src_hidden=!src_hidden}>
