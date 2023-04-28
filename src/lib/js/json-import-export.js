@@ -1,8 +1,11 @@
+import { get } from 'svelte/store';
+import { modelGridAPI, sourceGridAPI } from '$lib/stores/store-grid-manager.js'
+
 function test(){
     console.log("hello")
 }
 
-function export_all(modelApi, sourceApi){
+function export_all(){
     const output = {
         model: {
             data: [],
@@ -12,8 +15,8 @@ function export_all(modelApi, sourceApi){
         }
     }
     // need to manually loop through each grid and export
-    modelApi.forEachNode(node => output.model.data.push(node.data));
-    sourceApi.forEachNode(node => output.sources.data.push(node.data));
+    get(modelGridAPI).api.forEachNode(node => output.model.data.push(node.data));
+    get(sourceGridAPI).api.forEachNode(node => output.sources.data.push(node.data));
 
     // Generate data file target
     const data = encodeURI(JSON.stringify(output));

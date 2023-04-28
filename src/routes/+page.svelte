@@ -25,15 +25,8 @@
     function jsonUploadHandler(){
         // open json uploader module
         modalContent = JsonUploadModal;
-        modalContentProps = {modelData: modelGridData, sourceData: sourceGridData};
         showModal = true;
         return
-    }
-
-    // debug
-    $: {
-        console.debug({'modelApi': modelGrid, 'sourceApi': sourceGrid})
-        console.debug('modelData', modelGridData, 'sourceData', sourceGridData,)
     }
 
 
@@ -47,7 +40,7 @@
         <div id="model-grid-container" class="w-1/2 h-full flex flex-col flex-grow" class:hidden={model_hidden}>
             <div id="model-button-bar" class="h-12 w-full flex flex-row align-middle p-2 justify-between">
                 <div>
-                    <button class="btn-default" on:click={()=>jsonImportExport.export_all(modelGrid.api, sourceGrid.api)}>Export JSON</button>
+                    <button class="btn-default" on:click={()=>jsonImportExport.export_all()}>Export JSON</button>
                     <button class="btn-default"on:click={() => jsonUploadHandler()}>Import JSON</button>
                     <button class="btn-subtle" on:click={()=>showModal=true}>Modal</button>
                 </div>
