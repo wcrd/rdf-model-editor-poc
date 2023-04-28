@@ -9,6 +9,7 @@
     import { addGridDropZone } from '$lib/js/drag-and-drop.js'
     import { onRowDragEnter } from '$lib/js/row-dragging.js'
     import { SrcCellRenderer } from '$lib/ag-grid-components/srcCellRenderer.js'
+    import { get_linked_class, get_linked_parent, get_linked_root_parent } from '$lib/js/grid-data-helpers'
 
     // get target grid dropzone
     export let targetGrid;
@@ -58,22 +59,9 @@
         { field: "edit-class", hide: true, editable: false, suppressColumnsToolPanel: true },
         { field: "edit-parent", hide: true, editable: false, suppressColumnsToolPanel: true },
         // linked
-        { field: "linked-class", valueGetter: (params)=>{ return params.data['source-for'] ? targetGrid.api.getRowNode(params.data['source-for']).data.class : null } },
-        { field: "linked-root-parent", valueGetter: (params)=>{ 
-                if(params.data['source-for']){
-                    const path = targetGrid.api.getRowNode(params.data['source-for']).data.subject_path
-                    return path.length == 1 ? "(not set)" : path[0]
-                } else return null;
-            }
-        },
-        { field: "linked-parent", valueGetter: (params)=>{ 
-                if(params.data['source-for']){ 
-                    // get last two elements; if only one returned then no parent
-                    const path = targetGrid.api.getRowNode(params.data['source-for']).data.subject_path.slice(-2); 
-                    return path.length == 1 ? "(not set)" : path[0] 
-                } else return null
-            },
-        },
+        { field: "linked-class", valueGetter: (params)=> get_linked_class(params)},
+        { field: "linked-root-parent", valueGetter: (params) => get_linked_root_parent(params) },
+        { field: "linked-parent", valueGetter: (params) => get_linked_parent(params) },
     ];
 
     // let rowData = [];
