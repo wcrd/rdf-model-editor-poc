@@ -19,51 +19,67 @@
 
 ## To Do
 
-* Add row highligh fade style to rows that have just been moved. ~3s.
-* Selection
-  * [x] Row Selected on Click, Ctrl/Shift Click
-  * [x] Cell celected on double click
-  * [x] Cell selected on keyboard arrow movement
-  * [x] Rows unselect on keyboard arrow movement or cell double click
-* New Rows
-  * [x] Shift+Enter creates new row at selection level (selected cell; i.e. last click)
-  * [x] Ctrl+Shift+Enter creates new entity and moves anything selected inside as child.
-* Highlighting <- Needs to happen before New Rows work
-  * Shift+arrows should also highlight
-* Tab
-  * Tabbing highlighted rows nests or unnested them, if available.
-  * THIS IS MORE COMPLEX THAN THIS; parking for now. See branch: tab-captures
-* Undo
+### Model Grid
 
-* need to suppress shift enter opening drop downs
----
+* UI
+  * [ ] Toggle to control whether path is shown as label or subject
+  * [ ] Add row highligh fade style to rows that have just been moved. ~3s.
+  * [ ] Indicator column showing if there is source point linked? like little dot at start.
+* UX
+  * [HOLD] Tabbing to nest
+    * [ ] Tabbing highlighted rows nests or unnested them, if available.
+    * [ ] THIS IS MORE COMPLEX THAN THIS; parking for now. See branch: tab-captures
+  * [ ] need to suppress shift enter opening drop downs
+* Data
+  * [ ] force unique on model subject column
+  * [ ] Add combo in class selector
+
+### Source Grid
+
+* UI
+  * [ ] Toggle to control whether parent/root shows subject or label
+* Editing
+  - [ ] add valueSetter handlers to allow path and subject editing
+  * [ ] creating/updating
+    * [x] update/set class
+    * [ ] pnt not in model yet
+      * [ ] No entity
+      * [ ] entity
+        * [ ] class + no subject
+        * [ ] class + subject
+        * [ ] subject only (same as class + subject; we should auto populate class on subject selection)
+          * [ ] Offer dropdown in this cell?
+    * [ ] Cannot update parent/root class if subject is set. Can only make new subject.
+      * [ ] To set a class for source points they must be 'assigned' to a new entity. Once the entity is created, entity class cannot be changed from the source grid. Must be done in model grid. This is because it is not good ux when changing parent/root class in source; it would affect all other points assigned to that entity. Would need to loop through an update on the fly. I think it is better to allow static changes, that are processed on edit completion.
+  * [ ] Capture edits that are not OK on processing
+    * [ ] Store var for this?
+    * [ ] Highligh src rows red where processing failed
+    * [ ] Clear other nodes that we successfully processed.
+
+### General Grid
+* UX
+  * [ ] Shift + Arrow highlights
+  * [ ] Add range selection with mouse
+
+### Ontology
+* Ontology Grid
+  * [ ] Side grid to show tree of classes
+* Ontology Manager
+  * [ ] Modal? to show ontologies in use for this model
+  * [ ] Ability to upload / add ontology data; this can come later, by default will offer Brick and btg.com ontologies.
+
+### Cross Grid Drag
+* [ ] Single src row + ctrl creates new point entity
+- [ ] Prevent drag-and-drop operations in edit mode
+
+### Filtering
+
+### Functions
+
+### System
 
 * Storage
-  * Persist between sessions
-* Upload data into points src grid
-* Export 'save file'
-* Load 'save file'
-* Export model to ttl
-
-
-src-view
-* [ ] Update buttons to filter grid
-* [x] generate row-id on load
-* [x] drag into model grid
-  * [x] simple drag single - associate with point
-  * [ ] single+ctrl/multiple drag - create new rows and associate
-* [ ] Click model row to filter src-grid; add button above model grid: 'Filter source grid when I select'
-
-* [ ] force unique on model subject column
-
-* [ ] refresh model filter on drag-and-drop
-
-## Editing
-- [ ] enable class and label editing
-  - [ ] add handlers to allow path and subject editing
-
-
-## Source Edit Mode
-- [ ] Prevent drag-and-drop operations in edit mode
-- [ ] When exiting edit mode, need to process changes into the model
-- [ ] Add cellFormatter for parent, root parent showing "Class: Label". Cell data format could be class::label for editing...
+  * [ ] Persist between sessions
+* [ ] Upload data into points src grid
+* [ ] Export model to ttl
+* [ ] Undo
