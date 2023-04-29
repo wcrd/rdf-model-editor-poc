@@ -22,7 +22,7 @@ function onRowDragEnter(event) {
 }
 
 function onRowDragMove(event) {
-    console.debug(event)
+    // console.debug(event)
     // if src point from other grid; do extra checks & options
     if (srcDragMode) {
         // if one row selected, we are going to assign to an existing point

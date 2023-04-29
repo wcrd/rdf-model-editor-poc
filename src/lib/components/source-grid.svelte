@@ -99,7 +99,7 @@
             rowDrag: true, // all row drag from any cell
         },
         autoGroupColumnDef: {
-            rowDrag: true,
+            // rowDrag: true,
             groupSelectsChildren: false
         },
         getRowId: (params) => `${params.data['BACnet Network']}-${params.data['Device No']}-${params.data['Object Address']}`,
