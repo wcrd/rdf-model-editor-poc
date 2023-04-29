@@ -27,6 +27,7 @@ function toggle_edit_mode(state=true){
         // TODO
     }
 
+    // Show/hide editable columns
     sourceGridColumnDefs.update(curr => {
         curr.forEach(def => {
             if(Object.keys(colsToUpdate).includes(def?.field)){
@@ -34,6 +35,12 @@ function toggle_edit_mode(state=true){
                 def.editable = state;
             }
         })
+        return curr
+    })
+
+    // Disable/Enable row-dragging
+    sourceGridAPI.update(curr => {
+        curr.defaultColDef.rowDrag = !state;
         return curr
     })
 }

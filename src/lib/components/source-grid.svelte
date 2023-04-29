@@ -144,7 +144,7 @@
 </script>
 
 <div class="ag-theme-alpine h-full w-full">
-    <AgGridSvelte bind:rowData={$sourceData} bind:columnDefs={$sourceGridColumnDefs} {onGridReady} {gridOptions} class=""/>
+    <AgGridSvelte bind:rowData={$sourceData} bind:columnDefs={$sourceGridColumnDefs} {onGridReady} bind:gridOptions={gridOptions} class=""/>
 </div>
 
 <style>
