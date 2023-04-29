@@ -12,20 +12,21 @@ let srcDragMode = null;
 let potentialInsertNode= null;
 
 function onRowDragEnter(event) {
+    // console.debug(event);
     if (event.nodes.some(node => node?.data.type == "src")) {
-        if (event.nodes.length == 1) srcDragMode = 'single';
-        else srcDragMode = 'multiple';
+        if (event.nodes.length == 1 && !event.event.ctrlKey ) srcDragMode = 'link';
+        else srcDragMode = 'insert';
     } else {
         srcDragMode = null;
     }
 }
 
 function onRowDragMove(event) {
-    // console.debug("drg mode: ", srcDragMode)
+    console.debug(event)
     // if src point from other grid; do extra checks & options
     if (srcDragMode) {
         // if one row selected, we are going to assign to an existing point
-        if (srcDragMode == 'single') setPotentialParentForSource(event.api, event.overNode);
+        if (srcDragMode == 'link' && !event.event.ctrlKey) setPotentialParentForSource(event.api, event.overNode);
         // if more that one row selected, CTRL must also be held, as we will be
         // creating new point records at the parent
         else {
@@ -116,7 +117,7 @@ function onRowDragEnd(event) {
     }
 
     // if src point from other grid; do extra checks & options
-    if (srcDragMode == "single") {
+    if (srcDragMode == "link") {
         // Need to update
         // 1. If point already has source; update that source in src table
         // 2. If source already has point; update that point in pnt table
@@ -163,8 +164,8 @@ function onRowDragEnd(event) {
         // clear node to highlight
         setPotentialParentForSource(event.api, null);
     }
-    else if(srcDragMode == "multiple"){
-        console.debug("inserting multiple new points")
+    else if(srcDragMode == "insert"){
+        console.debug("inserting new point(s)")
         // console.debug(event.nodes)
 
         // lots of potential for refactoring here with code in if clause above
