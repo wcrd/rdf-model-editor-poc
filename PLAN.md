@@ -69,7 +69,8 @@
   * [ ] Ability to upload / add ontology data; this can come later, by default will offer Brick and btg.com ontologies.
 
 ### Cross Grid Drag
-* [ ] Single src row + ctrl creates new point entity
+* [x] Single src row + ctrl creates new point entity
+  * [ ] Need to reset highlight/insert line when ctrl is pressed or released
 - [ ] Prevent drag-and-drop operations in edit mode
 
 ### Filtering
