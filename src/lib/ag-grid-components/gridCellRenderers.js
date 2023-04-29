@@ -27,20 +27,28 @@ export class ParentCellRenderer {
       // render container
       this.eGui = document.createElement('div');
       // default val
-      this.eGui.innerHTML = params.value;
+      this.eGui.innerHTML = '';
       // check for data
-      if(params.value){
-        // get parts
-        const parts = params.value?.split("::");
-        if(parts.length == 2){
-            this.eGui.innerHTML = `
-                <span class="rounded-xl bg-blue-100 p-1">
-                    ${parts[0]}
-                </span>
-                <span class="ml-2">
-                    ${parts[1]}
-                </span>
-                `
+      // console.debug("render: ", params)
+      // if data and object has some values, then lets render
+      if(params.value && Object.values(params.value).some(val => val!=null)){
+        if(params.value.entClass){ 
+          this.eGui.innerHTML += `
+            <span class="rounded-xl bg-blue-100 p-1">
+                ${params.value.entClass || ""}
+            </span>
+            `
+        }
+        if(params.value.subject){
+          // inlcude label if subject is present, even if label is blank.
+          this.eGui.innerHTML += `
+            <span class="ml-2">
+                ${params.value.subject || ""}
+            </span>
+            <span class="ml-1">
+                (${params.value.label || ""})
+            </span>
+          `
         } 
         // else
         // something went wrong

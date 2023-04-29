@@ -81,6 +81,10 @@ function apply_updates(){
         if(!linkedNodeId){
             // need to create a new model node!!
             console.debug("Need to create a new model node for: ", node)
+            // check if a parent class, or parent subject has been specified
+            // we only support creating new entities or changing point assignment. 
+            // Editing existing entities is not possible in the source grid.
+            console.debug("New node: ", node.data['edit-class'], node.data['edit-parent'])
         } else {
             // get model node to update
             const modelNode = get(modelGridAPI).api.getRowNode(linkedNodeId);
