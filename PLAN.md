@@ -19,6 +19,11 @@
 
 ## To Do
 
+Current:
+* Create entities that are newly defined from source (and points)
+  * Move into entity, if exists, or if newly created. (Need object editing to work first)
+* edit objects in cell?
+
 ### Model Grid
 
 * UI
@@ -50,6 +55,8 @@
         * [ ] subject only (same as class + subject; we should auto populate class on subject selection)
           * [ ] Offer dropdown in this cell?
     * [ ] EDIT OBJECT IN CELL? Atm it shows [Object Object]
+      * [ ] Support shorthand class::subject; convert on edit
+      * [ ] ~~Only show class, subject in edit field. Hide label.~~
     * [ ] Cannot update parent/root class if subject is set. Can only make new subject.
       * [ ] To set a class for source points they must be 'assigned' to a new entity. Once the entity is created, entity class cannot be changed from the source grid. Must be done in model grid. This is because it is not good ux when changing parent/root class in source; it would affect all other points assigned to that entity. Would need to loop through an update on the fly. I think it is better to allow static changes, that are processed on edit completion.
   * [ ] Capture edits that are not OK on processing

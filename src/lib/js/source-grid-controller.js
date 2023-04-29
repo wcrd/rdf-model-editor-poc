@@ -2,6 +2,8 @@ import { get } from "svelte/store";
 import { sourceGridColumnDefs, sourceGridAPI, sourceEditedNodes } from "$lib/stores/store-grid-manager";
 import { get_linked_class, get_linked_parent, get_linked_root_parent } from "$lib/js/grid-data-helpers";
 import { modelGridAPI } from "../stores/store-grid-manager";
+import { createNewPointAtNode } from '$lib/js/entity-operations'
+import { addRowsToGrid } from '$lib/js/grid-operations'
 
 function toggle_edit_mode(state=true){
     // state = true: show
@@ -85,6 +87,25 @@ function apply_updates(){
             // we only support creating new entities or changing point assignment. 
             // Editing existing entities is not possible in the source grid.
             console.debug("New node: ", node.data['edit-class'], node.data['edit-parent'])
+            // create point entity
+            // TODO: this is same as entity-operations. Refactor.
+            // need to insert at same path as overnode
+            let newRow = createNewPointAtNode({});
+            newRow.source = node.id;
+            newRow.class = node.data['edit-class']
+            node.data['source-for'] = newRow.subject
+            // add to model grid
+            addRowsToGrid(get(modelGridAPI).api, [newRow])
+            // refresh source grid
+            get(sourceGridAPI).api.applyTransaction({
+                update: [node.data]
+            });
+            // if parent
+                // if exists
+                    // move point into parent
+                // if not
+                    // create entity
+                    // move point into entity
         } else {
             // get model node to update
             const modelNode = get(modelGridAPI).api.getRowNode(linkedNodeId);
