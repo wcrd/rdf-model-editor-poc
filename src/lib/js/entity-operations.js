@@ -121,6 +121,24 @@ function createNewPointAtNode(overNode){
 
 }
 
+// above function should be 'over' node as I am popping the path. This fucntion inserts at the given node.
+function createNewPointAtNode2(overNode){
+    const id_str = generateString(5)
+    const newPath = overNode?.data ? overNode.data.subject_path.slice() : []
+    // newPath.pop();
+    const subject = `pnt_${id_str}`
+    newPath.push(subject)
+
+    return {
+        "subject_path": newPath,
+        "subject": subject,
+        "label": "",
+        "class": "(not set)",
+        "type": "point"
+    }
+
+}
+
 // replace above function with this
 function createNewPointAtNodeWithParams(overNode, {subject, label, cls}={}){
     subject = subject || `pnt_${generateString(5)}`;
@@ -152,4 +170,4 @@ function removeSourceFor(gridApi, rows){
     return res.update[0]
 }
 
-export { generateNewEntity, moveToPath, createNewPointAtNode, removeSourceFor, createNewPointAtNodeWithParams, generateNewEntityWithParams }
+export { generateNewEntity, moveToPath, createNewPointAtNode, removeSourceFor, createNewPointAtNodeWithParams, generateNewEntityWithParams, createNewPointAtNode2 }

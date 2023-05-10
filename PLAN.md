@@ -23,6 +23,9 @@ Current:
 * Create entities that are newly defined from source (and points)
   * Move into entity, if exists, or if newly created.
 * Process updates to parent objects in edit mode as part of applying update routine.
+* Need to cleanup the apply_updates logic. It is too messy. Process_Parent probably needs a re-write
+  * CASES:
+    * src not in model; adding point to existing entity
 
 
 * Optional props in model (destructure object instead for arg?)
