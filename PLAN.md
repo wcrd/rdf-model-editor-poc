@@ -22,9 +22,8 @@
 Current:
 * Create entities that are newly defined from source (and points)
   * Move into entity, if exists, or if newly created. (Need object editing to work first)
-* ~~Parse edits to objects in cell using valueParser (this might not be needed? Using JSON.parse for now.)~~
 * Process updates to parent objects in edit mode as part of applying update routine.
-* Change src object key from entClass to class
+
 
 * Optional props in model (destructure object instead for arg?)
 
@@ -55,7 +54,14 @@ Current:
       * [ ] No entity
       * [ ] entity
         * [ ] class + no subject
-        * [ ] class + subject
+          * Creates new entity of class and nests point.
+        * [ ] class + subject -> this should be in a combo; user can add a new one through this too.
+          * Tries to find entity with that subject
+            * if found
+              * if class matches then add point entity to it
+              * if class does not match then do not process, we are not supporting changing parent/root class from source grid. Just addition and appending.
+            *  if not found
+               *  create new entity with subject and class and add point entity to it.
         * [ ] subject only (same as class + subject; we should auto populate class on subject selection)
           * [ ] Offer dropdown in this cell?
     * [ ] EDIT OBJECT IN CELL? Atm it shows [Object Object]

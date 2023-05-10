@@ -66,7 +66,16 @@
             valueFormatter: (params)=>JSON.stringify(params.value), 
             cellRenderer: ParentCellRenderer, 
             cellEditorParams: {useFormatter: true},
-            valueParser: params=>JSON.parse(params.newValue) 
+            valueParser: params=>{
+                // try to parse, else return old data
+                let data = params.oldValue;
+                try{
+                    data = JSON.parse(params.newValue)
+                } catch {
+                    console.log("Invalid cell value format. Discarding changes. Soz. Please provide a valid JSON object next time.", params.newValue)
+                }
+                return data
+            } 
         },
         // linked
         { field: "linked-class", valueGetter: (params)=> get_linked_class(params)},
