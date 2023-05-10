@@ -167,14 +167,16 @@ function parse_parent(parent_data, modelGridAPI){
             return {
                 error: false,
                 operation: "create",
-                ctx: parent_data
+                ctx: parent_data,
+                label_mode: false
             }
         }
     } else { // if no subject, then a new entity will be created
         return {
             error: false,
             operation: "create",
-            ctx: parent_data
+            ctx: parent_data,
+            label_mode: !!parent_data?.label
         }
     }
 }
@@ -194,9 +196,11 @@ function process_action(action, node, modelRowsToUpdate){
         // check for label in current transaction record (assign to same subject if so)
         // create new entity
         // console.debug(node)
-        const res_ent = addNewEntityRowWithParams(get(modelGridAPI).api, null, action.ctx)
+        const newEntity = addNewEntityRowWithParams(get(modelGridAPI).api, null, {...action.ctx, cls: action.ctx?.class}) // need to manually reassign class key as it is reserved. TODO: rename this in cell editor to cls
         // console.log(res_ent)
-        // create point and add to entity
+        // move existing model point to new parent
+        moveToPath(newEntity.data.subject_path, node, modelRowsToUpdate)
+        return true
     } else {
         console.log("Unsupported operation. Op: ", action, "on node: ", node)
         return false

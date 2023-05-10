@@ -32,8 +32,8 @@ function generateNewEntity(overNode){
 }
 
 // replace above with this function
-function generateNewEntityWithParams(overNode, {subject=null, label=null, cls=null}={}){
-    console.debug(subject, label, cls)
+function generateNewEntityWithParams(overNode, {subject, label, cls}={}){
+    // console.debug(subject, label, cls)
     const newSubject = subject || `ent_${generateString(5)}`;
     let newPath;
     
