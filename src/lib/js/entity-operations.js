@@ -31,6 +31,39 @@ function generateNewEntity(overNode){
     }
 }
 
+// replace above with this function
+function generateNewEntityWithParams(overNode, {subject=null, label=null, cls=null}={}){
+    console.debug(subject, label, cls)
+    const newSubject = subject || `ent_${generateString(5)}`;
+    let newPath;
+    
+    if(overNode){
+        // if location to insert is a point, then get the parent node.
+        const newPotentialParent =
+            overNode.data?.type === 'entity'
+            ? // if over an entity, we take the immediate row
+                overNode
+            : // if over a point, we take the parent row (which will be an entity, or root)
+                overNode.parent;
+        
+        // if no data, parent is root. Otherwise an entity
+        newPath = newPotentialParent?.data ? newPotentialParent.data.subject_path.slice() : []
+        newPath.push(newSubject)
+    } 
+    // else grid is empty or user has selected empty space. Add to root.
+    else {
+        newPath = [newSubject]
+    }
+
+    return {
+        "subject_path": newPath,
+        "subject": newSubject,
+        "label": label || "",
+        "class": cls || "(not set)",
+        "type": "entity"
+    }
+}
+
 
 // program to generate random strings
 // declare all characters
@@ -88,6 +121,22 @@ function createNewPointAtNode(overNode){
 
 }
 
+// replace above function with this
+function createNewPointAtNodeWithParams(overNode, {subject, label, cls}={}){
+    subject = subject || `pnt_${generateString(5)}`;
+    const newPath = overNode?.data ? overNode.data.subject_path.slice() : []
+    newPath.pop();
+    newPath.push(subject)
+
+    return {
+        "subject_path": newPath,
+        "subject": subject,
+        "label": label || "",
+        "class": cls || "(not set)",
+        "type": "point"
+    }
+}
+
 // clear linked sources
 function removeSourceFor(gridApi, rows){
     const srcIds = rows.map(row => row.source).filter(Boolean)
@@ -103,4 +152,4 @@ function removeSourceFor(gridApi, rows){
     return res.update[0]
 }
 
-export { generateNewEntity, moveToPath, createNewPointAtNode, removeSourceFor }
+export { generateNewEntity, moveToPath, createNewPointAtNode, removeSourceFor, createNewPointAtNodeWithParams, generateNewEntityWithParams }

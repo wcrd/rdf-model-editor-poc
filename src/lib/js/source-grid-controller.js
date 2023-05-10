@@ -2,8 +2,8 @@ import { get } from "svelte/store";
 import { sourceGridColumnDefs, sourceGridAPI, sourceEditedNodes } from "$lib/stores/store-grid-manager";
 import { get_linked_class, get_linked_parent, get_linked_root_parent } from "$lib/js/grid-data-helpers";
 import { modelGridAPI } from "../stores/store-grid-manager";
-import { createNewPointAtNode } from '$lib/js/entity-operations'
-import { addRowsToGrid } from '$lib/js/grid-operations'
+import { createNewPointAtNode, moveToPath, createNewPointAtNodeWithParams } from '$lib/js/entity-operations'
+import { addRowsToGrid, addNewEntityRowWithParams } from '$lib/js/grid-operations'
 
 function toggle_edit_mode(state=true){
     // state = true: show
@@ -81,7 +81,8 @@ function apply_updates(){
     console.log("Updating ", cellsToProcess.size, "entities.")
     cellsToProcess.forEach(node => {
         const linkedNodeId = node.data['source-for'];
-        if(!linkedNodeId){
+        if(!linkedNodeId){ 
+            // if source is not already linked to a model point
             // need to create a new model node!!
             console.debug("Need to create a new model node for: ", node)
             // check if a parent class, or parent subject has been specified
@@ -101,7 +102,9 @@ function apply_updates(){
             get(sourceGridAPI).api.applyTransaction({
                 update: [node.data]
             });
+
             // if parent
+            
                 // if exists
                     // move point into parent
                 // if not
@@ -113,6 +116,11 @@ function apply_updates(){
             // apply updates
             // Class
             modelNode.data.class = node.data['edit-class'];
+            // Parent
+            // parse cell and get action
+            const par_action = parse_parent(node.data['edit-parent'], modelGridAPI)
+            // console.debug(par_action)
+            process_action(par_action, modelNode, modelRowsToUpdate)
             // TODO: Others
 
             modelRowsToUpdate.push(modelNode.data);
@@ -129,6 +137,70 @@ function apply_updates(){
     sourceEditedNodes.update(curr => { curr.clear(); return curr } )
 
     return res
+}
+
+// parse parent cell json node for use in update logic
+function parse_parent(parent_data, modelGridAPI){
+    // if subject defined, then we need to check if it exists already in the model
+    if(parent_data?.subject){
+        const modelNode = get(modelGridAPI).api.getRowNode(parent_data.subject);
+        // console.debug("Model node: ", modelNode)
+        
+        if(modelNode){ // subject exists, check other fields, if provided
+            if((parent_data?.class ? modelNode.data.class == parent_data.class : 1) & (parent_data?.label ? modelNode.data.label == parent_data.label : 1)){
+                // valid reference; return this as new parent
+                return {
+                    operation: "move",
+                    error: false,
+                    targetNode: modelNode
+                }
+            } else {
+                // the parent object provided is inconsistent with model node
+                // editing class or label from source for existing model node is not allowed
+                // abort
+                console.log("Cannot process parent change due to inconsistent parent reference. No model node exists with these properties: ", parent_data)
+                return {
+                    error: true,
+                }
+            }
+        } else { // no entity in model, create it.
+            return {
+                error: false,
+                operation: "create",
+                ctx: parent_data
+            }
+        }
+    } else { // if no subject, then a new entity will be created
+        return {
+            error: false,
+            operation: "create",
+            ctx: parent_data
+        }
+    }
+}
+
+function process_action(action, node, modelRowsToUpdate){
+    // action = action object
+    // node = node to apply action to
+    // modelRowsToUpdate = reference to shared array containing record of nodes updated
+    if(action.error) return false;
+
+    if(action.operation=="move"){
+        // console.debug("Moving point: ", node, " to node: ", action.node)
+        moveToPath(action.targetNode.data.subject_path, node, modelRowsToUpdate)
+        return true
+    }
+    else if(action.operation=="create"){
+        // check for label in current transaction record (assign to same subject if so)
+        // create new entity
+        // console.debug(node)
+        const res_ent = addNewEntityRowWithParams(get(modelGridAPI).api, null, action.ctx)
+        // console.log(res_ent)
+        // create point and add to entity
+    } else {
+        console.log("Unsupported operation. Op: ", action, "on node: ", node)
+        return false
+    }
 }
 
 export { toggle_edit_mode }

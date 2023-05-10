@@ -21,7 +21,7 @@
 
 Current:
 * Create entities that are newly defined from source (and points)
-  * Move into entity, if exists, or if newly created. (Need object editing to work first)
+  * Move into entity, if exists, or if newly created.
 * Process updates to parent objects in edit mode as part of applying update routine.
 
 
@@ -48,27 +48,37 @@ Current:
   * [ ] Toggle to control whether parent/root shows subject or label
 * Editing
   - [ ] add valueSetter handlers to allow path and subject editing
-  * [ ] creating/updating
+  * [ ] UPDATING/CREATING LOGIC
     * [x] update/set class
-    * [ ] pnt not in model yet
-      * [ ] No entity
-      * [ ] entity
-        * [ ] class + no subject
-          * Creates new entity of class and nests point.
-        * [ ] class + subject -> this should be in a combo; user can add a new one through this too.
-          * Tries to find entity with that subject
-            * if found
-              * if class matches then add point entity to it
-              * if class does not match then do not process, we are not supporting changing parent/root class from source grid. Just addition and appending.
-            *  if not found
-               *  create new entity with subject and class and add point entity to it.
-        * [ ] subject only (same as class + subject; we should auto populate class on subject selection)
-          * [ ] Offer dropdown in this cell?
-    * [ ] EDIT OBJECT IN CELL? Atm it shows [Object Object]
-      * [ ] Support shorthand class::subject; convert on edit
-      * [ ] ~~Only show class, subject in edit field. Hide label.~~
-    * [ ] Cannot update parent/root class if subject is set. Can only make new subject.
-      * [ ] To set a class for source points they must be 'assigned' to a new entity. Once the entity is created, entity class cannot be changed from the source grid. Must be done in model grid. This is because it is not good ux when changing parent/root class in source; it would affect all other points assigned to that entity. Would need to loop through an update on the fly. I think it is better to allow static changes, that are processed on edit completion.
+    * [ ] IF source point not in model yet
+      * [X] IF parent is not set
+        * Create new point model node at root & link
+      * [ ] ELSE IF parent is set (case for JSON keys):
+        * [ ] **subject** (if subject is set, then we need to search for it)
+          * Find subject in model and get row
+          * [ ] IF exists:
+            * If **class** | **label** check that these match
+              *  If match:
+                 *  Create point and assign to subject provided
+              *  Else:
+                 *  Error - might be a mistaken assignement. Do not process change. Add to error list and move on.
+          * [ ] ELSE need to create a new entity
+            *  create new entity with subject (and class, and label) and add point entity to it.
+        * [ ] **!subject** (only new entity creation here)
+          * [ ] **class** & **!label**
+            * Creates new entity of class and nests point.
+          * [ ] **class** & **label**
+            * Creates new entity of class and label and nests point.
+            * Stores a temporary ref to the new subject for this label. Any other points during the current save loop that have class & label, or just label that matches will be assigned to this subject as well. 
+          * [ ] **!class** & **label**
+            * Same as class & !subject & label; except no class will be set.
+    * [ ] ELSE source point is already linked to model; only thing allowed here it to re-assign to a new entity by subject reference.
+      * Same process as **subject** above.
+  * [ ] EDIT OBJECT IN CELL? Atm it shows [Object Object]
+    * [ ] Support shorthand class::subject; convert on edit
+    * [ ] ~~Only show class, subject in edit field. Hide label.~~
+  * [ ] Cannot update parent/root class if subject is set. Can only make new subject.
+    * [ ] To set a class for source points they must be 'assigned' to a new entity. Once the entity is created, entity class cannot be changed from the source grid. Must be done in model grid. This is because it is not good ux when changing parent/root class in source; it would affect all other points assigned to that entity. Would need to loop through an update on the fly. I think it is better to allow static changes, that are processed on edit completion.
   * [ ] Capture edits that are not OK on processing
     * [ ] Store var for this?
     * [ ] Highligh src rows red where processing failed

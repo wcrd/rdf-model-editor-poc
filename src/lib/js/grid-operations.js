@@ -1,9 +1,17 @@
-import { generateNewEntity, createNewPointAtNode } from "$lib/js/entity-operations"
+import { generateNewEntity, createNewPointAtNode, generateNewEntityWithParams } from "$lib/js/entity-operations"
 
 // HELPER: Insert new row
 function addNewEntityRow(api, overNode){
     const transactionResults = api.applyTransaction({
         add: [generateNewEntity(overNode)],
+    })
+    return transactionResults.add[0]
+}
+
+// replace above with this
+function addNewEntityRowWithParams(api, overNode, params){
+    const transactionResults = api.applyTransaction({
+        add: [generateNewEntityWithParams(overNode, params)],
     })
     return transactionResults.add[0]
 }
@@ -30,4 +38,4 @@ function removeRowsFromGrid(api, rows){
     return transactionResults.remove[0]
 }
 
-export { addNewEntityRow, addRowsToGrid, removeRowsFromGrid }
+export { addNewEntityRow, addRowsToGrid, removeRowsFromGrid, addNewEntityRowWithParams }
