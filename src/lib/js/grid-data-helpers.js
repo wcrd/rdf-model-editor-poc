@@ -4,7 +4,7 @@ import { modelGridAPI, sourceGridAPI } from '$lib/stores/store-grid-manager'
 // factory
 function entityCellData({entClass=null, subject=null, label=null}={}){
     return {
-        entClass: entClass,
+        "class": entClass,
         subject: subject,
         label: label
     }

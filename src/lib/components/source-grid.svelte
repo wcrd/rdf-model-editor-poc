@@ -65,7 +65,8 @@
         { field: "edit-parent", hide: true, editable: false, suppressColumnsToolPanel: true, 
             valueFormatter: (params)=>JSON.stringify(params.value), 
             cellRenderer: ParentCellRenderer, 
-            cellEditorParams: {useFormatter: true} 
+            cellEditorParams: {useFormatter: true},
+            valueParser: params=>JSON.parse(params.newValue) 
         },
         // linked
         { field: "linked-class", valueGetter: (params)=> get_linked_class(params)},

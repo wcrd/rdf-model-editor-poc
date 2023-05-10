@@ -32,10 +32,10 @@ export class ParentCellRenderer {
       // console.debug("render: ", params)
       // if data and object has some values, then lets render
       if(params.value && Object.values(params.value).some(val => val!=null)){
-        if(params.value.entClass){ 
+        if(params.value.class){ 
           this.eGui.innerHTML += `
             <span class="rounded-xl bg-blue-100 p-1">
-                ${params.value.entClass || ""}
+                ${params.value.class || ""}
             </span>
             `
         }

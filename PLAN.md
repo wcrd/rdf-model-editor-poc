@@ -22,7 +22,11 @@
 Current:
 * Create entities that are newly defined from source (and points)
   * Move into entity, if exists, or if newly created. (Need object editing to work first)
-* edit objects in cell?
+* ~~Parse edits to objects in cell using valueParser (this might not be needed? Using JSON.parse for now.)~~
+* Process updates to parent objects in edit mode as part of applying update routine.
+* Change src object key from entClass to class
+
+* Optional props in model (destructure object instead for arg?)
 
 ### Model Grid
 
