@@ -9,6 +9,7 @@ function toggle_edit_mode(state=true){
     // state = true: show
     // state = false: hide
 
+    // object with column names and function to fetch value to show
     const colsToUpdate = {'edit-class': get_linked_class, 'edit-parent': get_linked_parent};
 
     if(state){

@@ -62,7 +62,11 @@
         // { field: "_edited", hide: true, editable: false, suppressColumnsToolPanel: true }, // for change tracking
         // editing
         { field: "edit-class", hide: true, editable: false, suppressColumnsToolPanel: true },
-        { field: "edit-parent", hide: true, editable: false, suppressColumnsToolPanel: true, cellRenderer: ParentCellRenderer },
+        { field: "edit-parent", hide: true, editable: false, suppressColumnsToolPanel: true, 
+            valueFormatter: (params)=>JSON.stringify(params.value), 
+            cellRenderer: ParentCellRenderer, 
+            cellEditorParams: {useFormatter: true} 
+        },
         // linked
         { field: "linked-class", valueGetter: (params)=> get_linked_class(params)},
         { field: "linked-parent", valueGetter: (params) => get_linked_parent(params), cellRenderer: ParentCellRenderer},
