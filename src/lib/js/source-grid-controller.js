@@ -1,7 +1,8 @@
 import { get } from "svelte/store";
 import { sourceGridColumnDefs, sourceGridAPI, sourceEditedNodes } from "$lib/stores/store-grid-manager";
 import { get_linked_class, get_linked_parent, get_linked_root_parent } from "$lib/js/grid-data-helpers";
-import { modelGridAPI } from "../stores/store-grid-manager";
+// import { modelGridAPI } from "../stores/store-grid-manager";
+import { modelGridAPI } from "$lib/stores/store-model-grid";
 import { createNewPointAtNode2, moveToPath, createNewPointAtNodeWithParams } from '$lib/js/entity-operations'
 import { addRowsToGrid, addNewEntityRowWithParams } from '$lib/js/grid-operations'
 

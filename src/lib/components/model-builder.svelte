@@ -6,7 +6,8 @@
 
     import { createEventDispatcher } from 'svelte'
 
-    import { modelData } from '$lib/stores/store-grid-manager.js'
+    // import { modelData } from '$lib/stores/store-grid-manager.js'
+    import { modelData } from '$lib/stores/store-model-grid.js'
 
     import { potentialParent, onRowDragEnd, onRowDragMove, onRowDragEnter, onRowDragLeave, potentialInsertNode } from '$lib/js/row-dragging.js'
     import { addNewEntityRow, removeRowsFromGrid } from '$lib/js/grid-operations.js'
