@@ -3,7 +3,7 @@
         "subject_path": ["vav_1", "pnt_1"],
         "subject": "pnt_1",
         "label": "Point 1",
-        "class": "On_Off_Command",
+        "class": "https://brickschema.org/schema/Brick#On_Off_Command",
         "type": "point"
     },
     {
@@ -38,7 +38,7 @@
         "subject_path": ["vav_1"],
         "subject": "vav_1",
         "label": "VAV 1",
-        "class": "VAV",
+        "class": "https://brickschema.org/schema/Brick#VAV",
         "type": "entity"
     },
     {

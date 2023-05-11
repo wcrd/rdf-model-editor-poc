@@ -6,8 +6,9 @@
 
     import { createEventDispatcher } from 'svelte'
 
-    import { modelGridAPI, modelData } from '$lib/stores/store-model-grid.js'
+    import { modelGridAPI, modelData, modelClassSet } from '$lib/stores/store-model-grid.js'
     import { removeSourceLinks } from '$lib/js/shared-transactions.js'
+    import { modelOntologyData } from '$lib/stores/store-ontology-grids.js'
 
     import { potentialParent, onRowDragEnd, onRowDragMove, onRowDragEnter, onRowDragLeave, potentialInsertNode } from '$lib/js/row-dragging.js'
     import { onCellKeyDown } from '$lib/js/keydown-handlers.js'
@@ -40,7 +41,8 @@
     function onGridReady() {
         fetch("/fake-data.json")
             .then((resp) => resp.json())
-            .then((data) => ($modelData = data));
+            .then((data) => ($modelData = data))
+            .then(() => modelOntologyData.refresh($modelClassSet) )
     }
 
     export let srcGrid;

@@ -1,4 +1,4 @@
-import { writable, get } from "svelte/store";
+import { writable, get, derived } from "svelte/store";
 
 //
 // Store to house references to Model Grid variables
@@ -55,5 +55,11 @@ function createModelAPIStore(){
 const modelGridAPI = createModelAPIStore();
 const modelData = writable([]);
 const modelGridColumnDefs = writable();
+// read-only derived store that has list of all classes in the model grid. For use in Ontology Panel.
+const modelClassSet = derived(modelData, $modelData => {
+    return new Set($modelData.map(row => row.class))
+})
 
-export { modelGridAPI, modelData, modelGridColumnDefs }
+export { modelGridAPI, modelData, modelGridColumnDefs, modelClassSet }
+
+console.debug({get, modelClassSet})

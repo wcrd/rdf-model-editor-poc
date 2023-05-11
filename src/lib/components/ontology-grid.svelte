@@ -4,11 +4,12 @@
     import "ag-grid-community/styles/ag-grid.css"; // Core grid CSS, always needed
     import "ag-grid-community/styles/ag-theme-alpine.css"; // Optional theme CSS
 
-    let rowData;
-    function onGridReady(){
-        fetch("/ontology.json")
-            .then(r => r.json())
-            .then(data => (rowData = data))
+    import { modelOntologyAPI, ontologyData, modelOntologyData } from '$lib/stores/store-ontology-grids.js'
+    import { modelClassSet } from '$lib/stores/store-model-grid.js'
+
+    async function onGridReady(){
+        await ontologyData.getData();
+        modelOntologyData.refresh($modelClassSet);
     }
 
     const gridOptions = {
@@ -45,6 +46,7 @@
     };
 
     function classValueGetter(params) {
+        // console.debug(params)
         // SET ICON
         let icon = "❔" //🧱 🟢 ❔
         try {
@@ -71,5 +73,5 @@
 </script>
 
 <div id="modelOntologyGrid" class="ag-theme-alpine h-full w-full">
-    <AgGridSvelte {rowData} {onGridReady} {gridOptions}/>
+    <AgGridSvelte bind:rowData={$modelOntologyData} {onGridReady} {gridOptions}/>
 </div>
