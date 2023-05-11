@@ -1,12 +1,13 @@
-import { generateNewEntity, moveToPath } from '$lib/js/entity-operations.js'
-import { addNewEntityRow } from '$lib/js/grid-operations';
+import { moveToPath } from '$lib/js/entity-operations.js'
+import { modelGridAPI } from '$lib/stores/store-model-grid';
 
-// custom keypress capture and handler
+// custom keypress capture and handler for the modelGrid
 function onCellKeyDown(e){
     const kc = e.event.keyCode; // easier to reference multiple times
     // SHIFT + ENTER
     if ( kc == 13 && e.event.shiftKey && !e.event.ctrlKey ){
-        addNewEntityRow(e.api, e.node)
+        // addNewEntityRow(e.api, e.node)
+        modelGridAPI.addEntityRow(e.node);
     }
     // CTRL + SHIFT + ENTER
     else if (kc == 13 && e.event.shiftKey && e.event.ctrlKey ){
@@ -20,16 +21,18 @@ function onCellKeyDown(e){
         if ( parents.size != 1) { console.log("Auto nesting entities with different parents not allowed."); return }
         const [newParent] = parents; // extract parent from set 
         // Write new node
-        const newNode = addNewEntityRow(e.api, newParent)
+        // const newNode = addNewEntityRow(e.api, newParent)
+        const newNode = modelGridAPI.addEntityRow(newParent);
         // console.debug("New Node: ", newNode)
         // Add selected as children of node
         const updatedRows = [];
         selectedNodes.forEach(node => {
             moveToPath(newNode.data.subject_path, node, updatedRows);
         });
-        e.api.applyTransaction({
-            update: updatedRows,
-        });
+        // e.api.applyTransaction({
+        //     update: updatedRows,
+        // });
+        modelGridAPI._updateGrid({ update: updatedRows })
         e.api.clearFocusedCell();
 
     }

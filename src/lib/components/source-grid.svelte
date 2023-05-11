@@ -4,7 +4,7 @@
     import "ag-grid-community/styles/ag-grid.css"; // Core grid CSS, always needed
     import "ag-grid-community/styles/ag-theme-alpine.css"; // Optional theme CSS
 
-    import { sourceData, sourceGridColumnDefs, modelGridAPI, sourceEditedNodes } from '$lib/stores/store-grid-manager.js'
+    import { sourceData, sourceGridColumnDefs, sourceEditedNodes } from '$lib/stores/store-grid-manager.js'
 
     import { addGridDropZone } from '$lib/js/drag-and-drop.js'
     import { onRowDragEnter } from '$lib/js/row-dragging.js'

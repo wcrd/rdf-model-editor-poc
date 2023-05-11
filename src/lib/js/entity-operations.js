@@ -1,50 +1,20 @@
-// simple function to generate new entity row data
-function generateNewEntity(overNode){
-    const id_str = generateString(5)
-    const subject = `ent_${id_str}`
-    let newPath;
-    
-    if(overNode){
-        // if location to insert is a point, then get the parent node.
-        const newPotentialParent =
-            overNode.data?.type === 'entity'
-            ? // if over an entity, we take the immediate row
-                overNode
-            : // if over a point, we take the parent row (which will be an entity, or root)
-                overNode.parent;
-        
-        // if no data, parent is root. Otherwise an entity
-        newPath = newPotentialParent?.data ? newPotentialParent.data.subject_path.slice() : []
-        newPath.push(subject)
-    } 
-    // else grid is empty or user has selected empty space. Add to root.
-    else {
-        newPath = [subject]
-    }
+//
+// Pure entity operations; no grid logic in here.
+//
+import { generateString } from "$lib/js/helpers";
 
-    return {
-        "subject_path": newPath,
-        "subject": subject,
-        "label": "",
-        "class": "(not set)",
-        "type": "entity"
-    }
-}
-
-// replace above with this function
-function generateNewEntityWithParams(overNode, {subject, label, cls}={}){
-    // console.debug(subject, label, cls)
+function generateEntity(atNode, {subject, label, cls}={}){
     const newSubject = subject || `ent_${generateString(5)}`;
     let newPath;
     
-    if(overNode){
+    if(atNode){
         // if location to insert is a point, then get the parent node.
         const newPotentialParent =
-            overNode.data?.type === 'entity'
+            atNode.data?.type === 'entity'
             ? // if over an entity, we take the immediate row
-                overNode
+                atNode
             : // if over a point, we take the parent row (which will be an entity, or root)
-                overNode.parent;
+                atNode.parent;
         
         // if no data, parent is root. Otherwise an entity
         newPath = newPotentialParent?.data ? newPotentialParent.data.subject_path.slice() : []
@@ -64,22 +34,31 @@ function generateNewEntityWithParams(overNode, {subject, label, cls}={}){
     }
 }
 
+function generatePoint(atNode, {child=false}={}, {subject, label, cls}={}){
+    const newSubject = subject || `pnt_${generateString(5)}`;
 
-// program to generate random strings
-// declare all characters
-const characters ='ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+    // get path of atNode; if null set path to root
+    const newPath = atNode?.data ? atNode.data.subject_path.slice() : []
+    // if child option set, try to add the point as child of atNode, else sibling.
+    if(child && atNode){
+        // if atNode is an entity then we can make point a child
+        atNode.data?.type === 'entity' ? null : newPath.pop(); 
 
-function generateString(length) {
-    let result = '';
-    const charactersLength = characters.length;
-    for ( let i = 0; i < length; i++ ) {
-        result += characters.charAt(Math.floor(Math.random() * charactersLength));
+    } else newPath.pop();
+    
+    newPath.push(newSubject)
+
+    return {
+        "subject_path": newPath,
+        "subject": newSubject,
+        "label": label || "",
+        "class": cls || "(not set)",
+        "type": "point"
     }
-
-    return result;
 }
 
-
+//
+// REVIEW THESE
 
 // Change entity path
 function moveToPath(newParentPath, node, allUpdatedNodes) {
@@ -101,73 +80,153 @@ function moveToPath(newParentPath, node, allUpdatedNodes) {
     }
 }
 
+// 
 
-// create point at node
-// TODO: similarity with above functions
-function createNewPointAtNode(overNode){
-    const id_str = generateString(5)
-    const newPath = overNode?.data ? overNode.data.subject_path.slice() : []
-    newPath.pop();
-    const subject = `pnt_${id_str}`
-    newPath.push(subject)
-
-    return {
-        "subject_path": newPath,
-        "subject": subject,
-        "label": "",
-        "class": "(not set)",
-        "type": "point"
-    }
-
+export { 
+    generateEntity, 
+    generatePoint, 
+    moveToPath, 
 }
 
-// above function should be 'over' node as I am popping the path. This fucntion inserts at the given node.
-function createNewPointAtNode2(overNode){
-    const id_str = generateString(5)
-    const newPath = overNode?.data ? overNode.data.subject_path.slice() : []
-    // newPath.pop();
-    const subject = `pnt_${id_str}`
-    newPath.push(subject)
-
-    return {
-        "subject_path": newPath,
-        "subject": subject,
-        "label": "",
-        "class": "(not set)",
-        "type": "point"
-    }
-
-}
-
-// replace above function with this
-function createNewPointAtNodeWithParams(overNode, {subject, label, cls}={}){
-    subject = subject || `pnt_${generateString(5)}`;
-    const newPath = overNode?.data ? overNode.data.subject_path.slice() : []
-    newPath.pop();
-    newPath.push(subject)
-
-    return {
-        "subject_path": newPath,
-        "subject": subject,
-        "label": label || "",
-        "class": cls || "(not set)",
-        "type": "point"
-    }
-}
+//
+// OLD
+//
 
 // clear linked sources
-function removeSourceFor(gridApi, rows){
-    const srcIds = rows.map(row => row.source).filter(Boolean)
-    const rowsToRefresh = []
-    srcIds.forEach(id => {
-        const node = gridApi.getRowNode(id)
-        node.data['source-for'] = null
-        rowsToRefresh.push(node.data)
-    })
-    const res = gridApi.applyTransaction({
-            update: rowsToRefresh
-    });
-    return res.update[0]
-}
+// function removeSourceFor(gridApi, rows){
+//     const srcIds = rows.map(row => row.source).filter(Boolean)
+//     const rowsToRefresh = []
+//     srcIds.forEach(id => {
+//         const node = gridApi.getRowNode(id)
+//         node.data['source-for'] = null
+//         rowsToRefresh.push(node.data)
+//     })
+//     const res = gridApi.applyTransaction({
+//             update: rowsToRefresh
+//     });
+//     return res.update[0]
+// }
 
-export { generateNewEntity, moveToPath, createNewPointAtNode, removeSourceFor, createNewPointAtNodeWithParams, generateNewEntityWithParams, createNewPointAtNode2 }
+// // simple function to generate new entity row data
+// function generateNewEntity(overNode){
+//     const id_str = generateString(5)
+//     const subject = `ent_${id_str}`
+//     let newPath;
+    
+//     if(overNode){
+//         // if location to insert is a point, then get the parent node.
+//         const newPotentialParent =
+//             overNode.data?.type === 'entity'
+//             ? // if over an entity, we take the immediate row
+//                 overNode
+//             : // if over a point, we take the parent row (which will be an entity, or root)
+//                 overNode.parent;
+        
+//         // if no data, parent is root. Otherwise an entity
+//         newPath = newPotentialParent?.data ? newPotentialParent.data.subject_path.slice() : []
+//         newPath.push(subject)
+//     } 
+//     // else grid is empty or user has selected empty space. Add to root.
+//     else {
+//         newPath = [subject]
+//     }
+
+//     return {
+//         "subject_path": newPath,
+//         "subject": subject,
+//         "label": "",
+//         "class": "(not set)",
+//         "type": "entity"
+//     }
+// }
+
+// // replace above with this function
+// function generateNewEntityWithParams(overNode, {subject, label, cls}={}){
+//     // console.debug(subject, label, cls)
+//     const newSubject = subject || `ent_${generateString(5)}`;
+//     let newPath;
+    
+//     if(overNode){
+//         // if location to insert is a point, then get the parent node.
+//         const newPotentialParent =
+//             overNode.data?.type === 'entity'
+//             ? // if over an entity, we take the immediate row
+//                 overNode
+//             : // if over a point, we take the parent row (which will be an entity, or root)
+//                 overNode.parent;
+        
+//         // if no data, parent is root. Otherwise an entity
+//         newPath = newPotentialParent?.data ? newPotentialParent.data.subject_path.slice() : []
+//         newPath.push(newSubject)
+//     } 
+//     // else grid is empty or user has selected empty space. Add to root.
+//     else {
+//         newPath = [newSubject]
+//     }
+
+//     return {
+//         "subject_path": newPath,
+//         "subject": newSubject,
+//         "label": label || "",
+//         "class": cls || "(not set)",
+//         "type": "entity"
+//     }
+// }
+
+
+
+
+
+// // create point at node
+// // TODO: similarity with above functions
+// function createNewPointAtNode(overNode){
+//     const id_str = generateString(5)
+//     const newPath = overNode?.data ? overNode.data.subject_path.slice() : []
+//     newPath.pop();
+//     const subject = `pnt_${id_str}`
+//     newPath.push(subject)
+
+//     return {
+//         "subject_path": newPath,
+//         "subject": subject,
+//         "label": "",
+//         "class": "(not set)",
+//         "type": "point"
+//     }
+
+// }
+
+// // above function should be 'over' node as I am popping the path. This fucntion inserts at the given node.
+// function createNewPointAtNode2(overNode){
+//     const id_str = generateString(5)
+//     const newPath = overNode?.data ? overNode.data.subject_path.slice() : []
+//     // newPath.pop();
+//     const subject = `pnt_${id_str}`
+//     newPath.push(subject)
+
+//     return {
+//         "subject_path": newPath,
+//         "subject": subject,
+//         "label": "",
+//         "class": "(not set)",
+//         "type": "point"
+//     }
+
+// }
+
+// // replace above function with this
+// function createNewPointAtNodeWithParams(overNode, {subject, label, cls}={}){
+//     subject = subject || `pnt_${generateString(5)}`;
+//     const newPath = overNode?.data ? overNode.data.subject_path.slice() : []
+//     newPath.pop();
+//     newPath.push(subject)
+
+//     return {
+//         "subject_path": newPath,
+//         "subject": subject,
+//         "label": label || "",
+//         "class": cls || "(not set)",
+//         "type": "point"
+//     }
+// }
+

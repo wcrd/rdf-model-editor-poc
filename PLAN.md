@@ -26,9 +26,13 @@ Current:
 * Need to cleanup the apply_updates logic. It is too messy. Process_Parent probably needs a re-write
   * CASES:
     * src not in model; adding point to existing entity
+    * Removing parent from src; currently nothing happens due to no-op.
 
 
 * Optional props in model (destructure object instead for arg?)
+
+## Structure Overhaul
+
 
 ### Model Grid
 

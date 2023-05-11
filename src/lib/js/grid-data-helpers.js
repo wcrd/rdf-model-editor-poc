@@ -1,5 +1,5 @@
 import { get } from 'svelte/store'
-import { modelGridAPI, sourceGridAPI } from '$lib/stores/store-grid-manager'
+import { modelGridAPI } from '$lib/stores/store-model-grid'
 
 // factory
 function entityCellData({entClass=null, subject=null, label=null}={}){
