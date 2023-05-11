@@ -20,6 +20,8 @@
     // vis control variables
     let src_hidden = false;
     let model_hidden = false;
+    let model_ontology_hidden = true;
+    let full_ontology_hidden = true;
     // mode variables
     let source_edit_mode = false;
 
@@ -45,9 +47,18 @@
         <p>main button bar</p>
     </div>
     <div id="grids-container" class="h-full flex flex-row">
+        <div id="model-ontology-panel" class="w-1/4 max-w-md h-full flex flex-col" class:hidden={model_ontology_hidden || model_hidden}>
+            <div id="model-ontology-button-bar" class="h-12 w-full flex flex-row align-middle p-2 justify-between">
+                <button class="btn-default">++</button>
+            </div>
+            <div>
+                <p>Placeholder for ontology grid panel</p>
+            </div>
+        </div>
         <div id="model-grid-container" class="w-1/2 h-full flex flex-col flex-grow" class:hidden={model_hidden}>
             <div id="model-button-bar" class="h-12 w-full flex flex-row align-middle p-2 justify-between">
                 <div>
+                    <button class="btn-subtle" on:click={()=>model_ontology_hidden=!model_ontology_hidden}>[>]</button>
                     <button class="btn-default" on:click={()=>jsonImportExport.export_all()}>Export JSON</button>
                     <button class="btn-default"on:click={() => launchModal(JsonUploadModal)}>Import JSON</button>
                     <button class="btn-subtle" on:click={()=>showModal=true}>Test Modal</button>
@@ -60,6 +71,9 @@
                         Hide Source
                         {/if}
                     </button>
+                    {#if src_hidden && full_ontology_hidden }
+                    <button class="btn-subtle" on:click={()=>full_ontology_hidden=!full_ontology_hidden}>[]</button>
+                    {/if}
                 </div>
             </div>
             <ModelBuilder bind:gridOptions={$modelGridAPI} srcGrid={$sourceGridAPI} on:select={(m)=>modelNodesToFilter=m.detail} />
@@ -89,9 +103,21 @@
                         Hide Model
                         {/if}
                     </button>
+                    {#if full_ontology_hidden}
+                    <button class="btn-subtle" on:click={()=>full_ontology_hidden=!full_ontology_hidden}>[]</button>
+                    {/if}
                 </div>
             </div>
             <SourceGrid bind:gridOptions={$sourceGridAPI} targetGrid={$modelGridAPI} filterMode={srcViewFilterMode} {modelNodesToFilter}/>
+        </div>
+        <div id="full-ontology-panel" class="w-1/4 max-w-md h-full flex flex-col" class:hidden={full_ontology_hidden}>
+            <div id="full-ontology-button-bar" class="h-12 w-full flex flex-row align-middle p-2 justify-between">
+                <button class="btn-subtle" on:click={()=>full_ontology_hidden=!full_ontology_hidden}>[]</button>
+                <button class="btn-default">++</button>
+            </div>
+            <div>
+                <p>Placeholder for ontology grid panel</p>
+            </div>
         </div>
     </div>
 </div>
