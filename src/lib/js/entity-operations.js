@@ -45,11 +45,11 @@ function generatePoint(atNode, {child=false}={}, {subject, label, cls}={}){
 
     } else newPath.pop();
     
-    newPath.push(subject)
+    newPath.push(newSubject)
 
     return {
         "subject_path": newPath,
-        "subject": subject,
+        "subject": newSubject,
         "label": label || "",
         "class": cls || "(not set)",
         "type": "point"

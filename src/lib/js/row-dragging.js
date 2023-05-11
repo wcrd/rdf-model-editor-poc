@@ -1,7 +1,7 @@
 import { get } from "svelte/store";
-import { moveToPath, createNewPointAtNode } from "$lib/js/entity-operations";
-import { addRowsToGrid } from "$lib/js/grid-operations";
+import { moveToPath, generatePoint } from "$lib/js/entity-operations";
 import { sourceGridAPI } from "$lib/stores/store-grid-manager";
+import { modelGridAPI } from "$lib/stores/store-model-grid";
 
 // ###################################################
 // Row moving controllers
@@ -185,7 +185,8 @@ function onRowDragEnd(event) {
             // need to insert at same path as overnode
             const newRows = [] 
             event.nodes.forEach(node => {
-                let newRow = createNewPointAtNode(event.overNode);
+                // let newRow = createNewPointAtNode(event.overNode);
+                let newRow = generatePoint(event.overNode)
                 newRow.source = node.id;
                 newRows.push(newRow)
 
@@ -193,7 +194,8 @@ function onRowDragEnd(event) {
             })
             // console.debug(newRows)
             // add to model grid
-            addRowsToGrid(event.api, newRows)
+            // addRowsToGrid(event.api, newRows)
+            modelGridAPI._updateGrid({ add: newRows })
             // refresh source grid
             srcGridApi.applyTransaction({
                 update: event.nodes.map(node => node.data),
