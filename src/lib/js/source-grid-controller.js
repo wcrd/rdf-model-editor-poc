@@ -3,8 +3,8 @@ import { sourceGridColumnDefs, sourceGridAPI, sourceEditedNodes } from "$lib/sto
 import { get_linked_class, get_linked_parent, get_linked_root_parent } from "$lib/js/grid-data-helpers";
 // import { modelGridAPI } from "../stores/store-grid-manager";
 import { modelGridAPI } from "$lib/stores/store-model-grid";
-import { createNewPointAtNode2, moveToPath, createNewPointAtNodeWithParams } from '$lib/js/entity-operations'
-import { addRowsToGrid, addNewEntityRowWithParams } from '$lib/js/grid-operations'
+import { moveToPath, generatePoint } from '$lib/js/entity-operations'
+// import { addNewEntityRowWithParams } from '$lib/js/grid-operations'
 
 function toggle_edit_mode(state=true){
     // state = true: show
@@ -100,13 +100,15 @@ function apply_updates(){
             // create point entity
             // TODO: this is same as entity-operations. Refactor.
             // need to insert at same path as overnode
-            let newRow = createNewPointAtNode2(newParent);
+            // let newRow = createNewPointAtNode2(newParent);
+            let newRow = generatePoint(newParent)
             newRow.source = node.id;
             newRow.class = node.data['edit-class']
             // console.debug(newRow)
             node.data['source-for'] = newRow.subject
             // add to model grid
-            addRowsToGrid(get(modelGridAPI).api, [newRow])
+            // addRowsToGrid(get(modelGridAPI).api, [newRow])
+            modelGridAPI._updateGrid({add: [newRow]})
             // refresh source grid
             get(sourceGridAPI).api.applyTransaction({
                 update: [node.data]
@@ -219,7 +221,8 @@ function process_action(action, node, modelRowsToUpdate, {move_point=false}={}){
         // check for label in current transaction record (assign to same subject if so)
         // create new entity
         // console.debug(node)
-        const newEntity = addNewEntityRowWithParams(get(modelGridAPI).api, null, {...action.ctx, cls: action.ctx?.class}) // need to manually reassign class key as it is reserved. TODO: rename this in cell editor to cls
+        // const newEntity = addNewEntityRowWithParams(get(modelGridAPI).api, null, {...action.ctx, cls: action.ctx?.class}) // need to manually reassign class key as it is reserved. TODO: rename this in cell editor to cls
+        const newEntity = modelGridAPI.addEntityRow(null, {entity_props: {...action.ctx, cls: action.ctx?.class}}) // need to manually reassign class key as it is reserved. TODO: rename this in cell editor to cls
         // console.log(res_ent)
         // move existing model point to new parent
         if(move_point) moveToPath(newEntity.data.subject_path, node, modelRowsToUpdate)

@@ -18,7 +18,6 @@ function createModelAPIStore(){
      * 
      * @param atNode ag-grid node object at which the new entity is to be added. If null, entity is added to root level.
      * @param {Object} [params] parameters for new entity creation, optional.
-     * @param {Boolean} [params.child=true] If true, new entity is created as child of atNode, if possible. Else entity is created as sibling of atNode 
      * @param {Object} [params.entity_props] {subject, label, cls} for the newly created entity
      * 
      * **/
