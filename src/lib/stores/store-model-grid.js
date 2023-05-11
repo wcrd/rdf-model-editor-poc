@@ -25,13 +25,13 @@ function createModelAPIStore(){
     function addEntityRow(atNode, {entity_props={}}={}){
         const newEntity = generateEntity(atNode, entity_props)
 
-        return _updateGrid({ add: [newEntity] })
+        return _updateGrid({ add: [newEntity] }).add[0]
     }
 
     function addPointRow(atNode, {point_props={}, child=false}={}){
         const newPoint = generatePoint(atNode, child, point_props);
         
-        return _updateGrid({ add: [newPoint] })
+        return _updateGrid({ add: [newPoint] }).add[0]
     }
 
 
