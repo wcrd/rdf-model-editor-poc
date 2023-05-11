@@ -13,6 +13,7 @@
 
     // NEW
     import { modelGridAPI } from '$lib/stores/store-model-grid.js'
+    import OntologyGrid from "$lib/components/ontology-grid.svelte";
 
     let srcViewFilterMode = 'all'
     let modelNodesToFilter;
@@ -51,9 +52,7 @@
             <div id="model-ontology-button-bar" class="h-12 w-full flex flex-row align-middle p-2 justify-between">
                 <button class="btn-default">++</button>
             </div>
-            <div>
-                <p>Placeholder for ontology grid panel</p>
-            </div>
+            <OntologyGrid/>
         </div>
         <div id="model-grid-container" class="w-1/2 h-full flex flex-col flex-grow" class:hidden={model_hidden}>
             <div id="model-button-bar" class="h-12 w-full flex flex-row align-middle p-2 justify-between">

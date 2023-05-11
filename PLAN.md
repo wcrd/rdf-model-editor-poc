@@ -29,7 +29,8 @@ Current:
     * Removing parent from src; currently nothing happens due to no-op.
 
 
-* Optional props in model (destructure object instead for arg?)
+* Status bar to show count of rows, entities, linked, etc.
+* Overlay to show on model when processing updates from source.
 
 ## Structure Overhaul
 

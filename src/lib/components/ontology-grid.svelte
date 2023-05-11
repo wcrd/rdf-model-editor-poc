@@ -1,0 +1,75 @@
+<script>
+    import AgGridSvelte from "ag-grid-svelte";
+    import 'ag-grid-enterprise'
+    import "ag-grid-community/styles/ag-grid.css"; // Core grid CSS, always needed
+    import "ag-grid-community/styles/ag-theme-alpine.css"; // Optional theme CSS
+
+    let rowData;
+    function onGridReady(){
+        fetch("/ontology.json")
+            .then(r => r.json())
+            .then(data => (rowData = data))
+    }
+
+    const gridOptions = {
+        treeData: true,
+        getDataPath: (data) => {
+            if (data.path.full[0] == "https://brickschema.org/schema/Brick#Class"){
+                return data.path.full.slice(1)
+            }
+            else {
+                return null
+            }
+        },
+        autoGroupColumnDef: {
+            headerName: "Class",
+            sortable: true,
+            cellRendererParams: {
+                suppressCount: true,
+                innerRenderer: classValueGetter
+            },
+            filter: 'agTextColumnFilter',
+            resizable: true,
+            checkboxSelection: true,
+            headerCheckboxSelection: true,
+            headerCheckboxSelectionFilteredOnly: true
+        },
+        defaultColDef: {
+            sortable: true,
+            flex: 1,
+            resizable: true
+        },
+        rowSelection:'multiple',
+        rowData: null,
+        groupSelectsChildren: true,
+    };
+
+    function classValueGetter(params) {
+        // SET ICON
+        let icon = "❔" //🧱 🟢 ❔
+        try {
+            if(params.data.prefix == "brick") {
+                icon = "🧱"
+            } else if (params.data.prefix == "switch") {
+                icon = "🟢"
+            } else if (params.data.prefix == "owl") {
+                icon = "🦉"
+            }
+        } catch(e) {
+            console.log(`Grid::Class: No icon for given namespace of: ${params.value}`)
+        }
+        // SET NAME (TERM)
+        try {
+            return `${params.data.term} &nbsp; ${icon}`
+        } catch {
+            console.log(`Grid::Class: No term available for: ${params.value}`)
+            return `${params.value} &nbsp; ${icon}`
+        }
+    }
+
+
+</script>
+
+<div id="modelOntologyGrid" class="ag-theme-alpine h-full w-full">
+    <AgGridSvelte {rowData} {onGridReady} {gridOptions}/>
+</div>
