@@ -4,7 +4,7 @@
     import "ag-grid-community/styles/ag-grid.css"; // Core grid CSS, always needed
     import "ag-grid-community/styles/ag-theme-alpine.css"; // Optional theme CSS
 
-    import { sourceData, sourceGridColumnDefs, modelGridAPI, sourceEditedNodes } from '$lib/stores/store-grid-manager.js'
+    import { sourceData, sourceGridColumnDefs, sourceEditedNodes } from '$lib/stores/store-grid-manager.js'
 
     import { addGridDropZone } from '$lib/js/drag-and-drop.js'
     import { onRowDragEnter } from '$lib/js/row-dragging.js'
@@ -62,7 +62,21 @@
         // { field: "_edited", hide: true, editable: false, suppressColumnsToolPanel: true }, // for change tracking
         // editing
         { field: "edit-class", hide: true, editable: false, suppressColumnsToolPanel: true },
-        { field: "edit-parent", hide: true, editable: false, suppressColumnsToolPanel: true },
+        { field: "edit-parent", hide: true, editable: false, suppressColumnsToolPanel: true, 
+            valueFormatter: (params)=>JSON.stringify(params.value), 
+            cellRenderer: ParentCellRenderer, 
+            cellEditorParams: {useFormatter: true},
+            valueParser: params=>{
+                // try to parse, else return old data
+                let data = params.oldValue;
+                try{
+                    data = JSON.parse(params.newValue)
+                } catch {
+                    console.log("Invalid cell value format. Discarding changes. Soz. Please provide a valid JSON object next time.", params.newValue)
+                }
+                return data
+            } 
+        },
         // linked
         { field: "linked-class", valueGetter: (params)=> get_linked_class(params)},
         { field: "linked-parent", valueGetter: (params) => get_linked_parent(params), cellRenderer: ParentCellRenderer},

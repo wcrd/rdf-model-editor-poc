@@ -1,5 +1,7 @@
 import { get } from 'svelte/store';
-import { modelGridAPI, sourceGridAPI, modelData, sourceData } from '$lib/stores/store-grid-manager.js'
+// import { modelGridAPI, sourceGridAPI, modelData, sourceData } from '$lib/stores/store-grid-manager.js'
+import { sourceGridAPI, sourceData } from '$lib/stores/store-grid-manager.js'
+import { modelGridAPI, modelData } from '$lib/stores/store-model-grid.js'
 
 function test(){
     console.log("hello")

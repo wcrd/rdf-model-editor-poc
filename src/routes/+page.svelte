@@ -7,8 +7,12 @@
     import SimpleModal from "$lib/components/modals/modal-simple.svelte"
     import JsonUploadModal from "$lib/components/modals/modal-upload-json.svelte"
 
-    import { modelGridAPI, sourceGridAPI } from '$lib/stores/store-grid-manager.js'
+    // import { modelGridAPI, sourceGridAPI } from '$lib/stores/store-grid-manager.js'
+    import { sourceGridAPI } from '$lib/stores/store-grid-manager.js'
     import { toggle_edit_mode } from '$lib/js/source-grid-controller'
+
+    // NEW
+    import { modelGridAPI } from '$lib/stores/store-model-grid.js'
 
     let srcViewFilterMode = 'all'
     let modelNodesToFilter;

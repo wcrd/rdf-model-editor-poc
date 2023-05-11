@@ -19,6 +19,21 @@
 
 ## To Do
 
+Current:
+* Create entities that are newly defined from source (and points)
+  * Move into entity, if exists, or if newly created.
+* Process updates to parent objects in edit mode as part of applying update routine.
+* Need to cleanup the apply_updates logic. It is too messy. Process_Parent probably needs a re-write
+  * CASES:
+    * src not in model; adding point to existing entity
+    * Removing parent from src; currently nothing happens due to no-op.
+
+
+* Optional props in model (destructure object instead for arg?)
+
+## Structure Overhaul
+
+
 ### Model Grid
 
 * UI
@@ -37,20 +52,40 @@
 ### Source Grid
 
 * UI
-  * [ ] Toggle to control whether parent/root shows subject or label
+  * [X] Toggle to control whether parent/root shows subject or label
 * Editing
   - [ ] add valueSetter handlers to allow path and subject editing
-  * [ ] creating/updating
+  * [X] UPDATING/CREATING LOGIC
     * [x] update/set class
-    * [ ] pnt not in model yet
-      * [ ] No entity
-      * [ ] entity
-        * [ ] class + no subject
-        * [ ] class + subject
-        * [ ] subject only (same as class + subject; we should auto populate class on subject selection)
-          * [ ] Offer dropdown in this cell?
-    * [ ] Cannot update parent/root class if subject is set. Can only make new subject.
-      * [ ] To set a class for source points they must be 'assigned' to a new entity. Once the entity is created, entity class cannot be changed from the source grid. Must be done in model grid. This is because it is not good ux when changing parent/root class in source; it would affect all other points assigned to that entity. Would need to loop through an update on the fly. I think it is better to allow static changes, that are processed on edit completion.
+    * [X] IF source point not in model yet
+      * [X] IF parent is not set
+        * Create new point model node at root & link
+      * [X] ELSE IF parent is set (case for JSON keys):
+        * [X] **subject** (if subject is set, then we need to search for it)
+          * Find subject in model and get row
+          * [X] IF exists:
+            * If **class** | **label** check that these match
+              *  If match:
+                 *  Create point and assign to subject provided
+              *  Else:
+                 *  Error - might be a mistaken assignement. Do not process change. Add to error list and move on.
+          * [X] ELSE need to create a new entity
+            *  create new entity with subject (and class, and label) and add point entity to it.
+        * [X] **!subject** (only new entity creation here)
+          * [X] **class** & **!label**
+            * Creates new entity of class and nests point.
+          * [X] **class** & **label**
+            * Creates new entity of class and label and nests point.
+            * Stores a temporary ref to the new subject for this label. Any other points during the current save loop that have class & label, or just label that matches will be assigned to this subject as well. 
+          * [X] **!class** & **label**
+            * Same as class & !subject & label; except no class will be set.
+    * [X] ELSE source point is already linked to model; only thing allowed here it to re-assign to a new entity by subject reference.
+      * Same process as **subject** above.
+  * [X] EDIT OBJECT IN CELL? Atm it shows [Object Object]
+    * [ ] Support shorthand class::subject; convert on edit
+    * [ ] ~~Only show class, subject in edit field. Hide label.~~
+  * [X] Cannot update parent/root class if subject is set. Can only make new subject.
+    * [X] To set a class for source points they must be 'assigned' to a new entity. Once the entity is created, entity class cannot be changed from the source grid. Must be done in model grid. This is because it is not good ux when changing parent/root class in source; it would affect all other points assigned to that entity. Would need to loop through an update on the fly. I think it is better to allow static changes, that are processed on edit completion.
   * [ ] Capture edits that are not OK on processing
     * [ ] Store var for this?
     * [ ] Highligh src rows red where processing failed
@@ -72,6 +107,7 @@
 * [x] Single src row + ctrl creates new point entity
   * [ ] Need to reset highlight/insert line when ctrl is pressed or released
 - [ ] Prevent drag-and-drop operations in edit mode
+  - Need to check API docs on how to re-apply default col defs.
 
 ### Filtering
 
