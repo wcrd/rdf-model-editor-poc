@@ -45,11 +45,15 @@ export class ParentCellRenderer {
             <span class="ml-2">
                 ${params.value.subject || ""}
             </span>
-            <span class="ml-1">
+            `
+        }
+        if(params.value.label){
+          this.eGui.innerHTML +=
+            `<span class="ml-1">
                 (${params.value.label || ""})
             </span>
           `
-        } 
+        }
         // else
         // something went wrong
         // will just return default value set above

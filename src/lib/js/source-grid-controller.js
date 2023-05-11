@@ -72,6 +72,7 @@ function copy_linked_column_values(target_func_obj){
 
 function apply_updates(){
     const modelRowsToUpdate = []
+    const labelSubjectRef = {}; // this holds label-subject refrences for any entities created using just the label field for use by other updates in this transaction. i.e. users can assign points to entities via just the label. NEW points only.
 
     // use edited cells tracking object to apply update to model grid
     const cellsToProcess = get(sourceEditedNodes);
@@ -97,7 +98,7 @@ function apply_updates(){
             // Process Parent
             // Process the parent field to see if any entity actions are required for this point.
             const parent_action = parse_parent(srcNode.data['edit-parent'])
-            process_action(parent_action, newPointNode, modelRowsToUpdate) // stores result in modelRowsToUpdate; process these updates at the end
+            process_action(parent_action, newPointNode, modelRowsToUpdate, labelSubjectRef) // stores result in modelRowsToUpdate; process these updates at the end
 
         } else {
 
@@ -113,7 +114,7 @@ function apply_updates(){
             const parent_action = parse_parent(srcNode.data['edit-parent'])
             // console.debug("Parent Action = ", parent_action)
 
-            process_action(parent_action, modelNode, modelRowsToUpdate)
+            process_action(parent_action, modelNode, modelRowsToUpdate, labelSubjectRef)
 
             modelRowsToUpdate.push(modelNode.data);
         }
@@ -185,10 +186,11 @@ function parse_parent(parent_data){
     }
 }
 
-function process_action(action, modelNode, modelRowsToUpdate){
+function process_action(action, modelNode, modelRowsToUpdate, labelSubjectRef){
     // action = action object
     // modelNode = node to apply action to
     // modelRowsToUpdate = reference to shared array containing record of nodes updated
+    // NOTE: The point node must exist to process any parent actions (i.e. can't be a pending update)
 
     if(action.error) return false;
 
@@ -199,14 +201,29 @@ function process_action(action, modelNode, modelRowsToUpdate){
         moveToPath(action.targetNode?.data.subject_path || [], modelNode, modelRowsToUpdate)
     }
     else if(action.operation=="create"){
-        // check for label in current transaction record (assign to same subject if so)
-        
-        // create new entity
-        const newEntity = modelGridAPI.addEntityRow(null, {entity_props: {...action.ctx, cls: action.ctx?.class}}) // need to manually reassign class key as it is reserved. TODO: rename this in cell editor to cls
-        
-        // move existing model point to new parent
-        moveToPath(newEntity.data.subject_path, modelNode, modelRowsToUpdate)
-        
+        let entityNode;
+
+        // if label mode need to:
+        // * check label-subject object to see if a new entity has been created in this update for the given label; if just do a move operation to this entity
+        // * if not, create new entity, record in label-subject ref.
+        if(action?.label_mode){
+            // check ref object for newly created entities
+            if(action.ctx.label in labelSubjectRef) {
+                entityNode = get(modelGridAPI).api.getRowNode(labelSubjectRef[action.ctx.label]);
+                // console.debug("Label mode. Found existing entity: ", entityNode)
+            } else {
+                // create new entity and add to ref
+                entityNode = modelGridAPI.addEntityRow(null, { entity_props: {...action.ctx, cls: action.ctx?.class} })
+                labelSubjectRef[action.ctx.label] = entityNode.data.subject
+                // console.debug("Label mode. Created new entity: ", entityNode)
+            }
+        }
+        else { // create new entity
+            entityNode = modelGridAPI.addEntityRow(null, {entity_props: {...action.ctx, cls: action.ctx?.class}}) // need to manually reassign class key as it is reserved. TODO: rename this in cell editor to cls
+        }
+
+        // move model point to new parent
+        moveToPath(entityNode.data.subject_path, modelNode, modelRowsToUpdate)
 
     } else {
         console.log("Unsupported operation. Op: ", action, "on node: ", modelNode)

@@ -52,40 +52,40 @@ Current:
 ### Source Grid
 
 * UI
-  * [ ] Toggle to control whether parent/root shows subject or label
+  * [X] Toggle to control whether parent/root shows subject or label
 * Editing
   - [ ] add valueSetter handlers to allow path and subject editing
-  * [ ] UPDATING/CREATING LOGIC
+  * [X] UPDATING/CREATING LOGIC
     * [x] update/set class
-    * [ ] IF source point not in model yet
+    * [X] IF source point not in model yet
       * [X] IF parent is not set
         * Create new point model node at root & link
-      * [ ] ELSE IF parent is set (case for JSON keys):
-        * [ ] **subject** (if subject is set, then we need to search for it)
+      * [X] ELSE IF parent is set (case for JSON keys):
+        * [X] **subject** (if subject is set, then we need to search for it)
           * Find subject in model and get row
-          * [ ] IF exists:
+          * [X] IF exists:
             * If **class** | **label** check that these match
               *  If match:
                  *  Create point and assign to subject provided
               *  Else:
                  *  Error - might be a mistaken assignement. Do not process change. Add to error list and move on.
-          * [ ] ELSE need to create a new entity
+          * [X] ELSE need to create a new entity
             *  create new entity with subject (and class, and label) and add point entity to it.
-        * [ ] **!subject** (only new entity creation here)
-          * [ ] **class** & **!label**
+        * [X] **!subject** (only new entity creation here)
+          * [X] **class** & **!label**
             * Creates new entity of class and nests point.
-          * [ ] **class** & **label**
+          * [X] **class** & **label**
             * Creates new entity of class and label and nests point.
             * Stores a temporary ref to the new subject for this label. Any other points during the current save loop that have class & label, or just label that matches will be assigned to this subject as well. 
-          * [ ] **!class** & **label**
+          * [X] **!class** & **label**
             * Same as class & !subject & label; except no class will be set.
-    * [ ] ELSE source point is already linked to model; only thing allowed here it to re-assign to a new entity by subject reference.
+    * [X] ELSE source point is already linked to model; only thing allowed here it to re-assign to a new entity by subject reference.
       * Same process as **subject** above.
-  * [ ] EDIT OBJECT IN CELL? Atm it shows [Object Object]
+  * [X] EDIT OBJECT IN CELL? Atm it shows [Object Object]
     * [ ] Support shorthand class::subject; convert on edit
     * [ ] ~~Only show class, subject in edit field. Hide label.~~
-  * [ ] Cannot update parent/root class if subject is set. Can only make new subject.
-    * [ ] To set a class for source points they must be 'assigned' to a new entity. Once the entity is created, entity class cannot be changed from the source grid. Must be done in model grid. This is because it is not good ux when changing parent/root class in source; it would affect all other points assigned to that entity. Would need to loop through an update on the fly. I think it is better to allow static changes, that are processed on edit completion.
+  * [X] Cannot update parent/root class if subject is set. Can only make new subject.
+    * [X] To set a class for source points they must be 'assigned' to a new entity. Once the entity is created, entity class cannot be changed from the source grid. Must be done in model grid. This is because it is not good ux when changing parent/root class in source; it would affect all other points assigned to that entity. Would need to loop through an update on the fly. I think it is better to allow static changes, that are processed on edit completion.
   * [ ] Capture edits that are not OK on processing
     * [ ] Store var for this?
     * [ ] Highligh src rows red where processing failed
