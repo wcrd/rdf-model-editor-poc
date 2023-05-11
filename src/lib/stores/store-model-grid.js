@@ -48,7 +48,8 @@ function createModelAPIStore(){
     return {
         ...store,
         addEntityRow,
-        addPointRow
+        addPointRow,
+        _updateGrid
     }
 }
 
