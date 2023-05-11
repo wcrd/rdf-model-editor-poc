@@ -1,5 +1,5 @@
 import { get } from "svelte/store";
-import { moveToPath, generatePoint } from "$lib/js/entity-operations";
+import { moveToPath } from "$lib/js/entity-operations";
 import { sourceGridAPI } from "$lib/stores/store-grid-manager";
 import { modelGridAPI } from "$lib/stores/store-model-grid";
 import { removeSourceLinks, addSourceLink } from "$lib/js/shared-transactions";
@@ -128,41 +128,13 @@ function onRowDragEnd(event) {
         const srcGridApi = event.node.beans.gridApi
         // 1. if point has source already, remove that association
         if (potentialParent.data.source) {
-            // let oldSource = srcGridApi.getRowNode(potentialParent.data.source);
-            // console.debug("Pnt removed from Src: ", potentialParent.data.source, oldSource.data['source-for'])
-            // oldSource.data['source-for'] = null
-            // srcGridApi.applyTransaction({
-            //     update: [oldSource.data],
-            // });
-            // srcGridApi.clearFocusedCell()
             removeSourceLinks({modelRows: [potentialParent.data]})
         }
+
         // 2. source has point already, remove that association in points grid
         if (event.node.data['source-for']) {
-            // let oldPoint = event.api.getRowNode(event.node.data['source-for'])
-            // console.debug("Src removed from Pnt: ", event.node.data['source-for'], oldPoint.data.source)
-            // oldPoint.data.source = null;
-            // event.api.applyTransaction({
-            //     update: [oldPoint.data]
-            // });
-            // event.api.clearFocusedCell();
             removeSourceLinks({sourceRows: [event.node.data]})
         }
-
-        // 3. update model row
-        // potentialParent.data.source = event.node.id
-        // // console.debug(event)
-        // event.api.applyTransaction({
-        //     update: [potentialParent.data],
-        // });
-        // event.api.clearFocusedCell();
-
-        // 4. finally update source grid again
-        // event.node.data['source-for'] = potentialParent.id
-        // srcGridApi.applyTransaction({
-        //     update: [event.node.data],
-        // });
-        // srcGridApi.clearFocusedCell()
 
         // 3&4: Create link between source and model
         addSourceLink(potentialParent, event.node)
@@ -184,32 +156,15 @@ function onRowDragEnd(event) {
         } else {
         // for each dragged src node
         // 1. create model point node
-        // 2. link to src point (do steps 2 from clause above)\
+        // 2. link to src point (do steps 2 from clause above)
             const srcGridApi = event.node.beans.gridApi;
-            // const insertIndex = event.overNode.rowIndex;
 
             // need to insert at same path as overnode
             const newRows = [] 
             event.nodes.forEach(node => {
-                // // let newRow = createNewPointAtNode(event.overNode);
-                // let newRow = generatePoint(event.overNode)
-                // newRow.source = node.id;
-                // newRows.push(newRow)
-
-                // node.data['source-for'] = newRow.subject
-
                 const newPointNode = modelGridAPI.addPointRow(event.overNode)
                 addSourceLink(newPointNode, node)
             })
-            // console.debug(newRows)
-            // add to model grid
-            // addRowsToGrid(event.api, newRows)
-            // modelGridAPI._updateGrid({ add: newRows })
-            // refresh source grid
-            // srcGridApi.applyTransaction({
-            //     update: event.nodes.map(node => node.data),
-            // });
-            // srcGridApi._updateGrid({update: event.nodes.map(node => node.data)})
             srcGridApi.deselectAll()
 
         }
@@ -239,9 +194,10 @@ function onRowDragEnd(event) {
             nodesToChangeParent.forEach(node => {
                 moveToPath(newParentPath, node, updatedRows);
             });
-            event.api.applyTransaction({
-                update: updatedRows,
-            });
+            // event.api.applyTransaction({
+            //     update: updatedRows,
+            // });
+            modelGridAPI._updateGrid({update: updatedRows})
             event.api.clearFocusedCell();
         }
 
