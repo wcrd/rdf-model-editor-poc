@@ -184,7 +184,6 @@ function onRowDragEnd(event) {
         } else {
         // for each dragged src node
         // 1. create model point node
-        // 1a. assign class (if available from src grid) // do this later
         // 2. link to src point (do steps 2 from clause above)\
             const srcGridApi = event.node.beans.gridApi;
             // const insertIndex = event.overNode.rowIndex;
@@ -192,21 +191,25 @@ function onRowDragEnd(event) {
             // need to insert at same path as overnode
             const newRows = [] 
             event.nodes.forEach(node => {
-                // let newRow = createNewPointAtNode(event.overNode);
-                let newRow = generatePoint(event.overNode)
-                newRow.source = node.id;
-                newRows.push(newRow)
+                // // let newRow = createNewPointAtNode(event.overNode);
+                // let newRow = generatePoint(event.overNode)
+                // newRow.source = node.id;
+                // newRows.push(newRow)
 
-                node.data['source-for'] = newRow.subject
+                // node.data['source-for'] = newRow.subject
+
+                const newPointNode = modelGridAPI.addPointRow(event.overNode)
+                addSourceLink(newPointNode, node)
             })
             // console.debug(newRows)
             // add to model grid
             // addRowsToGrid(event.api, newRows)
-            modelGridAPI._updateGrid({ add: newRows })
+            // modelGridAPI._updateGrid({ add: newRows })
             // refresh source grid
-            srcGridApi.applyTransaction({
-                update: event.nodes.map(node => node.data),
-            });
+            // srcGridApi.applyTransaction({
+            //     update: event.nodes.map(node => node.data),
+            // });
+            // srcGridApi._updateGrid({update: event.nodes.map(node => node.data)})
             srcGridApi.deselectAll()
 
         }
