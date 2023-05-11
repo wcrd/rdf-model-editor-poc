@@ -6,12 +6,10 @@
 
     import { createEventDispatcher } from 'svelte'
 
-    // import { modelData } from '$lib/stores/store-grid-manager.js'
     import { modelGridAPI, modelData } from '$lib/stores/store-model-grid.js'
+    import { removeSourceLinks } from '$lib/js/shared-transactions.js'
 
     import { potentialParent, onRowDragEnd, onRowDragMove, onRowDragEnter, onRowDragLeave, potentialInsertNode } from '$lib/js/row-dragging.js'
-    // import { addNewEntityRow, removeRowsFromGrid } from '$lib/js/grid-operations.js'
-    import { removeSourceFor } from '$lib/js/entity-operations.js'
     import { onCellKeyDown } from '$lib/js/keydown-handlers.js'
     import { SrcCellRenderer } from '$lib/ag-grid-components/gridCellRenderers.js'
 
@@ -104,10 +102,11 @@
                     const nodes = params.api.getSelectedNodes()
                     const allNodes = nodes.flatMap(node => node.allLeafChildren)
                     const allRows = allNodes.map(node => node.data)
+                    // update source grid to remove associations
+                    removeSourceLinks({modelRows: allRows})
                     // removeRowsFromGrid(params.api, allRows)
                     modelGridAPI._updateGrid({remove: allRows})
-                    // update source grid to remove associations
-                    removeSourceFor(srcGrid.api, allRows)
+                    // removeSourceFor(srcGrid.api, allRows)
                 }
             },
             'separator',
@@ -118,12 +117,13 @@
                     const allNodes = params.api.getSelectedNodes();
                     const allRows = allNodes.map(node => node.data)
                     // remove from src grid first, before updating model (otherwise this function doesn't work)
-                    removeSourceFor(srcGrid.api, allRows)
+                    // removeSourceFor(srcGrid.api, allRows)
                     // now remove the src from the model row
                     // params.api.applyTransaction({
                     //     update: allRows.map(row => { row.source = null; return row })
                     // });
-                    modelGridAPI._updateGrid({ update: allRows.map(row => { row.source=null; return row })})
+                    // modelGridAPI._updateGrid({ update: allRows.map(row => { row.source=null; return row })})
+                    removeSourceLinks({modelRows: allRows})
                 }
             },
             'separator',

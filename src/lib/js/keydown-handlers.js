@@ -1,5 +1,4 @@
-import { generateNewEntity, moveToPath } from '$lib/js/entity-operations.js'
-// import { addNewEntityRow } from '$lib/js/grid-operations';
+import { moveToPath } from '$lib/js/entity-operations.js'
 import { modelGridAPI } from '$lib/stores/store-model-grid';
 
 // custom keypress capture and handler for the modelGrid
