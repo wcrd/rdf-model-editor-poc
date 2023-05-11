@@ -28,7 +28,7 @@ function createModelAPIStore(){
     }
 
     function addPointRow(atNode, {point_props={}, child=false}={}){
-        const newPoint = generatePoint(atNode, child, point_props);
+        const newPoint = generatePoint(atNode, {child, point_props});
         
         return _updateGrid({ add: [newPoint] }).add[0]
     }

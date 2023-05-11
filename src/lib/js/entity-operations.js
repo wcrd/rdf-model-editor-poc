@@ -34,8 +34,8 @@ function generateEntity(atNode, {subject, label, cls}={}){
     }
 }
 
-function generatePoint(atNode, {child=false}={}, {subject, label, cls}={}){
-    const newSubject = subject || `pnt_${generateString(5)}`;
+function generatePoint(atNode, {child=false, point_props={subject, label, cls}}={}){
+    const newSubject = point_props.subject || `pnt_${generateString(5)}`;
 
     // get path of atNode; if null set path to root
     const newPath = atNode?.data ? atNode.data.subject_path.slice() : []
@@ -51,8 +51,8 @@ function generatePoint(atNode, {child=false}={}, {subject, label, cls}={}){
     return {
         "subject_path": newPath,
         "subject": newSubject,
-        "label": label || "",
-        "class": cls || "(not set)",
+        "label": point_props.label || "",
+        "class": point_props.cls || "(not set)",
         "type": "point"
     }
 }

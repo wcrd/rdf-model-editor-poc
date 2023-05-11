@@ -3,6 +3,7 @@ import { sourceGridColumnDefs, sourceGridAPI, sourceEditedNodes } from "$lib/sto
 import { get_linked_class, get_linked_parent, get_linked_root_parent } from "$lib/js/grid-data-helpers";
 import { modelGridAPI } from "$lib/stores/store-model-grid";
 import { moveToPath, generatePoint } from '$lib/js/entity-operations'
+import { addSourceLink } from '$lib/js/shared-transactions.js' 
 
 
 function toggle_edit_mode(state=true){
@@ -22,12 +23,7 @@ function toggle_edit_mode(state=true){
         // just apply the whole column, all values have been copied from the model grid on init
         // so they are the same.
         apply_updates();
-
-        // Parent changes
-        // TODO
-
-        // Other changes
-        // TODO
+        
     }
 
     // Show/hide editable columns
@@ -67,7 +63,7 @@ function copy_linked_column_values(target_func_obj){
     });
 
     // apply updates
-    const res = get(sourceGridAPI).api.applyTransaction({
+    const res = sourceGridAPI._updateGrid({
         update: rowsToUpdate
     });
 
@@ -76,105 +72,92 @@ function copy_linked_column_values(target_func_obj){
 
 function apply_updates(){
     const modelRowsToUpdate = []
+
     // use edited cells tracking object to apply update to model grid
     const cellsToProcess = get(sourceEditedNodes);
     console.log("Updating ", cellsToProcess.size, "entities.")
-    cellsToProcess.forEach(node => {
-        const linkedNodeId = node.data['source-for'];
+
+
+    cellsToProcess.forEach(srcNode => {
+
+        // determine if source row is linked to a model row already
+        const linkedNodeId = srcNode.data['source-for'];
         // console.debug("NODE: ", node, "Linked to Model: ", linkedNodeId)
+
         if(!linkedNodeId){ 
             // if source is not already linked to a model point
             // need to create a new model node!!
+            console.debug("Unlinked mode. SrcNode: ", srcNode)
 
-            // But first lets process the parent field to see if point is nested.
-            const par_action = parse_parent(node.data['edit-parent'], modelGridAPI)
-            const newParent = process_action(par_action, null, modelRowsToUpdate, {move_point: false})
-            // console.debug(par_action, newParent)
+            // Create new point
+            const newPointNode = modelGridAPI.addPointRow(null, { point_props: {cls: srcNode.data['edit-class']} })
+            // link to source node
+            addSourceLink(newPointNode, srcNode)
 
-            // console.debug("Need to create a new model node for: ", node)
-            // check if a parent class, or parent subject has been specified
-            // we only support creating new entities or changing point assignment. 
-            // Editing existing entities is not possible in the source grid.
-            // console.debug("New node: ", node.data['edit-class'], node.data['edit-parent'])
-            // create point entity
-            // TODO: this is same as entity-operations. Refactor.
-            // need to insert at same path as overnode
-            // let newRow = createNewPointAtNode2(newParent);
-            let newRow = generatePoint(newParent)
-            newRow.source = node.id;
-            newRow.class = node.data['edit-class']
-            // console.debug(newRow)
-            node.data['source-for'] = newRow.subject
-            // add to model grid
-            // addRowsToGrid(get(modelGridAPI).api, [newRow])
-            modelGridAPI._updateGrid({add: [newRow]})
-            // refresh source grid
-            get(sourceGridAPI).api.applyTransaction({
-                update: [node.data]
-            });
+            // Process Parent
+            // Process the parent field to see if any entity actions are required for this point.
+            const parent_action = parse_parent(srcNode.data['edit-parent'])
+            process_action(parent_action, newPointNode, modelRowsToUpdate) // stores result in modelRowsToUpdate; process these updates at the end
 
-            // if parent
-            
-                // if exists
-                    // move point into parent
-                // if not
-                    // create entity
-                    // move point into entity
         } else {
+
+            console.debug("Linked mode. SrcNode: ", srcNode)
+
             // get model node to update
             const modelNode = get(modelGridAPI).api.getRowNode(linkedNodeId);
             // apply updates
             // Class
-            modelNode.data.class = node.data['edit-class'];
+            modelNode.data.class = srcNode.data['edit-class'];
             // Parent
             // parse cell and get action
-            const par_action = parse_parent(node.data['edit-parent'], modelGridAPI)
-            // console.debug(par_action)
-            process_action(par_action, modelNode, modelRowsToUpdate, {move_point: true})
+            const parent_action = parse_parent(srcNode.data['edit-parent'])
+            // console.debug("Parent Action = ", parent_action)
+
+            process_action(parent_action, modelNode, modelRowsToUpdate)
 
             modelRowsToUpdate.push(modelNode.data);
         }
     });
 
     // apply transaction to model grid
-    const res = get(modelGridAPI).api.applyTransaction({
-        update: modelRowsToUpdate
-    });
+    modelGridAPI._updateGrid({ update: modelRowsToUpdate });
     // console.debug(res)
 
     // clear change tracking
     sourceEditedNodes.update(curr => { curr.clear(); return curr } )
 
-    return res
+    return
 }
 
 // parse parent cell json node for use in update logic
-function parse_parent(parent_data, modelGridAPI){
+function parse_parent(parent_data){
+
     if (!parent_data || parent_data == {} || Object.values(parent_data).every(v => !v)){
-        // no parent data provided; no-op
-        // actually, to handle case where parent is removed, this should be a 'move' operation
-        // TODO: not working as I have to handle both linked and unlinked cases in code abbove.
+        // no parent data provided;
+        // To handle case where a parent is removed, this should be a 'move' operation with no target (i.e. move to root)
         return {
             operation: "move",
             error: false,
-            targetNode: {}
+            targetNode: null
         }
     }
+
     // if subject defined, then we need to check if it exists already in the model
     if(parent_data?.subject){
+
         const modelNode = get(modelGridAPI).api.getRowNode(parent_data.subject);
-        // console.debug("Model node: ", modelNode)
         
         if(modelNode){ // subject exists, check other fields, if provided
             if((parent_data?.class ? modelNode.data.class == parent_data.class : 1) & (parent_data?.label ? modelNode.data.label == parent_data.label : 1)){
-                // valid reference; return this as new parent
+                // valid reference as all fields match; return this as new parent
                 return {
                     operation: "move",
                     error: false,
                     targetNode: modelNode
                 }
-            } else {
-                // the parent object provided is inconsistent with model node
+            } 
+            else {
+                // the parent subject provided is inconsistent with any model nodes
                 // editing class or label from source for existing model node is not allowed
                 // abort
                 console.log("Cannot process parent change due to inconsistent parent reference. No model node exists with these properties: ", parent_data)
@@ -182,52 +165,51 @@ function parse_parent(parent_data, modelGridAPI){
                     error: true,
                 }
             }
-        } else { // no entity in model, create it.
+        } 
+        else { // no entity with given subject found in model, create it.
             return {
                 error: false,
                 operation: "create",
-                ctx: parent_data,
-                label_mode: false
+                ctx: parent_data, // params for new entity
+                label_mode: false // create new entity based on subject; not on a label ref.
             }
         }
-    } else { // if no subject, then a new entity will be created
+    } 
+    else { // if no subject, then a new entity will be created using provided label(/class), or via just provided class.
         return {
             error: false,
             operation: "create",
-            ctx: parent_data,
-            label_mode: !!parent_data?.label
+            ctx: parent_data, // params for new entity
+            label_mode: !!parent_data?.label // if label is provided then need to check label ref object for newly created nodes absed on that label.
         }
     }
 }
 
-function process_action(action, node, modelRowsToUpdate, {move_point=false}={}){
+function process_action(action, modelNode, modelRowsToUpdate){
     // action = action object
-    // node = node to apply action to
+    // modelNode = node to apply action to
     // modelRowsToUpdate = reference to shared array containing record of nodes updated
+
     if(action.error) return false;
 
     if(action.operation=="no-op"){
         return false
     }
     else if(action.operation=="move"){
-        // console.debug("Moving point: ", node, " to node: ", action.node)
-        if(move_point) {
-            moveToPath(action.targetNode.data.subject_path, node, modelRowsToUpdate)
-            return false
-        } else { return action.targetNode }
+        moveToPath(action.targetNode?.data.subject_path || [], modelNode, modelRowsToUpdate)
     }
     else if(action.operation=="create"){
         // check for label in current transaction record (assign to same subject if so)
+        
         // create new entity
-        // console.debug(node)
-        // const newEntity = addNewEntityRowWithParams(get(modelGridAPI).api, null, {...action.ctx, cls: action.ctx?.class}) // need to manually reassign class key as it is reserved. TODO: rename this in cell editor to cls
         const newEntity = modelGridAPI.addEntityRow(null, {entity_props: {...action.ctx, cls: action.ctx?.class}}) // need to manually reassign class key as it is reserved. TODO: rename this in cell editor to cls
-        // console.log(res_ent)
+        
         // move existing model point to new parent
-        if(move_point) moveToPath(newEntity.data.subject_path, node, modelRowsToUpdate)
-        return newEntity
+        moveToPath(newEntity.data.subject_path, modelNode, modelRowsToUpdate)
+        
+
     } else {
-        console.log("Unsupported operation. Op: ", action, "on node: ", node)
+        console.log("Unsupported operation. Op: ", action, "on node: ", modelNode)
         return false
     }
 }
