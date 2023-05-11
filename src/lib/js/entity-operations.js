@@ -1,3 +1,65 @@
+//
+// NEW
+//
+
+function generateEntity(atNode, {subject, label, cls}={}){
+    const newSubject = subject || `ent_${generateString(5)}`;
+    let newPath;
+    
+    if(atNode){
+        // if location to insert is a point, then get the parent node.
+        const newPotentialParent =
+            atNode.data?.type === 'entity'
+            ? // if over an entity, we take the immediate row
+                atNode
+            : // if over a point, we take the parent row (which will be an entity, or root)
+                atNode.parent;
+        
+        // if no data, parent is root. Otherwise an entity
+        newPath = newPotentialParent?.data ? newPotentialParent.data.subject_path.slice() : []
+        newPath.push(newSubject)
+    } 
+    // else grid is empty or user has selected empty space. Add to root.
+    else {
+        newPath = [newSubject]
+    }
+
+    return {
+        "subject_path": newPath,
+        "subject": newSubject,
+        "label": label || "",
+        "class": cls || "(not set)",
+        "type": "entity"
+    }
+}
+
+function generatePoint(atNode, {child=false}={}, {subject, label, cls}={}){
+    const newSubject = subject || `pnt_${generateString(5)}`;
+
+    // get path of atNode; if null set path to root
+    const newPath = atNode?.data ? atNode.data.subject_path.slice() : []
+    // if child option set, try to add the point as child of atNode, else sibling.
+    if(child && atNode){
+        // if atNode is an entity then we can make point a child
+        atNode.data?.type === 'entity' ? null : newPath.pop(); 
+
+    } else newPath.pop();
+    
+    newPath.push(subject)
+
+    return {
+        "subject_path": newPath,
+        "subject": subject,
+        "label": label || "",
+        "class": cls || "(not set)",
+        "type": "point"
+    }
+}
+
+//
+// OLD
+//
+
 // simple function to generate new entity row data
 function generateNewEntity(overNode){
     const id_str = generateString(5)
@@ -170,4 +232,7 @@ function removeSourceFor(gridApi, rows){
     return res.update[0]
 }
 
-export { generateNewEntity, moveToPath, createNewPointAtNode, removeSourceFor, createNewPointAtNodeWithParams, generateNewEntityWithParams, createNewPointAtNode2 }
+export { 
+    generateEntity, generatePoint,
+    generateNewEntity, moveToPath, createNewPointAtNode, removeSourceFor, createNewPointAtNodeWithParams, generateNewEntityWithParams, createNewPointAtNode2 
+}

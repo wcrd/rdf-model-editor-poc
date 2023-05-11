@@ -150,9 +150,12 @@ function apply_updates(){
 function parse_parent(parent_data, modelGridAPI){
     if (!parent_data || parent_data == {} || Object.values(parent_data).every(v => !v)){
         // no parent data provided; no-op
+        // actually, to handle case where parent is removed, this should be a 'move' operation
+        // TODO: not working as I have to handle both linked and unlinked cases in code abbove.
         return {
-            operation: "no-op",
-            error: false
+            operation: "move",
+            error: false,
+            targetNode: {}
         }
     }
     // if subject defined, then we need to check if it exists already in the model
