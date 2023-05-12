@@ -3,6 +3,7 @@
     import 'ag-grid-enterprise'
     import "ag-grid-community/styles/ag-grid.css"; // Core grid CSS, always needed
     import "ag-grid-community/styles/ag-theme-alpine.css"; // Optional theme CSS
+    import { debounce } from 'lodash'
 
     import { createEventDispatcher } from 'svelte'
 
@@ -42,7 +43,7 @@
         fetch("/fake-data.json")
             .then((resp) => resp.json())
             .then((data) => ($modelData = data))
-            .then(() => modelOntologyData.refresh($modelClassSet) )
+            .then(() => modelClassSet.refresh())
     }
 
     export let srcGrid;
@@ -83,7 +84,27 @@
         onCellContextMenu: (event) => { event.node.isSelected() ? null : event.node.setSelected(true) },
         onCellValueChanged: (params) => {
             // refresh source grid so linked-data fields are re-fetched
-            srcGrid.api.refreshCells({ columns: ['linked-class', 'linked-parent', 'linked-root-parent']});   
+            srcGrid.api.refreshCells({ columns: ['linked-class', 'linked-parent', 'linked-root-parent']});
+            
+            // refresh ontology grid if classes have changed
+            // console.debug(params)
+            if(params.column.colId == "class"){
+                // TODO: make a common function for this whole operation
+                // make it smarter by only evaluating changes/updates
+                console.debug("Model class cell updates; refreshing model ontology")
+                modelClassSet.refresh()
+                modelOntologyData.refresh($modelClassSet)
+            }
+        },
+        onRowDataUpdated: (params) => {
+            // new data added or updated
+            // debounce to prevent constant refreshes
+            // console.log(params)
+            debounce(() => {
+                console.debug("Model row updates; refreshing model ontology")
+                modelClassSet.refresh()
+                modelOntologyData.refresh($modelClassSet)
+            }, 500)()
         }
 
     };

@@ -47,4 +47,4 @@ function createModelOntologyDataStore(){
     }
 }
 
-console.debug({get, modelOntologyData})
+console.debug("Store:ModelOntology", {get, ontologyData, modelOntologyAPI, modelOntologyData})
