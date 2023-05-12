@@ -33,9 +33,9 @@
             },
             filter: 'agTextColumnFilter',
             resizable: true,
-            checkboxSelection: true,
-            headerCheckboxSelection: true,
-            headerCheckboxSelectionFilteredOnly: true
+            // checkboxSelection: true,
+            // headerCheckboxSelection: true,
+            // headerCheckboxSelectionFilteredOnly: true
         },
         defaultColDef: {
             sortable: true,
