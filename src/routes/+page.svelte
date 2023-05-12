@@ -13,8 +13,9 @@
 
     // NEW
     import { modelGridAPI } from '$lib/stores/store-model-grid.js'
+    import ModelOntologyGrid from "$lib/components/model-ontology-grid.svelte";
+    import { modelOntologyAPI, ontologyAPI } from '$lib/stores/store-ontology-grids.js'
     import OntologyGrid from "$lib/components/ontology-grid.svelte";
-    import { modelOntologyAPI } from '$lib/stores/store-ontology-grids.js'
 
     let srcViewFilterMode = 'all'
     let modelNodesToFilter;
@@ -103,7 +104,7 @@
                     <button class="btn-default" on:click={()=>collapseRows($modelOntologyAPI.api)}>-</button>
                 </div>
             </div>
-            <OntologyGrid bind:gridOptions={$modelOntologyAPI} on:select={(e)=>handleClassSelection(e)}/>
+            <ModelOntologyGrid bind:gridOptions={$modelOntologyAPI} on:select={(e)=>handleClassSelection(e)}/>
         </div>
         <div id="model-grid-container" class="w-1/2 h-full flex flex-col flex-grow" class:hidden={model_hidden}>
             <div id="model-button-bar" class="h-12 w-full flex flex-row align-middle p-2 justify-between">
@@ -162,12 +163,13 @@
         </div>
         <div id="full-ontology-panel" class="w-1/4 max-w-md h-full flex flex-col" class:hidden={full_ontology_hidden}>
             <div id="full-ontology-button-bar" class="h-12 w-full flex flex-row align-middle p-2 justify-between">
-                <button class="btn-subtle" on:click={()=>full_ontology_hidden=!full_ontology_hidden}>[]</button>
-                <button class="btn-default">++</button>
+                <div>
+                    <button class="btn-subtle" on:click={()=>full_ontology_hidden=!full_ontology_hidden}>[]</button>
+                    <button class="btn-default" on:click={()=>expandRows($ontologyAPI.api)}>+</button>
+                    <button class="btn-default" on:click={()=>collapseRows($ontologyAPI.api)}>-</button>
+                </div>
             </div>
-            <div>
-                <p>Placeholder for ontology grid panel</p>
-            </div>
+            <OntologyGrid bind:gridOptions={$ontologyAPI} />
         </div>
     </div>
 </div>

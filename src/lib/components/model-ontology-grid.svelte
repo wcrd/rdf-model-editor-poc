@@ -4,14 +4,15 @@
     import "ag-grid-community/styles/ag-grid.css"; // Core grid CSS, always needed
     import "ag-grid-community/styles/ag-theme-alpine.css"; // Optional theme CSS
 
-    import { ontologyData, ontologyAPI } from '$lib/stores/store-ontology-grids.js'
+    import { modelOntologyAPI, ontologyData, modelOntologyData } from '$lib/stores/store-ontology-grids.js'
+    import { modelClassSet } from '$lib/stores/store-model-grid.js'
     import { classValueRenderer } from '$lib/js/common-grid.js'
-    // import { createEventDispatcher } from 'svelte'
-    // const dispatch = createEventDispatcher()
+    import { createEventDispatcher } from 'svelte'
+    const dispatch = createEventDispatcher()
 
     async function onGridReady(){
-        ontologyData.getData();
-        // modelOntologyData.refresh($modelClassSet);
+        await ontologyData.getData();
+        modelOntologyData.refresh($modelClassSet);
     }
 
     export const gridOptions = {
@@ -45,11 +46,20 @@
         rowSelection:'multiple',
         rowData: null,
         groupSelectsChildren: true,
+        onSelectionChanged: onSelectionChanged,
+    };
+
+    
+
+    // on selection send event (used for filtering by source grid)
+    function onSelectionChanged(event) {
+      const selectedNodes = event.api.getSelectedNodes();
+      dispatch("select", selectedNodes);
     };
 
 
 </script>
 
 <div id="modelOntologyGrid" class="ag-theme-alpine h-full w-full">
-    <AgGridSvelte bind:rowData={$ontologyData} {onGridReady} {gridOptions}/>
+    <AgGridSvelte bind:rowData={$modelOntologyData} {onGridReady} {gridOptions}/>
 </div>
