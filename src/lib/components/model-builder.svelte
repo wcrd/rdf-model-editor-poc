@@ -14,6 +14,7 @@
     import { potentialParent, onRowDragEnd, onRowDragMove, onRowDragEnter, onRowDragLeave, potentialInsertNode } from '$lib/js/row-dragging.js'
     import { onCellKeyDown } from '$lib/js/keydown-handlers.js'
     import { SrcCellRenderer } from '$lib/ag-grid-components/gridCellRenderers.js'
+    import { classValueFormatter } from '$lib/js/common-grid.js'
 
     const dispatch = createEventDispatcher()
 
@@ -31,7 +32,7 @@
         { field: "subject_path", cellRenderer: params => { return `${params.value.join(" / ")}`} }, 
         { field: "subject" }, 
         { field: "label", editable: true },
-        { field: "class", editable: true },
+        { field: "class", editable: true, valueFormatter: classValueFormatter },
         { field: "pointName", editable: true},
         { field: "type", hide: true },
         // internal fields

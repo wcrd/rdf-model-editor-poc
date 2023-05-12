@@ -38,6 +38,9 @@ Ontology
 * Status bar to show count of rows, entities, linked, etc.
 * Overlay to show on model when processing updates from source.
 
+Storage
+* Add 'sync' to indexDB from store every x minutes. Provide force sync button.
+
 ## Structure Overhaul
 
 

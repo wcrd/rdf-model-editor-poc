@@ -6,6 +6,7 @@
 
     import { modelOntologyAPI, ontologyData, modelOntologyData } from '$lib/stores/store-ontology-grids.js'
     import { modelClassSet } from '$lib/stores/store-model-grid.js'
+    import { classValueRenderer } from '$lib/js/common-grid.js'
     import { createEventDispatcher } from 'svelte'
     const dispatch = createEventDispatcher()
 
@@ -29,7 +30,7 @@
             sortable: true,
             cellRendererParams: {
                 suppressCount: true,
-                innerRenderer: classValueGetter
+                innerRenderer: classValueRenderer
             },
             filter: 'agTextColumnFilter',
             resizable: true,
@@ -48,29 +49,7 @@
         onSelectionChanged: onSelectionChanged,
     };
 
-    function classValueGetter(params) {
-        // console.debug(params)
-        // SET ICON
-        let icon = "❔" //🧱 🟢 ❔
-        try {
-            if(params.data.prefix == "brick") {
-                icon = "🧱"
-            } else if (params.data.prefix == "switch") {
-                icon = "🟢"
-            } else if (params.data.prefix == "owl") {
-                icon = "🦉"
-            }
-        } catch(e) {
-            console.log(`Grid::Class: No icon for given namespace of: ${params.value}`)
-        }
-        // SET NAME (TERM)
-        try {
-            return `${params.data.term} &nbsp; ${icon}`
-        } catch {
-            console.log(`Grid::Class: No term available for: ${params.value}`)
-            return `${params.value} &nbsp; ${icon}`
-        }
-    }
+    
 
     // on selection send event (used for filtering by source grid)
     function onSelectionChanged(event) {
