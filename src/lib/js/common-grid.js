@@ -61,7 +61,24 @@ function classValueFormatter(params){
     }
 }
 
+/**
+ * Sets the quick filter for given grid using provided value.
+ * @param api GridApi to set filter on
+ * @param {string} value Value to filter the grid by
+ * @param {boolean} [expand=false] Expand all rows after filtering, optional.
+ * @returns null 
+ **/
+function setGridQuickFilter(api, value, expand=false){
+    api.setQuickFilter(
+        value
+    );
+    if(expand) api.expandAll();
+
+    return
+}
+
 export {
     classValueRenderer,
-    classValueFormatter
+    classValueFormatter,
+    setGridQuickFilter
 }

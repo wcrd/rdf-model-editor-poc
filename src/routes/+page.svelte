@@ -16,6 +16,7 @@
     import ModelOntologyGrid from "$lib/components/model-ontology-grid.svelte";
     import { modelOntologyAPI, ontologyAPI } from '$lib/stores/store-ontology-grids.js'
     import OntologyGrid from "$lib/components/ontology-grid.svelte";
+    import { setGridQuickFilter } from "$lib/js/common-grid.js"
 
     let srcViewFilterMode = 'all'
     let modelNodesToFilter;
@@ -30,6 +31,12 @@
 
     // filter variables
     let filter_classes = []; // classes to filter the model to
+    // We don't need these variables as we could filter directly from the input element.
+    // however keeping for now incase I want to set or clear via another function.
+    let model_ontology_filter_input;
+    let model_filter_input;
+    let ontology_filter_input;
+
 
     // MOVE LATER
     // Filtering
@@ -93,26 +100,33 @@
 </script>
 
 <div class="h-screen w-full flex flex-col">
-    <div id="controller-bar-container" class="h-8 bg-red-100">
+    <div id="controller-bar-container" class="h-8 bg-red-100 flex flex-row p-1 gap-x-1">
         <p>main button bar</p>
+        <button class="btn-subtle !py-0" on:click={()=>showModal=true}>Test Modal</button>
     </div>
     <div id="grids-container" class="h-full flex flex-row">
         <div id="model-ontology-panel" class="w-1/4 max-w-md h-full flex flex-col" class:hidden={model_ontology_hidden || model_hidden}>
-            <div id="model-ontology-button-bar" class="h-12 w-full flex flex-row align-middle p-2 justify-between">
+            <div id="model-ontology-button-bar" class="h-12 w-full flex flex-row align-middle p-2 justify-between gap-x-1">
                 <div>
                     <button class="btn-default" on:click={()=>expandRows($modelOntologyAPI.api)}>+</button>
                     <button class="btn-default" on:click={()=>collapseRows($modelOntologyAPI.api)}>-</button>
+                </div>
+                <div class="border rounded border-blue-500 flex-grow">
+                    <input class="w-full outline-none" type="search" id="model-ontology-filter-text-box" bind:value={model_ontology_filter_input} placeholder="Filter..." on:input={()=>setGridQuickFilter($modelOntologyAPI.api, model_ontology_filter_input, true)}>
                 </div>
             </div>
             <ModelOntologyGrid bind:gridOptions={$modelOntologyAPI} on:select={(e)=>handleClassSelection(e)}/>
         </div>
         <div id="model-grid-container" class="w-1/2 h-full flex flex-col flex-grow" class:hidden={model_hidden}>
             <div id="model-button-bar" class="h-12 w-full flex flex-row align-middle p-2 justify-between">
-                <div>
+                <div class="flex flex-row gap-x-1">
                     <button class="btn-subtle" on:click={()=>model_ontology_hidden=!model_ontology_hidden}>[>]</button>
                     <button class="btn-default" on:click={()=>jsonImportExport.export_all()}>Export JSON</button>
                     <button class="btn-default"on:click={() => launchModal(JsonUploadModal)}>Import JSON</button>
-                    <button class="btn-subtle" on:click={()=>showModal=true}>Test Modal</button>
+                    
+                    <div class="border rounded border-blue-500 flex-grow">
+                        <input class="w-full outline-none" type="search" id="model-filter-text-box" bind:value={model_filter_input} placeholder="Filter..." on:input={()=>setGridQuickFilter($modelGridAPI.api, model_filter_input, true)}>
+                    </div>
                 </div>
                 <div id="src-panel-slide">
                     <button class="btn-subtle" on:click={()=>src_hidden=!src_hidden}>
@@ -162,11 +176,14 @@
             <SourceGrid bind:gridOptions={$sourceGridAPI} targetGrid={$modelGridAPI} filterMode={srcViewFilterMode} {modelNodesToFilter}/>
         </div>
         <div id="full-ontology-panel" class="w-1/4 max-w-md h-full flex flex-col" class:hidden={full_ontology_hidden}>
-            <div id="full-ontology-button-bar" class="h-12 w-full flex flex-row align-middle p-2 justify-between">
+            <div id="full-ontology-button-bar" class="h-12 w-full flex flex-row align-middle p-2 justify-between gap-x-1">
                 <div>
                     <button class="btn-subtle" on:click={()=>full_ontology_hidden=!full_ontology_hidden}>[]</button>
                     <button class="btn-default" on:click={()=>expandRows($ontologyAPI.api)}>+</button>
                     <button class="btn-default" on:click={()=>collapseRows($ontologyAPI.api)}>-</button>
+                </div>
+                <div class="border rounded border-blue-500 flex-grow">
+                    <input class="w-full outline-none" type="search" id="ontology-filter-text-box" bind:value={ontology_filter_input} placeholder="Filter..." on:input={()=>setGridQuickFilter($ontologyAPI.api, ontology_filter_input, true)}>
                 </div>
             </div>
             <OntologyGrid bind:gridOptions={$ontologyAPI} />
