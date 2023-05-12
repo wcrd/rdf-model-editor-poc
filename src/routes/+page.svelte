@@ -35,6 +35,7 @@
     // however keeping for now incase I want to set or clear via another function.
     let model_ontology_filter_input;
     let model_filter_input;
+    let source_filter_input;
     let ontology_filter_input;
 
 
@@ -118,8 +119,8 @@
             <ModelOntologyGrid bind:gridOptions={$modelOntologyAPI} on:select={(e)=>handleClassSelection(e)}/>
         </div>
         <div id="model-grid-container" class="w-1/2 h-full flex flex-col flex-grow" class:hidden={model_hidden}>
-            <div id="model-button-bar" class="h-12 w-full flex flex-row align-middle p-2 justify-between">
-                <div class="flex flex-row gap-x-1">
+            <div id="model-button-bar" class="h-12 w-full flex flex-row align-middle p-2 justify-between gap-x-1">
+                <div class="flex flex-row gap-x-1 flex-grow">
                     <button class="btn-subtle" on:click={()=>model_ontology_hidden=!model_ontology_hidden}>[>]</button>
                     <button class="btn-default" on:click={()=>jsonImportExport.export_all()}>Export JSON</button>
                     <button class="btn-default"on:click={() => launchModal(JsonUploadModal)}>Import JSON</button>
@@ -145,7 +146,7 @@
         </div>
         <div id="src-grid-container" class="w-1/2 h-full flex flex-col flex-grow" class:hidden={src_hidden}>
             <div id="source-button-bar" class="h-12 w-full flex flex-row align-middle p-2 space-x-2 justify-between">
-                <div>
+                <div class="flex flex-row gap-x-1 flex-grow">
                     <button class="btn-default" class:btn-selected={srcViewFilterMode=="unassigned"} on:click={()=>{srcViewFilterMode="unassigned"}}>Unassigned</button>
                     <button class="btn-default" class:btn-selected={srcViewFilterMode=="assigned"} on:click={()=>{srcViewFilterMode="assigned"}}>Assigned</button>
                     <button class="btn-default" class:btn-selected={srcViewFilterMode=="all"} on:click={()=>{srcViewFilterMode="all"}}>All</button>
@@ -159,8 +160,12 @@
                         Edit Mode
                         {/if}
                     </button>
+                    <span>|</span>
+                    <div class="border rounded border-blue-500 flex-grow">
+                        <input class="w-full outline-none" type="search" id="source-filter-text-box" bind:value={source_filter_input} placeholder="Filter..." on:input={()=>setGridQuickFilter($sourceGridAPI.api, source_filter_input, false)}>
+                    </div>
                 </div>
-                <div>
+                <div class="flex flex-row">
                     <button class="btn-subtle" on:click={()=>model_hidden=!model_hidden}>
                         {#if model_hidden}
                         Show Model
