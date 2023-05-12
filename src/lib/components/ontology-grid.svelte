@@ -6,7 +6,8 @@
 
     import { modelOntologyAPI, ontologyData, modelOntologyData } from '$lib/stores/store-ontology-grids.js'
     import { modelClassSet } from '$lib/stores/store-model-grid.js'
-    import { get } from "svelte/store";
+    import { createEventDispatcher } from 'svelte'
+    const dispatch = createEventDispatcher()
 
     async function onGridReady(){
         await ontologyData.getData();
@@ -44,6 +45,7 @@
         rowSelection:'multiple',
         rowData: null,
         groupSelectsChildren: true,
+        onSelectionChanged: onSelectionChanged,
     };
 
     function classValueGetter(params) {
@@ -69,6 +71,12 @@
             return `${params.value} &nbsp; ${icon}`
         }
     }
+
+    // on selection send event (used for filtering by source grid)
+    function onSelectionChanged(event) {
+      const selectedNodes = event.api.getSelectedNodes();
+      dispatch("select", selectedNodes);
+    };
 
 
 </script>

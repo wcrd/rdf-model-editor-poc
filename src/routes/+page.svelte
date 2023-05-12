@@ -27,6 +27,44 @@
     // mode variables
     let source_edit_mode = false;
 
+    // filter variables
+    let filter_classes = []; // classes to filter the model to
+
+    // MOVE LATER
+    // Filtering
+    // Function to set the 'class' SET type filter on main grid
+    function setModelClassFilter(itemsToFilter){
+        try {
+            const filterInstance = $modelGridAPI.api.getFilterInstance('class');
+            // console.log(grid_api)
+            // console.log(filterInstance)
+            // Get Set filter
+            // const setFilter = filterInstance.filters.filter(filter => filter.filterNameKey == "setFilter")[0]
+            // assuming single filter type column for now. If not use above code.
+            const setFilter = filterInstance;
+            // console.log(setFilter, grid_api)
+            if (itemsToFilter.length==0){
+                setFilter.resetFilterValues()
+                setFilter.setModel(null)
+                $modelGridAPI.api.onFilterChanged()
+            } else {
+                setFilter.setModel({ values: itemsToFilter }).then(function() { $modelGridAPI.api.onFilterChanged(); });
+            }
+        } catch {
+            console.log('Grid not ready to filter')
+        }
+    }
+
+    // handle filter class selection
+    function handleClassSelection(event){
+        filter_classes = event.detail.map(row => row.data.uri)
+    }
+
+    // Call the filter everytime the filter list changes
+    $: {
+        setModelClassFilter(filter_classes)
+    }
+
     // Modal control
     let showModal = false;
     let modalContent = SimpleModal;
@@ -65,7 +103,7 @@
                     <button class="btn-default" on:click={()=>collapseRows($modelOntologyAPI.api)}>-</button>
                 </div>
             </div>
-            <OntologyGrid bind:gridOptions={$modelOntologyAPI}/>
+            <OntologyGrid bind:gridOptions={$modelOntologyAPI} on:select={(e)=>handleClassSelection(e)}/>
         </div>
         <div id="model-grid-container" class="w-1/2 h-full flex flex-col flex-grow" class:hidden={model_hidden}>
             <div id="model-button-bar" class="h-12 w-full flex flex-row align-middle p-2 justify-between">
