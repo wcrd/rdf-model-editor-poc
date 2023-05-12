@@ -6,13 +6,14 @@
 
     import { modelOntologyAPI, ontologyData, modelOntologyData } from '$lib/stores/store-ontology-grids.js'
     import { modelClassSet } from '$lib/stores/store-model-grid.js'
+    import { get } from "svelte/store";
 
     async function onGridReady(){
         await ontologyData.getData();
         modelOntologyData.refresh($modelClassSet);
     }
 
-    const gridOptions = {
+    export const gridOptions = {
         treeData: true,
         getDataPath: (data) => {
             if (data.path.full[0] == "https://brickschema.org/schema/Brick#Class"){

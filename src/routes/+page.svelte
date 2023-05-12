@@ -14,6 +14,7 @@
     // NEW
     import { modelGridAPI } from '$lib/stores/store-model-grid.js'
     import OntologyGrid from "$lib/components/ontology-grid.svelte";
+    import { modelOntologyAPI } from '$lib/stores/store-ontology-grids.js'
 
     let srcViewFilterMode = 'all'
     let modelNodesToFilter;
@@ -40,6 +41,15 @@
         return
     }
 
+    // move into common grid ops module
+    function collapseRows(api) {
+        api.collapseAll();
+    }
+
+    function expandRows(api) {
+        api.expandAll();
+    }
+
 
 </script>
 
@@ -50,9 +60,12 @@
     <div id="grids-container" class="h-full flex flex-row">
         <div id="model-ontology-panel" class="w-1/4 max-w-md h-full flex flex-col" class:hidden={model_ontology_hidden || model_hidden}>
             <div id="model-ontology-button-bar" class="h-12 w-full flex flex-row align-middle p-2 justify-between">
-                <button class="btn-default">++</button>
+                <div>
+                    <button class="btn-default" on:click={()=>expandRows($modelOntologyAPI.api)}>+</button>
+                    <button class="btn-default" on:click={()=>collapseRows($modelOntologyAPI.api)}>-</button>
+                </div>
             </div>
-            <OntologyGrid/>
+            <OntologyGrid bind:gridOptions={$modelOntologyAPI}/>
         </div>
         <div id="model-grid-container" class="w-1/2 h-full flex flex-col flex-grow" class:hidden={model_hidden}>
             <div id="model-button-bar" class="h-12 w-full flex flex-row align-middle p-2 justify-between">

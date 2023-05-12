@@ -32,6 +32,8 @@ Ontology
 * Updates not workign properly
   * Need to make sure modelClassSet is updating when a cell value is changed; currently is not.
   * Be nice if ontology panel auto updated.
+  * Add 'unclassified' as ontology option
+  * Update update calls to be in a function with some smarts
 
 * Status bar to show count of rows, entities, linked, etc.
 * Overlay to show on model when processing updates from source.
