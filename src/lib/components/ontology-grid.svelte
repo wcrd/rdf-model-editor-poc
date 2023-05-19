@@ -7,7 +7,7 @@
     import { ontologyData, ontologyAPI } from '$lib/stores/store-ontology-grids.js'
     import { modelGridAPI } from '$lib/stores/store-model-grid.js'
     import { classValueRenderer, addGridDropZone } from '$lib/js/common-grid.js'
-    import { classOverModelNode } from '$lib/js/row-dragging/ont-model.js'
+    import { ontModelDragParams } from '$lib/js/row-dragging/ont-model.js'
 
     // import { createEventDispatcher } from 'svelte'
     // const dispatch = createEventDispatcher()
@@ -20,9 +20,7 @@
         setTimeout(()=>addGridDropZone(
                 params, 
                 $modelGridAPI.api,
-                {
-                    onDragging: classOverModelNode
-                }
+                ontModelDragParams
             ), 1000)
     }
 

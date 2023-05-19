@@ -40,6 +40,10 @@ function setPotentialTargetForClass(overNode, classNode){
     return false;
 }
 
+const ontModelDragParams = {
+    onDragging: classOverModelNode,
+}
+
 export {
-    classOverModelNode
+    ontModelDragParams
 }
