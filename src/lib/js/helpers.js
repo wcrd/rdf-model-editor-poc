@@ -13,6 +13,5 @@ function generateString(length) {
 }
 
 export {
-    generateString,
-    
+    generateString,   
 }

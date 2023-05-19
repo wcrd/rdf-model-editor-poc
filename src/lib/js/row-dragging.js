@@ -1,14 +1,14 @@
 import { get } from "svelte/store";
 import { moveToPath } from "$lib/js/entity-operations";
 import { sourceGridAPI } from "$lib/stores/store-grid-manager";
-import { modelGridAPI } from "$lib/stores/store-model-grid";
+import { modelGridAPI, potentialParent } from "$lib/stores/store-model-grid";
 import { removeSourceLinks, addSourceLink } from "$lib/js/shared-transactions";
 
 // ###################################################
 // Row moving controllers
 //
 
-let potentialParent = null;
+// let potentialParent = null;
 let srcDragMode = null;
 let potentialInsertNode= null;
 
@@ -64,6 +64,7 @@ function setPotentialInsertNode(gridApi, overNode){
 
 function setPotentialParentForNode(gridApi, overNode) {
     let newPotentialParent;
+    let currPotentialParent = get(potentialParent);
 
     // set parent to node we are hovering near
     if (overNode) {
@@ -78,7 +79,7 @@ function setPotentialParentForNode(gridApi, overNode) {
     }
 
     // check if it is the current parent
-    const alreadySelected = potentialParent === newPotentialParent;
+    const alreadySelected = currPotentialParent === newPotentialParent;
     if (alreadySelected) {
         return; // exit early, nothing to change
     }
@@ -87,14 +88,14 @@ function setPotentialParentForNode(gridApi, overNode) {
     // we refresh the previous selection (if it exists) to clear
     // the highlighted and then the new selection.
     const rowsToRefresh = [];
-    if (potentialParent) {
-        rowsToRefresh.push(potentialParent);
+    if (currPotentialParent) {
+        rowsToRefresh.push(currPotentialParent);
     }
     if (newPotentialParent) {
         rowsToRefresh.push(newPotentialParent);
     }
 
-    potentialParent = newPotentialParent;
+    potentialParent.set(newPotentialParent);
 
     refreshRows(gridApi, rowsToRefresh);
 };
@@ -113,7 +114,9 @@ function refreshRows(api, rowsToRefresh) {
 }
 
 function onRowDragEnd(event) {
-    if (!potentialParent && !potentialInsertNode) {
+    const currPotentialParent = get(potentialParent);
+
+    if (!currPotentialParent && !potentialInsertNode) {
         return
     }
 
@@ -127,8 +130,8 @@ function onRowDragEnd(event) {
 
         const srcGridApi = event.node.beans.gridApi
         // 1. if point has source already, remove that association
-        if (potentialParent.data.source) {
-            removeSourceLinks({modelRows: [potentialParent.data]})
+        if (currPotentialParent.data.source) {
+            removeSourceLinks({modelRows: [currPotentialParent.data]})
         }
 
         // 2. source has point already, remove that association in points grid
@@ -137,7 +140,7 @@ function onRowDragEnd(event) {
         }
 
         // 3&4: Create link between source and model
-        addSourceLink(potentialParent, event.node)
+        addSourceLink(currPotentialParent, event.node)
 
 
         // clear node to highlight
@@ -173,7 +176,7 @@ function onRowDragEnd(event) {
     }
     // if internal model drag, do normal    
     else {
-        const newParentPath = potentialParent.data ? potentialParent.data.subject_path : [];
+        const newParentPath = currPotentialParent.data ? currPotentialParent.data.subject_path : [];
         // filter to just nodes that need parents updated
         const nodesToChangeParent = event.nodes.filter((node) => {
             if (!arePathsEqual(newParentPath, node.data.subject_path)) {
@@ -183,7 +186,7 @@ function onRowDragEnd(event) {
         });
 
         // check if any nodes that are being updated are being moved into their own child
-        const invalidMode = nodesToChangeParent.some(node => isSelectionParentOfTarget(node, potentialParent));
+        const invalidMode = nodesToChangeParent.some(node => isSelectionParentOfTarget(node, currPotentialParent));
         if (invalidMode) {
             console.log('Not allowed.');
         }
@@ -237,6 +240,7 @@ function isSelectionParentOfTarget(selectedNode, targetNode) {
 
 function setPotentialParentForSource(gridApi, overNode) {
     let newPotentialParent;
+    const currPotentialParent = get(potentialParent);
 
     // set parent to node we are hovering near
     if (overNode) {
@@ -251,7 +255,7 @@ function setPotentialParentForSource(gridApi, overNode) {
     }
 
     // check if it is the current parent
-    const alreadySelected = potentialParent === newPotentialParent;
+    const alreadySelected = currPotentialParent === newPotentialParent;
     if (alreadySelected) {
         return; // exit early, nothing to change
     }
@@ -260,21 +264,21 @@ function setPotentialParentForSource(gridApi, overNode) {
     // we refresh the previous selection (if it exists) to clear
     // the highlighted and then the new selection.
     const rowsToRefresh = [];
-    if (potentialParent) {
-        rowsToRefresh.push(potentialParent);
+    if (currPotentialParent) {
+        rowsToRefresh.push(currPotentialParent);
     }
     if (newPotentialParent) {
         rowsToRefresh.push(newPotentialParent);
     }
 
-    potentialParent = newPotentialParent;
+    potentialParent.set(newPotentialParent);
 
     refreshRows(gridApi, rowsToRefresh);
 }
 
 
 export { 
-    potentialParent, potentialInsertNode, 
+    potentialInsertNode, 
     onRowDragEnd, onRowDragMove, onRowDragEnter, onRowDragLeave,
     refreshRows
 }

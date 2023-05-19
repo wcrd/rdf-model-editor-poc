@@ -75,7 +75,10 @@ const modelClassSet = {
     }
 }
 
+// ui control variables
+const potentialParent = writable();
 
-export { modelGridAPI, modelData, modelGridColumnDefs, modelClassSet }
+
+export { modelGridAPI, modelData, modelGridColumnDefs, modelClassSet, potentialParent }
 
 console.debug("Store:Model", {get, modelData, modelGridAPI, modelClassSet})

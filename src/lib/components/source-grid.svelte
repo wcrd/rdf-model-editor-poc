@@ -94,7 +94,11 @@
         // add row drop zone
         // setting delay to make sure other grid is intitalised
         // TODO: update this to be more robust.
-        setTimeout(() => addGridDropZone(params, targetGrid.api), 1000)   
+        setTimeout(() => addGridDropZone(
+            params, 
+            targetGrid.api, 
+            {}
+            ), 1000)   
     };
 
     export let gridOptions = {

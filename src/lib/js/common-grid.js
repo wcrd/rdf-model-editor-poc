@@ -87,8 +87,8 @@ function setGridQuickFilter(api, value, expand=false){
  * @param targetGridApi Target grid api reference
  * @returns null 
  **/
-function addGridDropZone(params, targetGridApi) {
-    const dropZone = targetGridApi.getRowDropZoneParams();
+function addGridDropZone(params, targetGridApi, rowDropZoneParams={}) {
+    const dropZone = targetGridApi.getRowDropZoneParams(rowDropZoneParams);
   
     params.api.addRowDropZone(dropZone);
 }

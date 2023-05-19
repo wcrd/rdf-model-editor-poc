@@ -7,6 +7,8 @@
     import { ontologyData, ontologyAPI } from '$lib/stores/store-ontology-grids.js'
     import { modelGridAPI } from '$lib/stores/store-model-grid.js'
     import { classValueRenderer, addGridDropZone } from '$lib/js/common-grid.js'
+    import { classOverModelNode } from '$lib/js/row-dragging/ont-model.js'
+
     // import { createEventDispatcher } from 'svelte'
     // const dispatch = createEventDispatcher()
 
@@ -15,7 +17,13 @@
         // modelOntologyData.refresh($modelClassSet);
         // Add model grid as valid drag-drop target
         // TODO: make more robust and move into parent; I don't like importing all the grid apis into each grid module.
-        setTimeout(()=>addGridDropZone(params, $modelGridAPI.api), 1000)
+        setTimeout(()=>addGridDropZone(
+                params, 
+                $modelGridAPI.api,
+                {
+                    onDragging: classOverModelNode
+                }
+            ), 1000)
     }
 
     export const gridOptions = {
@@ -50,6 +58,9 @@
         rowSelection:'multiple',
         rowData: null,
         groupSelectsChildren: true,
+        context: {
+            gridName: "ontology"
+        }
     };
 
 
