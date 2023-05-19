@@ -11,7 +11,7 @@
     import { removeSourceLinks } from '$lib/js/shared-transactions.js'
     import { modelOntologyData } from '$lib/stores/store-ontology-grids.js'
 
-    import { onRowDragEnd, onRowDragMove, onRowDragEnter, onRowDragLeave } from '$lib/js/row-dragging.js'
+    import { modelModelDragHandlers } from '$lib/js/row-dragging/model-model.js'
     import { onCellKeyDown } from '$lib/js/keydown-handlers.js'
     import { SrcCellRenderer } from '$lib/ag-grid-components/gridCellRenderers.js'
     import { classValueFormatter } from '$lib/js/common-grid.js'
@@ -75,10 +75,7 @@
         // onRowDragEnter: e => {
         //     console.debug("Row Drag Begin: ", e)
         // },
-        onRowDragLeave: onRowDragLeave,
-        onRowDragMove: onRowDragMove,
-        onRowDragEnd: onRowDragEnd,
-        onRowDragEnter: onRowDragEnter,
+        ...modelModelDragHandlers,
         getContextMenuItems: getContextMenuItems,
         onCellKeyDown: onCellKeyDown,
         onSelectionChanged: onSelectionChanged,

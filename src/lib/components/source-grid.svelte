@@ -8,7 +8,6 @@
 
     // import { addGridDropZone } from '$lib/js/drag-and-drop.js'
     import { addGridDropZone } from '$lib/js/common-grid.js'
-    import { onRowDragEnter } from '$lib/js/row-dragging.js'
     import { SrcCellRenderer, ParentCellRenderer } from '$lib/ag-grid-components/gridCellRenderers.js'
     import { get_linked_class, get_linked_parent, get_linked_root_parent } from '$lib/js/grid-data-helpers'
     import { srcModelDragParams } from '$lib/js/row-dragging/src-model.js'
@@ -124,7 +123,6 @@
         },
         getRowId: (params) => `${params.data['BACnet Network']}-${params.data['Device No']}-${params.data['Object Address']}`,
         // Row Dragging Config (Event Handlers for native Grid Events)
-        onRowDragEnter: onRowDragEnter,
         animateRows: true,
         isExternalFilterPresent: isExternalFilterPresent,
         doesExternalFilterPass: doesExternalFilterPass,

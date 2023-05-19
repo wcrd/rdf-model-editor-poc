@@ -1,9 +1,9 @@
 import { get } from "svelte/store";
 import { moveToPath } from "$lib/js/entity-operations";
 import { sourceGridAPI, dragMode } from "$lib/stores/store-grid-manager";
-import { modelGridAPI, potentialParent, potentialInsertNode } from "$lib/stores/store-model-grid";
+import { modelGridAPI, potentialParent } from "$lib/stores/store-model-grid";
 import { refreshRows } from "$lib/js/common-grid";
-
+import { isSelectionParentOfTarget, arePathsEqual } from "$lib/js/ontology-helpers";
 
 // ###################################################
 // Row moving controllers
@@ -116,31 +116,10 @@ function setPotentialParentForNode(overNode) {
     return rowsToRefresh
 };
 
-function arePathsEqual(path1, path2) {
-    if (path1.length !== path2.length) {
-        return false;
-    }
-
-    let equal = true;
-    path1.forEach((item, index) => {
-        if (path2[index] !== item) {
-            equal = false;
-        }
-    });
-
-    return equal;
+const modelModelDragHandlers = {
+    onRowDragEnd, onRowDragMove, onRowDragEnter, onRowDragLeave
 }
-
-function isSelectionParentOfTarget(selectedNode, targetNode) {
-    const children = selectedNode.childrenAfterGroup || [];
-    for (let i = 0; i < children.length; i++) {
-        if (targetNode && children[i].key === targetNode.key) return true;
-        isSelectionParentOfTarget(children[i], targetNode);
-    }
-    return false;
-}
-
 
 export {  
-    onRowDragEnd, onRowDragMove, onRowDragEnter, onRowDragLeave
+        modelModelDragHandlers    
 }
