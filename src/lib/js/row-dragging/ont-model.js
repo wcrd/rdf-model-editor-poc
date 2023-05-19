@@ -13,9 +13,9 @@ function classOverModelNode(params){
     if(params.overNode){
         // console.debug(classType, overNodeType)
         // set potential parent
-        const targetSet = setPotentialTargetForClass(params.overNode, params.node)
-        if(targetSet){
-            refreshRows(params.api, [get(potentialParent)])
+        const rowsToUpdate = setPotentialTargetForClass(params.overNode, params.node)
+        if(rowsToUpdate){
+            refreshRows(params.api, rowsToUpdate)
         }
 
     }
@@ -34,7 +34,7 @@ function setPotentialTargetForClass(overNode, classNode){
         const alreadyTarget = currentTarget == overNode;
         if(!alreadyTarget){
             potentialParent.set(overNode)
-            return true
+            return [currentTarget, overNode]
         }
     }
     return false;

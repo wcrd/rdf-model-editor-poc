@@ -11,6 +11,7 @@
     import { onRowDragEnter } from '$lib/js/row-dragging.js'
     import { SrcCellRenderer, ParentCellRenderer } from '$lib/ag-grid-components/gridCellRenderers.js'
     import { get_linked_class, get_linked_parent, get_linked_root_parent } from '$lib/js/grid-data-helpers'
+    import { srcModelDragParams } from '$lib/js/row-dragging/src-model.js'
 
     // get target grid dropzone
     export let targetGrid;
@@ -97,9 +98,7 @@
         setTimeout(() => addGridDropZone(
                 params, 
                 targetGrid.api, 
-                {
-                    
-                }
+                srcModelDragParams,
             ), 1000)   
     };
 

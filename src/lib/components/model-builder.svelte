@@ -7,11 +7,11 @@
 
     import { createEventDispatcher } from 'svelte'
 
-    import { modelGridAPI, modelData, modelClassSet, potentialParent } from '$lib/stores/store-model-grid.js'
+    import { modelGridAPI, modelData, modelClassSet, potentialParent, potentialInsertNode } from '$lib/stores/store-model-grid.js'
     import { removeSourceLinks } from '$lib/js/shared-transactions.js'
     import { modelOntologyData } from '$lib/stores/store-ontology-grids.js'
 
-    import { onRowDragEnd, onRowDragMove, onRowDragEnter, onRowDragLeave, potentialInsertNode } from '$lib/js/row-dragging.js'
+    import { onRowDragEnd, onRowDragMove, onRowDragEnter, onRowDragLeave } from '$lib/js/row-dragging.js'
     import { onCellKeyDown } from '$lib/js/keydown-handlers.js'
     import { SrcCellRenderer } from '$lib/ag-grid-components/gridCellRenderers.js'
     import { classValueFormatter } from '$lib/js/common-grid.js'
@@ -20,7 +20,7 @@
 
     const cellClassRules = {
         'hover-over': (params) => {return params.node === $potentialParent},
-        'insert-at': (params) => { return params.node === potentialInsertNode },
+        'insert-at': (params) => { return params.node === $potentialInsertNode },
     };
     const rowClassRules = {
         'entity-row': (params) => { return params.node.data.type == "entity" }
@@ -75,10 +75,10 @@
         // onRowDragEnter: e => {
         //     console.debug("Row Drag Begin: ", e)
         // },
-        onRowDragLeave: onRowDragLeave,
-        onRowDragMove: onRowDragMove,
-        onRowDragEnd: onRowDragEnd,
-        onRowDragEnter: onRowDragEnter,
+        // onRowDragLeave: onRowDragLeave,
+        // onRowDragMove: onRowDragMove,
+        // onRowDragEnd: onRowDragEnd,
+        // onRowDragEnter: onRowDragEnter,
         getContextMenuItems: getContextMenuItems,
         onCellKeyDown: onCellKeyDown,
         onSelectionChanged: onSelectionChanged,
