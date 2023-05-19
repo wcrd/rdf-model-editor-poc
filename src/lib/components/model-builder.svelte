@@ -75,10 +75,10 @@
         // onRowDragEnter: e => {
         //     console.debug("Row Drag Begin: ", e)
         // },
-        // onRowDragLeave: onRowDragLeave,
-        // onRowDragMove: onRowDragMove,
-        // onRowDragEnd: onRowDragEnd,
-        // onRowDragEnter: onRowDragEnter,
+        onRowDragLeave: onRowDragLeave,
+        onRowDragMove: onRowDragMove,
+        onRowDragEnd: onRowDragEnd,
+        onRowDragEnter: onRowDragEnter,
         getContextMenuItems: getContextMenuItems,
         onCellKeyDown: onCellKeyDown,
         onSelectionChanged: onSelectionChanged,
@@ -106,6 +106,9 @@
                 modelClassSet.refresh()
                 modelOntologyData.refresh($modelClassSet)
             }, 500)()
+        },
+        context: {
+            gridName: "model"
         }
 
     };

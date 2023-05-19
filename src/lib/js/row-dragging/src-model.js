@@ -4,12 +4,15 @@ import { potentialParent, potentialInsertNode } from "$lib/stores/store-model-gr
 import { refreshRows } from "$lib/js/common-grid";
 import { removeSourceLinks, addSourceLink } from "$lib/js/shared-transactions";
 import { modelGridAPI } from "$lib/stores/store-model-grid";
-import { sourceGridAPI } from "$lib/stores/store-grid-manager"
+import { sourceGridAPI, dragMode } from "$lib/stores/store-grid-manager"
 
 let srcDragMode = null; // controls: insert new node or make link to existing
 
 function onRowDragEnter(params) {
     // console.debug(params);
+    // set global drag controller
+    dragMode.set("source-to-model")
+
     // check that we are dragging at least some source points; a little redundant.
     if (params.nodes.some(node => node?.data.type == "src")) {
         // 1 node and no ctrl key = link; else insert.
@@ -20,6 +23,7 @@ function onRowDragEnter(params) {
 }
 
 function srcOverModelNode(params){
+    // console.debug("Callback drag: ", params)
     // check we are dragging source rows (a little redundant)
     if(srcDragMode){
         let rowsToRefresh = false;
@@ -100,12 +104,24 @@ function onRowDragStop(params){
     // clear highlight
     if(rowsToRefresh) refreshRows(params.api, rowsToRefresh)
 
+    // reset global drag mode
+    dragMode.set(null)
+
+}
+
+function onRowDragLeave(params){
+    // clear highlight
+    const rowsToRefresh = setPotentialModelNodeForSource(null)
+    if(rowsToRefresh) refreshRows(params.api, rowsToRefresh)
+    // reset global drag mode
+    dragMode.set(null)
 }
 
 const srcModelDragParams = {
     onDragEnter: onRowDragEnter,
     onDragging: srcOverModelNode,
     onDragStop: onRowDragStop,
+    onDragLeave: onRowDragLeave
 }
 
 

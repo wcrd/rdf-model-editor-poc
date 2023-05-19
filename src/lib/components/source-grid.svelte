@@ -133,7 +133,10 @@
             // event.node.setDataValue('_edited', true)
             $sourceEditedNodes.add(event.node)
             // console.debug(event)
-        } 
+        },
+        context: {
+            gridName: "source"
+        }
     };
     
     function isExternalFilterPresent(){
