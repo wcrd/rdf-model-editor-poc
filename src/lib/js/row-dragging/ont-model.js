@@ -1,17 +1,43 @@
+import { get } from "svelte/store";
 import { getClassType } from "$lib/js/ontology-helpers.js"
+import { refreshRows } from "$lib/js/common-grid";
+import { potentialParent } from '$lib/stores/store-model-grid.js'
+
+const MODEL_NODE_TYPE_CLASS_TYPE_MAP = {
+    "entity": ["Equipment", "Location", "Collection"],
+    "point": ["Point"],
+}
 
 function classOverModelNode(params){
     // check we are over something useful
     if(params.overNode){
-        // check type of model node
-        console.debug("Class over node: ", params)
-        const classType = getClassType(params.node.data);
-        const overNodeType = params.overNode.data.type
-        console.debug(classType, overNodeType)
+        // console.debug(classType, overNodeType)
+        // set potential parent
+        const targetSet = setPotentialTargetForClass(params.overNode, params.node)
+        if(targetSet){
+            refreshRows(params.api, [get(potentialParent)])
+        }
+
     }
-    // set highlight
+}
 
 
+function setPotentialTargetForClass(overNode, classNode){
+    const currentTarget = get(potentialParent);
+
+    // check model node type and ontology class are compatible
+    const overNodeType = overNode.data.type
+    const classType = getClassType(classNode.data);
+    if( MODEL_NODE_TYPE_CLASS_TYPE_MAP[overNodeType].includes(classType) ){
+        // console.debug("Compatible")
+        // check if already the target
+        const alreadyTarget = currentTarget == overNode;
+        if(!alreadyTarget){
+            potentialParent.set(overNode)
+            return true
+        }
+    }
+    return false;
 }
 
 export {

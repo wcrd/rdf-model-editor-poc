@@ -95,9 +95,11 @@
         // setting delay to make sure other grid is intitalised
         // TODO: update this to be more robust.
         setTimeout(() => addGridDropZone(
-            params, 
-            targetGrid.api, 
-            {}
+                params, 
+                targetGrid.api, 
+                {
+                    
+                }
             ), 1000)   
     };
 

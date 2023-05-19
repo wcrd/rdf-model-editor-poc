@@ -94,9 +94,28 @@ function addGridDropZone(params, targetGridApi, rowDropZoneParams={}) {
 }
 
 
+//
+// GENERAL OPS
+//
+
+function refreshRows(api, rowsToRefresh) {
+    const params = {
+        // refresh these rows only.
+        rowNodes: rowsToRefresh,
+        // because the grid does change detection, the refresh
+        // will not happen because the underlying value has not
+        // changed. to get around this, we force the refresh,
+        // which skips change detection.
+        force: true,
+    };
+    api.refreshCells(params);
+}
+
+
 export {
     classValueRenderer,
     classValueFormatter,
     setGridQuickFilter,
-    addGridDropZone
+    addGridDropZone,
+    refreshRows
 }
