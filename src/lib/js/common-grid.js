@@ -77,8 +77,26 @@ function setGridQuickFilter(api, value, expand=false){
     return
 }
 
+
+// 
+// DRAG AND DROP
+//
+/**
+ * Adds another ag-grid grid instance as a target for drag-and-drop operation from the current grid.
+ * @param params Event parameters from ag-grid; dispatched by current grid, generally from onGridReady
+ * @param targetGridApi Target grid api reference
+ * @returns null 
+ **/
+function addGridDropZone(params, targetGridApi) {
+    const dropZone = targetGridApi.getRowDropZoneParams();
+  
+    params.api.addRowDropZone(dropZone);
+}
+
+
 export {
     classValueRenderer,
     classValueFormatter,
-    setGridQuickFilter
+    setGridQuickFilter,
+    addGridDropZone
 }

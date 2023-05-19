@@ -6,7 +6,8 @@
 
     import { sourceData, sourceGridColumnDefs, sourceEditedNodes } from '$lib/stores/store-grid-manager.js'
 
-    import { addGridDropZone } from '$lib/js/drag-and-drop.js'
+    // import { addGridDropZone } from '$lib/js/drag-and-drop.js'
+    import { addGridDropZone } from '$lib/js/common-grid.js'
     import { onRowDragEnter } from '$lib/js/row-dragging.js'
     import { SrcCellRenderer, ParentCellRenderer } from '$lib/ag-grid-components/gridCellRenderers.js'
     import { get_linked_class, get_linked_parent, get_linked_root_parent } from '$lib/js/grid-data-helpers'

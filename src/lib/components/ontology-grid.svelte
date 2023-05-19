@@ -5,13 +5,17 @@
     import "ag-grid-community/styles/ag-theme-alpine.css"; // Optional theme CSS
 
     import { ontologyData, ontologyAPI } from '$lib/stores/store-ontology-grids.js'
-    import { classValueRenderer } from '$lib/js/common-grid.js'
+    import { modelGridAPI } from '$lib/stores/store-model-grid.js'
+    import { classValueRenderer, addGridDropZone } from '$lib/js/common-grid.js'
     // import { createEventDispatcher } from 'svelte'
     // const dispatch = createEventDispatcher()
 
-    async function onGridReady(){
+    async function onGridReady(params){
         ontologyData.getData();
         // modelOntologyData.refresh($modelClassSet);
+        // Add model grid as valid drag-drop target
+        // TODO: make more robust and move into parent; I don't like importing all the grid apis into each grid module.
+        setTimeout(()=>addGridDropZone(params, $modelGridAPI.api), 1000)
     }
 
     export const gridOptions = {
@@ -36,6 +40,7 @@
             // checkboxSelection: true,
             // headerCheckboxSelection: true,
             // headerCheckboxSelectionFilteredOnly: true
+            rowDrag: true,
         },
         defaultColDef: {
             sortable: true,
