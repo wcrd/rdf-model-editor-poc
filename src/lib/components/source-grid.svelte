@@ -11,6 +11,8 @@
     import { SrcCellRenderer, ParentCellRenderer } from '$lib/ag-grid-components/gridCellRenderers.js'
     import { get_linked_class, get_linked_parent, get_linked_root_parent } from '$lib/js/grid-data-helpers'
     import { srcModelDragParams } from '$lib/js/row-dragging/src-model.js'
+    import { classValueFormatter } from '$lib/js/common-grid.js'
+
 
     // get target grid dropzone
     export let targetGrid;
@@ -62,7 +64,7 @@
         { field: "type", hide: true },
         // { field: "_edited", hide: true, editable: false, suppressColumnsToolPanel: true }, // for change tracking
         // editing
-        { field: "edit-class", hide: true, editable: false, suppressColumnsToolPanel: true },
+        { field: "edit-class", hide: true, editable: false, suppressColumnsToolPanel: true, valueFormatter: classValueFormatter },
         { field: "edit-parent", hide: true, editable: false, suppressColumnsToolPanel: true, 
             valueFormatter: (params)=>JSON.stringify(params.value), 
             cellRenderer: ParentCellRenderer, 
@@ -79,7 +81,7 @@
             } 
         },
         // linked
-        { field: "linked-class", valueGetter: (params)=> get_linked_class(params)},
+        { field: "linked-class", valueGetter: (params)=> get_linked_class(params), valueFormatter: classValueFormatter},
         { field: "linked-parent", valueGetter: (params) => get_linked_parent(params), cellRenderer: ParentCellRenderer},
         { field: "linked-root-parent", valueGetter: (params) => get_linked_root_parent(params), cellRenderer: ParentCellRenderer },
     ];
