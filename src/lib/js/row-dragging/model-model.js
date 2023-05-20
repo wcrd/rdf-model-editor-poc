@@ -23,15 +23,16 @@ function onRowDragMove(params) {
 }
 
 function onRowDragLeave(params){
-    // reset all potential variables
-    console.debug("You left the grid yo stupid fok")
-    setPotentialParentForNode(params.api, null);
-    setPotentialInsertNode(params.api, null);
-    // clear grid highlights
-    refreshRows(gridApi, rowsToRefresh)
+    if( get(dragMode) == "model-to-model" ) {
+        // reset all potential variables
+        console.debug("You left the grid yo stupid fok")
+        const rowsToRefresh = setPotentialParentForNode(null);
+        // clear grid highlights
+        if(rowsToRefresh) refreshRows(params.api, rowsToRefresh)
 
-    // reset global drag mode
-    dragMode.set(null)
+        // reset global drag mode
+        dragMode.set(null)
+    }
     return
 }
 

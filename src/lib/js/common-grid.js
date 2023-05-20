@@ -99,6 +99,8 @@ function addGridDropZone(params, targetGridApi, rowDropZoneParams={}) {
 //
 
 function refreshRows(api, rowsToRefresh) {
+    if(!rowsToRefresh) return
+    
     const params = {
         // refresh these rows only.
         rowNodes: rowsToRefresh,

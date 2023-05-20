@@ -111,7 +111,9 @@ function onRowDragStop(params){
 
 function onRowDragLeave(params){
     // clear highlight
-    const rowsToRefresh = setPotentialModelNodeForSource(null)
+    const rowsToRefresh = [] 
+    rowsToRefresh.push(...(setPotentialModelNodeForSource(null) || []))
+    rowsToRefresh.push(...(setPotentialInsertNode(null) || [] ))
     if(rowsToRefresh) refreshRows(params.api, rowsToRefresh)
     // reset global drag mode
     dragMode.set(null)
