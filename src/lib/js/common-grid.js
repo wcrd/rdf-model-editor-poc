@@ -46,6 +46,7 @@ function classValueFormatter(params){
     // console.debug(params)
 
     let icon = "❔"
+    if(!params.value) return params.value
     try {
         const [ontology, fragment] = params.value.split("#")
         if(ontology in PREFIXES){
