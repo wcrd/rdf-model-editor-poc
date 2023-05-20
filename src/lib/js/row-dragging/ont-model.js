@@ -1,7 +1,7 @@
 import { get } from "svelte/store";
 import { getClassType } from "$lib/js/ontology-helpers.js"
 import { refreshRows } from "$lib/js/common-grid";
-import { potentialParent } from '$lib/stores/store-model-grid.js'
+import { potentialParent, modelGridAPI } from '$lib/stores/store-model-grid.js'
 import { dragMode } from '$lib/stores/store-grid-manager.js'
 
 const MODEL_NODE_TYPE_CLASS_TYPE_MAP = {
@@ -35,6 +35,28 @@ function classOverModelNode(params){
 
     }
 }
+
+function onRowDragEnd(params){
+    const rowsToRefresh = [];
+    // update model grid
+    const targetNode = get(potentialParent);
+    targetNode.data.class = params.node.data.uri;
+    rowsToRefresh.push(targetNode);
+    // console.debug(params)
+    // clear highlight
+    rowsToRefresh.push(...(setPotentialTargetForClass(null, null) || []));
+    // update grid
+    // execute updates (so events fire)
+    modelGridAPI._updateGrid({update: rowsToRefresh.map(row => row.data)})
+
+    refreshRows(params.api, rowsToRefresh)
+    // reset global drag mode
+    dragMode.set(null)
+}
+
+//
+//
+//
 
 
 function setPotentialTargetForClass(overNode, classNode){
@@ -72,6 +94,7 @@ const ontModelDragParams = {
     onDragEnter: onRowDragEnter,
     onDragging: classOverModelNode,
     onDragLeave: onRowDragLeave,
+    onDragStop: onRowDragEnd
 }
 
 export {

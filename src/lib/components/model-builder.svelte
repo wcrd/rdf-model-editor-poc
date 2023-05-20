@@ -63,7 +63,7 @@
             sortable: true,
             cellClassRules: cellClassRules,
             resizable: true,
-            filter: true
+            filter: true,
         },
         autoGroupColumnDef: {
             rowDrag: true,
@@ -102,8 +102,13 @@
                 console.debug("Model row updates; refreshing model ontology")
                 modelClassSet.refresh()
                 modelOntologyData.refresh($modelClassSet)
+
+                //
+                // refresh source grid so linked-data fields are re-fetched
+            srcGrid.api.refreshCells({ columns: ['linked-class', 'linked-parent', 'linked-root-parent']});
             }, 500)()
         },
+        // onModelUpdated: (params)=>console.debug("Updated"),
         context: {
             gridName: "model"
         }
