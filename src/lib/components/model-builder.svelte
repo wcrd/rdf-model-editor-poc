@@ -12,6 +12,7 @@
     import { modelOntologyData, ontologyAPI } from '$lib/stores/store-ontology-grids.js'
 
     import { modelModelDragHandlers } from '$lib/js/row-dragging/model-model.js'
+    import { modelOntDragHandlers } from '$lib/js/row-dragging/model-ont.js'
     import { onCellKeyDown } from '$lib/js/keydown-handlers.js'
     import { SrcCellRenderer } from '$lib/ag-grid-components/gridCellRenderers.js'
     import { classValueFormatter, addGridDropZone } from '$lib/js/common-grid.js'
@@ -49,7 +50,7 @@
         setTimeout(() => addGridDropZone(
             params, 
             $ontologyAPI.api, 
-            {},
+            modelOntDragHandlers,
         ), 1000)
     }
 
