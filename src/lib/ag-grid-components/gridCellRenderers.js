@@ -1,3 +1,5 @@
+import { classValueFormatter } from "$lib/js/common-grid";
+
 export class SrcCellRenderer {
     // init method gets the details of the cell to be renderer
     init(params) {
@@ -32,10 +34,11 @@ export class ParentCellRenderer {
       // console.debug("render: ", params)
       // if data and object has some values, then lets render
       if(params.value && Object.values(params.value).some(val => val!=null)){
-        if(params.value.class){ 
+        if(params.value.class){
+          const cls_str = classValueFormatter({value: params.value.class}) 
           this.eGui.innerHTML += `
             <span class="rounded-xl bg-blue-100 p-1">
-                ${params.value.class || ""}
+                ${cls_str || ""}
             </span>
             `
         }

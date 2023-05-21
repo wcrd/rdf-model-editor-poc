@@ -12,7 +12,7 @@ function generateString(length) {
     return result;
 }
 
+
 export {
-    generateString,
-    
+    generateString,   
 }

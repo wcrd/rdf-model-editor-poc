@@ -3,98 +3,98 @@
         "subject_path": ["vav_1", "pnt_1"],
         "subject": "pnt_1",
         "label": "Point 1",
-        "class": "On_Off_Command",
+        "class": "https://brickschema.org/schema/Brick#On_Off_Command",
         "type": "point"
     },
     {
         "subject_path": ["vav_1","fan_1","pnt_2"],
         "subject": "pnt_2",
         "label": "Point 2",
-        "class": "On_Off_Command",
+        "class": "https://brickschema.org/schema/Brick#Start_Stop_Command",
         "type": "point"
     },
     {
         "subject_path": ["pnt_3"],
         "subject": "pnt_3",
         "label": "Point 3",
-        "class": "On_Off_Command",
+        "class": "https://brickschema.org/schema/Brick#Water_Temperature_Setpoint",
         "type": "point"
     },
     {
         "subject_path": ["pnt_4"],
         "subject": "pnt_4",
         "label": "Point 4",
-        "class": "On_Off_Command",
+        "class": "https://brickschema.org/schema/Brick#Voltage_Sensor",
         "type": "point"
     },
     {
         "subject_path": ["pnt_5"],
         "subject": "pnt_5",
         "label": "Point 5",
-        "class": "On_Off_Command",
+        "class": "https://switchautomation.com/schemas/BrickExtension#Water_Level_Setpoint",
         "type": "point"
     },
     {
         "subject_path": ["vav_1"],
         "subject": "vav_1",
         "label": "VAV 1",
-        "class": "VAV",
+        "class": "https://brickschema.org/schema/Brick#VAV",
         "type": "entity"
     },
     {
         "subject_path": ["vav_1", "fan_1"],
         "subject": "fan_1",
         "label": "Fan 1",
-        "class": "Fan",
+        "class": "https://brickschema.org/schema/Brick#Fan",
         "type": "entity"
     },
     {
         "subject_path": ["vav_2", "pnt_11"],
         "subject": "pnt_11",
         "label": "Point 11",
-        "class": "On_Off_Command",
+        "class": "https://brickschema.org/schema/Brick#Pressure_Status",
         "type": "point"
     },
     {
         "subject_path": ["vav_2","fan_2","pnt_21"],
         "subject": "pnt_21",
         "label": "Point 21",
-        "class": "On_Off_Command",
+        "class": "https://brickschema.org/schema/Brick#Start_Stop_Command",
         "type": "point"
     },
     {
         "subject_path": ["pnt_31"],
         "subject": "pnt_31",
         "label": "Point 31",
-        "class": "On_Off_Command",
+        "class": "https://brickschema.org/schema/Brick#Voltage_Sensor",
         "type": "point"
     },
     {
         "subject_path": ["pnt_41"],
         "subject": "pnt_41",
         "label": "Point 41",
-        "class": "On_Off_Command",
+        "class": "https://switchautomation.com/schemas/BrickExtension#Water_Level_Setpoint",
         "type": "point"
     },
     {
         "subject_path": ["pnt_51"],
         "subject": "pnt_51",
         "label": "Point 51",
-        "class": "On_Off_Command",
+        "class": "https://brickschema.org/schema/Brick#Discharge_Air_Flow_Sensor",
         "type": "point"
     },
     {
         "subject_path": ["vav_2"],
         "subject": "vav_2",
         "label": "VAV 2",
-        "class": "VAV",
+        "class": "https://brickschema.org/schema/Brick#VAV",
         "type": "entity"
     },
     {
         "subject_path": ["vav_2", "fan_2"],
         "subject": "fan_2",
         "label": "Fan 2",
-        "class": "Fan",
+        "class": "https://brickschema.org/schema/Brick#Fan",
         "type": "entity"
     }
 ]

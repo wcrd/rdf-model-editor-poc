@@ -3,21 +3,25 @@
     import 'ag-grid-enterprise'
     import "ag-grid-community/styles/ag-grid.css"; // Core grid CSS, always needed
     import "ag-grid-community/styles/ag-theme-alpine.css"; // Optional theme CSS
+    import { debounce } from 'lodash'
 
     import { createEventDispatcher } from 'svelte'
 
-    import { modelGridAPI, modelData } from '$lib/stores/store-model-grid.js'
+    import { modelGridAPI, modelData, modelClassSet, potentialParent, potentialInsertNode } from '$lib/stores/store-model-grid.js'
     import { removeSourceLinks } from '$lib/js/shared-transactions.js'
+    import { modelOntologyData, ontologyAPI } from '$lib/stores/store-ontology-grids.js'
 
-    import { potentialParent, onRowDragEnd, onRowDragMove, onRowDragEnter, onRowDragLeave, potentialInsertNode } from '$lib/js/row-dragging.js'
+    import { modelModelDragHandlers } from '$lib/js/row-dragging/model-model.js'
+    import { modelOntDragHandlers } from '$lib/js/row-dragging/model-ont.js'
     import { onCellKeyDown } from '$lib/js/keydown-handlers.js'
     import { SrcCellRenderer } from '$lib/ag-grid-components/gridCellRenderers.js'
+    import { classValueFormatter, addGridDropZone } from '$lib/js/common-grid.js'
 
     const dispatch = createEventDispatcher()
 
     const cellClassRules = {
-        'hover-over': (params) => {return params.node === potentialParent},
-        'insert-at': (params) => { return params.node === potentialInsertNode },
+        'hover-over': (params) => {return params.node === $potentialParent},
+        'insert-at': (params) => { return params.node === $potentialInsertNode },
     };
     const rowClassRules = {
         'entity-row': (params) => { return params.node.data.type == "entity" }
@@ -29,7 +33,7 @@
         { field: "subject_path", cellRenderer: params => { return `${params.value.join(" / ")}`} }, 
         { field: "subject" }, 
         { field: "label", editable: true },
-        { field: "class", editable: true },
+        { field: "class", editable: true, valueFormatter: classValueFormatter },
         { field: "pointName", editable: true},
         { field: "type", hide: true },
         // internal fields
@@ -37,10 +41,17 @@
     ];
 
     // let rowData = [];
-    function onGridReady() {
+    function onGridReady(params) {
         fetch("/fake-data.json")
             .then((resp) => resp.json())
-            .then((data) => ($modelData = data));
+            .then((data) => ($modelData = data))
+            .then(() => modelClassSet.refresh());
+        
+        setTimeout(() => addGridDropZone(
+            params, 
+            $ontologyAPI.api, 
+            modelOntDragHandlers,
+        ), 1000)
     }
 
     export let srcGrid;
@@ -59,7 +70,7 @@
             sortable: true,
             cellClassRules: cellClassRules,
             resizable: true,
-            filter: true
+            filter: true,
         },
         autoGroupColumnDef: {
             rowDrag: true,
@@ -71,17 +82,42 @@
         // onRowDragEnter: e => {
         //     console.debug("Row Drag Begin: ", e)
         // },
-        onRowDragLeave: onRowDragLeave,
-        onRowDragMove: onRowDragMove,
-        onRowDragEnd: onRowDragEnd,
-        onRowDragEnter: onRowDragEnter,
+        ...modelModelDragHandlers,
         getContextMenuItems: getContextMenuItems,
         onCellKeyDown: onCellKeyDown,
         onSelectionChanged: onSelectionChanged,
         onCellContextMenu: (event) => { event.node.isSelected() ? null : event.node.setSelected(true) },
         onCellValueChanged: (params) => {
             // refresh source grid so linked-data fields are re-fetched
-            srcGrid.api.refreshCells({ columns: ['linked-class', 'linked-parent', 'linked-root-parent']});   
+            srcGrid.api.refreshCells({ columns: ['linked-class', 'linked-parent', 'linked-root-parent']});
+            
+            // refresh ontology grid if classes have changed
+            // console.debug(params)
+            if(params.column.colId == "class"){
+                // TODO: make a common function for this whole operation
+                // make it smarter by only evaluating changes/updates
+                console.debug("Model class cell updates; refreshing model ontology")
+                modelClassSet.refresh()
+                modelOntologyData.refresh($modelClassSet)
+            }
+        },
+        onRowDataUpdated: (params) => {
+            // new data added or updated
+            // debounce to prevent constant refreshes
+            // console.log(params)
+            debounce(() => {
+                console.debug("Model row updates; refreshing model ontology")
+                modelClassSet.refresh()
+                modelOntologyData.refresh($modelClassSet)
+
+                //
+                // refresh source grid so linked-data fields are re-fetched
+            srcGrid.api.refreshCells({ columns: ['linked-class', 'linked-parent', 'linked-root-parent']});
+            }, 500)()
+        },
+        // onModelUpdated: (params)=>console.debug("Updated"),
+        context: {
+            gridName: "model"
         }
 
     };

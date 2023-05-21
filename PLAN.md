@@ -18,6 +18,10 @@
 
 
 ## To Do
+Today:
+* BUG: Model to ont is not working when ont has a quick filter applied
+* Storage
+* Combo class selector -> this might not be required though; could do cell edit just opens the ontology panel? Adds a 'select' button in search box? On Enter or click class is applied?
 
 Current:
 * Create entities that are newly defined from source (and points)
@@ -28,8 +32,16 @@ Current:
     * src not in model; adding point to existing entity
     * Removing parent from src; currently nothing happens due to no-op.
 
+Ontology
+* Updates not workign properly
+  * Add 'unclassified' as ontology option
+  * Update update calls to be in a function with some smarts
 
-* Optional props in model (destructure object instead for arg?)
+* Status bar to show count of rows, entities, linked, etc.
+* Overlay to show on model when processing updates from source.
+
+Storage
+* Add 'sync' to indexDB from store every x minutes. Provide force sync button.
 
 ## Structure Overhaul
 
