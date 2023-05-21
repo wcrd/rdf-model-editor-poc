@@ -74,6 +74,9 @@ function onRowDragEnd(params) {
 
         // refresh source grid so linked-data fields are re-fetched
         get(sourceGridAPI).api.refreshCells({ columns: ['linked-class', 'linked-parent', 'linked-root-parent']});
+
+        // reset global drag controller
+        dragMode.set(null)
     }
 }
 
