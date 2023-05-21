@@ -18,6 +18,9 @@
 
 
 ## To Do
+Today:
+* Storage
+* Combo class selector -> this might not be required though; could do cell edit just opens the ontology panel? Adds a 'select' button in search box? On Enter or click class is applied?
 
 Current:
 * Create entities that are newly defined from source (and points)
@@ -30,8 +33,6 @@ Current:
 
 Ontology
 * Updates not workign properly
-  * Need to make sure modelClassSet is updating when a cell value is changed; currently is not.
-  * Be nice if ontology panel auto updated.
   * Add 'unclassified' as ontology option
   * Update update calls to be in a function with some smarts
 

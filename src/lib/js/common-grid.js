@@ -46,6 +46,7 @@ function classValueFormatter(params){
     // console.debug(params)
 
     let icon = "❔"
+    if(!params.value) return params.value
     try {
         const [ontology, fragment] = params.value.split("#")
         if(ontology in PREFIXES){
@@ -77,8 +78,47 @@ function setGridQuickFilter(api, value, expand=false){
     return
 }
 
+
+// 
+// DRAG AND DROP
+//
+/**
+ * Adds another ag-grid grid instance as a target for drag-and-drop operation from the current grid.
+ * @param params Event parameters from ag-grid; dispatched by current grid, generally from onGridReady
+ * @param targetGridApi Target grid api reference
+ * @returns null 
+ **/
+function addGridDropZone(params, targetGridApi, rowDropZoneParams={}) {
+    const dropZone = targetGridApi.getRowDropZoneParams(rowDropZoneParams);
+  
+    params.api.addRowDropZone(dropZone);
+}
+
+
+//
+// GENERAL OPS
+//
+
+function refreshRows(api, rowsToRefresh) {
+    if(!rowsToRefresh) return
+    
+    const params = {
+        // refresh these rows only.
+        rowNodes: rowsToRefresh,
+        // because the grid does change detection, the refresh
+        // will not happen because the underlying value has not
+        // changed. to get around this, we force the refresh,
+        // which skips change detection.
+        force: true,
+    };
+    api.refreshCells(params);
+}
+
+
 export {
     classValueRenderer,
     classValueFormatter,
-    setGridQuickFilter
+    setGridQuickFilter,
+    addGridDropZone,
+    refreshRows
 }

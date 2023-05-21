@@ -6,10 +6,13 @@
 
     import { sourceData, sourceGridColumnDefs, sourceEditedNodes } from '$lib/stores/store-grid-manager.js'
 
-    import { addGridDropZone } from '$lib/js/drag-and-drop.js'
-    import { onRowDragEnter } from '$lib/js/row-dragging.js'
+    // import { addGridDropZone } from '$lib/js/drag-and-drop.js'
+    import { addGridDropZone } from '$lib/js/common-grid.js'
     import { SrcCellRenderer, ParentCellRenderer } from '$lib/ag-grid-components/gridCellRenderers.js'
     import { get_linked_class, get_linked_parent, get_linked_root_parent } from '$lib/js/grid-data-helpers'
+    import { srcModelDragParams } from '$lib/js/row-dragging/src-model.js'
+    import { classValueFormatter } from '$lib/js/common-grid.js'
+
 
     // get target grid dropzone
     export let targetGrid;
@@ -61,7 +64,7 @@
         { field: "type", hide: true },
         // { field: "_edited", hide: true, editable: false, suppressColumnsToolPanel: true }, // for change tracking
         // editing
-        { field: "edit-class", hide: true, editable: false, suppressColumnsToolPanel: true },
+        { field: "edit-class", hide: true, editable: false, suppressColumnsToolPanel: true, valueFormatter: classValueFormatter },
         { field: "edit-parent", hide: true, editable: false, suppressColumnsToolPanel: true, 
             valueFormatter: (params)=>JSON.stringify(params.value), 
             cellRenderer: ParentCellRenderer, 
@@ -78,7 +81,7 @@
             } 
         },
         // linked
-        { field: "linked-class", valueGetter: (params)=> get_linked_class(params)},
+        { field: "linked-class", valueGetter: (params)=> get_linked_class(params), valueFormatter: classValueFormatter},
         { field: "linked-parent", valueGetter: (params) => get_linked_parent(params), cellRenderer: ParentCellRenderer},
         { field: "linked-root-parent", valueGetter: (params) => get_linked_root_parent(params), cellRenderer: ParentCellRenderer },
     ];
@@ -93,7 +96,11 @@
         // add row drop zone
         // setting delay to make sure other grid is intitalised
         // TODO: update this to be more robust.
-        setTimeout(() => addGridDropZone(params, targetGrid.api), 1000)   
+        setTimeout(() => addGridDropZone(
+                params, 
+                targetGrid.api, 
+                srcModelDragParams,
+            ), 1000)   
     };
 
     export let gridOptions = {
@@ -118,7 +125,6 @@
         },
         getRowId: (params) => `${params.data['BACnet Network']}-${params.data['Device No']}-${params.data['Object Address']}`,
         // Row Dragging Config (Event Handlers for native Grid Events)
-        onRowDragEnter: onRowDragEnter,
         animateRows: true,
         isExternalFilterPresent: isExternalFilterPresent,
         doesExternalFilterPass: doesExternalFilterPass,
@@ -127,7 +133,10 @@
             // event.node.setDataValue('_edited', true)
             $sourceEditedNodes.add(event.node)
             // console.debug(event)
-        } 
+        },
+        context: {
+            gridName: "source"
+        }
     };
     
     function isExternalFilterPresent(){

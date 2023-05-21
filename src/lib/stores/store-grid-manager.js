@@ -15,6 +15,9 @@ export const sourceData = writable([]);
 // change tracking
 export const sourceEditedNodes = writable()
 
+// drag-mode control var
+export const dragMode = writable()
+
 console.debug({get, sourceData, sourceGridAPI, sourceEditedNodes})
 
 

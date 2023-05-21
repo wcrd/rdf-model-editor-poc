@@ -7,20 +7,21 @@
 
     import { createEventDispatcher } from 'svelte'
 
-    import { modelGridAPI, modelData, modelClassSet } from '$lib/stores/store-model-grid.js'
+    import { modelGridAPI, modelData, modelClassSet, potentialParent, potentialInsertNode } from '$lib/stores/store-model-grid.js'
     import { removeSourceLinks } from '$lib/js/shared-transactions.js'
-    import { modelOntologyData } from '$lib/stores/store-ontology-grids.js'
+    import { modelOntologyData, ontologyAPI } from '$lib/stores/store-ontology-grids.js'
 
-    import { potentialParent, onRowDragEnd, onRowDragMove, onRowDragEnter, onRowDragLeave, potentialInsertNode } from '$lib/js/row-dragging.js'
+    import { modelModelDragHandlers } from '$lib/js/row-dragging/model-model.js'
+    import { modelOntDragHandlers } from '$lib/js/row-dragging/model-ont.js'
     import { onCellKeyDown } from '$lib/js/keydown-handlers.js'
     import { SrcCellRenderer } from '$lib/ag-grid-components/gridCellRenderers.js'
-    import { classValueFormatter } from '$lib/js/common-grid.js'
+    import { classValueFormatter, addGridDropZone } from '$lib/js/common-grid.js'
 
     const dispatch = createEventDispatcher()
 
     const cellClassRules = {
-        'hover-over': (params) => {return params.node === potentialParent},
-        'insert-at': (params) => { return params.node === potentialInsertNode },
+        'hover-over': (params) => {return params.node === $potentialParent},
+        'insert-at': (params) => { return params.node === $potentialInsertNode },
     };
     const rowClassRules = {
         'entity-row': (params) => { return params.node.data.type == "entity" }
@@ -40,11 +41,17 @@
     ];
 
     // let rowData = [];
-    function onGridReady() {
+    function onGridReady(params) {
         fetch("/fake-data.json")
             .then((resp) => resp.json())
             .then((data) => ($modelData = data))
-            .then(() => modelClassSet.refresh())
+            .then(() => modelClassSet.refresh());
+        
+        setTimeout(() => addGridDropZone(
+            params, 
+            $ontologyAPI.api, 
+            modelOntDragHandlers,
+        ), 1000)
     }
 
     export let srcGrid;
@@ -63,7 +70,7 @@
             sortable: true,
             cellClassRules: cellClassRules,
             resizable: true,
-            filter: true
+            filter: true,
         },
         autoGroupColumnDef: {
             rowDrag: true,
@@ -75,10 +82,7 @@
         // onRowDragEnter: e => {
         //     console.debug("Row Drag Begin: ", e)
         // },
-        onRowDragLeave: onRowDragLeave,
-        onRowDragMove: onRowDragMove,
-        onRowDragEnd: onRowDragEnd,
-        onRowDragEnter: onRowDragEnter,
+        ...modelModelDragHandlers,
         getContextMenuItems: getContextMenuItems,
         onCellKeyDown: onCellKeyDown,
         onSelectionChanged: onSelectionChanged,
@@ -105,7 +109,15 @@
                 console.debug("Model row updates; refreshing model ontology")
                 modelClassSet.refresh()
                 modelOntologyData.refresh($modelClassSet)
+
+                //
+                // refresh source grid so linked-data fields are re-fetched
+            srcGrid.api.refreshCells({ columns: ['linked-class', 'linked-parent', 'linked-root-parent']});
             }, 500)()
+        },
+        // onModelUpdated: (params)=>console.debug("Updated"),
+        context: {
+            gridName: "model"
         }
 
     };
