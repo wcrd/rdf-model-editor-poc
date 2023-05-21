@@ -9,12 +9,12 @@
 
     import { modelGridAPI, modelData, modelClassSet, potentialParent, potentialInsertNode } from '$lib/stores/store-model-grid.js'
     import { removeSourceLinks } from '$lib/js/shared-transactions.js'
-    import { modelOntologyData } from '$lib/stores/store-ontology-grids.js'
+    import { modelOntologyData, ontologyAPI } from '$lib/stores/store-ontology-grids.js'
 
     import { modelModelDragHandlers } from '$lib/js/row-dragging/model-model.js'
     import { onCellKeyDown } from '$lib/js/keydown-handlers.js'
     import { SrcCellRenderer } from '$lib/ag-grid-components/gridCellRenderers.js'
-    import { classValueFormatter } from '$lib/js/common-grid.js'
+    import { classValueFormatter, addGridDropZone } from '$lib/js/common-grid.js'
 
     const dispatch = createEventDispatcher()
 
@@ -40,11 +40,17 @@
     ];
 
     // let rowData = [];
-    function onGridReady() {
+    function onGridReady(params) {
         fetch("/fake-data.json")
             .then((resp) => resp.json())
             .then((data) => ($modelData = data))
-            .then(() => modelClassSet.refresh())
+            .then(() => modelClassSet.refresh());
+        
+        setTimeout(() => addGridDropZone(
+            params, 
+            $ontologyAPI.api, 
+            {},
+        ), 1000)
     }
 
     export let srcGrid;

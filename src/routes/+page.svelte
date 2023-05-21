@@ -8,7 +8,7 @@
     import JsonUploadModal from "$lib/components/modals/modal-upload-json.svelte"
 
     // import { modelGridAPI, sourceGridAPI } from '$lib/stores/store-grid-manager.js'
-    import { sourceGridAPI } from '$lib/stores/store-grid-manager.js'
+    import { sourceGridAPI, dragMode } from '$lib/stores/store-grid-manager.js'
     import { toggle_edit_mode } from '$lib/js/source-grid-controller'
 
     // NEW
@@ -102,8 +102,14 @@
 
 <div class="h-screen w-full flex flex-col">
     <div id="controller-bar-container" class="h-8 bg-red-100 flex flex-row p-1 gap-x-1">
-        <p>main button bar</p>
+        <p>MAIN BAR (TBC)</p>
         <button class="btn-subtle !py-0" on:click={()=>showModal=true}>Test Modal</button>
+        <div class="border-slate-500 border rounded-xl px-2 flex flex-row">
+            <p class="pr-2">
+                Drag Mode:
+            </p>
+            <p>{$dragMode}</p>
+        </div>
     </div>
     <div id="grids-container" class="h-full flex flex-row">
         <div id="model-ontology-panel" class="w-1/4 max-w-md h-full flex flex-col" class:hidden={model_ontology_hidden || model_hidden}>

@@ -19,8 +19,7 @@
 
 ## To Do
 Today:
-* Drag-drop targets for Ontology RHS panel and model
-  * Update model event handlers to not handle row drags from source grid;
+* Drag-drop targets: Model to Ontology Grid
 * Storage
 * Combo class selector -> this might not be required though; could do cell edit just opens the ontology panel? Adds a 'select' button in search box? On Enter or click class is applied?
 
