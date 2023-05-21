@@ -12,23 +12,25 @@ const MODEL_NODE_TYPE_CLASS_TYPE_MAP = {
 // control variables
 let hoverOverNode;
 let timer;
+let modelNodeSet;
 
-function onRowDragEnter(){
+function onRowDragEnter(params){
     // set global drag controller
     dragMode.set("model-to-ontology")
+
+    // get dragged node types for use later
+    modelNodeSet = new Set(params.nodes.map(node => node.data.type));
 };
 
 function onRowDragMove(params){
     // model over class node
 
     // guard; dragged model rows must be same 'type' (entity OR point for assignment to work)
-    const modelNodeTypes = new Set(params.nodes.map(node => node.data.type));
-    if(modelNodeTypes.size!=1){
+    if(modelNodeSet.size!=1){
         // going to show message on row drag end to cut down on console messages.
         // console.log("ERROR: Cannot drag model rows of different types for class assignement. Drag points or entiites.")
         return false;
     }
-
 
     // check we are over something useful
     if(params.overNode){
@@ -40,7 +42,7 @@ function onRowDragMove(params){
         if(
             !params.overNode?.expanded 
             && params.overNode != hoverOverNode
-            && MODEL_NODE_TYPE_CLASS_TYPE_MAP[modelNodeTypes.values().next().value].includes(classType)
+            && MODEL_NODE_TYPE_CLASS_TYPE_MAP[modelNodeSet.values().next().value].includes(classType)
         ){
             clearTimeout(timer);
             timer = setTimeout(()=>{
@@ -63,7 +65,36 @@ function onRowDragLeave(){
     dragMode.set(null)
 };
 
-function onRowDragEnd(){
+function onRowDragEnd(params){
+    // clear expansion timer (may not be running)
+    clearTimeout(timer)
+
+    // guard; dragged model rows must be same 'type' (entity OR point for assignment to work)
+    if(modelNodeSet.size!=1){
+        console.log("ERROR: Cannot drag model rows of different types for class assignement. Drag points OR entiites.")
+        return false;
+    }
+
+    // check target class is set
+    if(hoverOverNode){
+        // double check class is valid for dragged model nodes
+        // get class type to check drag is compatible
+        const classType = getClassType(hoverOverNode.data);
+        if(MODEL_NODE_TYPE_CLASS_TYPE_MAP[modelNodeSet.values().next().value].includes(classType)){
+            const rowsToUpdate = [];
+            // for each node, update class
+            params.nodes.forEach(node => {
+                node.data.class = hoverOverNode.data.uri;
+                rowsToUpdate.push(node.data)
+            })
+            // apply updates to model grid
+            modelGridAPI._updateGrid({ update: rowsToUpdate })
+
+        }
+
+    }
+
+    hoverOverNode = null;
     // reset global drag mode
     dragMode.set(null)
 };
