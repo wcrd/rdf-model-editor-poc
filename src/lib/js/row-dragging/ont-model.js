@@ -40,16 +40,19 @@ function onRowDragEnd(params){
     const rowsToRefresh = [];
     // update model grid
     const targetNode = get(potentialParent);
-    targetNode.data.class = params.node.data.uri;
-    rowsToRefresh.push(targetNode);
-    // console.debug(params)
-    // clear highlight
-    rowsToRefresh.push(...(setPotentialTargetForClass(null, null) || []));
-    // update grid
-    // execute updates (so events fire)
-    modelGridAPI._updateGrid({update: rowsToRefresh.map(row => row.data)})
+    if(targetNode){
+        targetNode.data.class = params.node.data.uri;
+        rowsToRefresh.push(targetNode);
+        // console.debug(params)
+        // clear highlight
+        rowsToRefresh.push(...(setPotentialTargetForClass(null, null) || []));
+        // update grid
+        // execute updates (so events fire)
+        modelGridAPI._updateGrid({update: rowsToRefresh.map(row => row.data)})
 
-    refreshRows(params.api, rowsToRefresh)
+        refreshRows(params.api, rowsToRefresh)
+    }
+    
     // reset global drag mode
     dragMode.set(null)
 }
