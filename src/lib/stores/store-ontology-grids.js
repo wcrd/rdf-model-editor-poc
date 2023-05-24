@@ -28,6 +28,7 @@ export const modelOntologyGroupState = {
     // store expansion state of each node; persist during data refresh.
     // TODO: persist in local storage; along with the all other data.
     apply: function(){
+        // console.debug("Reapplying row state")
         get(this).forEach(expandedNodeId => {
             let modelOntNode = get(modelOntologyAPI).api.getRowNode(expandedNodeId);
             if(modelOntNode) modelOntNode.expanded = true

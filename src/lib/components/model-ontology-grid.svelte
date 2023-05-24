@@ -48,7 +48,9 @@
         groupSelectsChildren: true,
         onSelectionChanged: onSelectionChanged,
         onRowGroupOpened: params => modelOntologyGroupState.updateGroupState(params.node),
-        onRowDataUpdated: () => modelOntologyGroupState.apply(),
+        onRowDataUpdated: () => {
+            modelOntologyGroupState.apply()
+        }
     };
 
     
