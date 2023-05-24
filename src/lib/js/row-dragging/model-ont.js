@@ -24,6 +24,7 @@ function onRowDragEnter(params){
 
 function onRowDragMove(params){
     // model over class node
+    // console.debug(params.overNode)
 
     // guard; dragged model rows must be same 'type' (entity OR point for assignment to work)
     if(modelNodeSet.size!=1){
@@ -36,21 +37,28 @@ function onRowDragMove(params){
     if(params.overNode){
         // get class type to check drag is compatible
         const classType = getClassType(params.overNode.data);
-        // expand after 1 sec
-        // clear if we leave row
-        // if new hover node, and row not expanded AND class is valid for dragged
+
+        // if new hover node AND class is valid for dragged
         if(
-            !params.overNode?.expanded 
-            && params.overNode != hoverOverNode
+            params.overNode != hoverOverNode
             && MODEL_NODE_TYPE_CLASS_TYPE_MAP[modelNodeSet.values().next().value].includes(classType)
         ){
-            clearTimeout(timer);
-            timer = setTimeout(()=>{
-                params.overNode.setExpanded(true)
-                // console.debug("Time func trigger. ", params)
-            }, 1500);
+            // if row not expanded, long hover will expand it
+            if(!params.overNode?.expanded){
+                // expand after 1.5 sec
+                // clear if we leave row
+                clearTimeout(timer);
+                timer = setTimeout(()=>{
+                    params.overNode.setExpanded(true)
+                    // console.debug("Time func trigger. ", params)
+                }, 1500);
+                // console.debug("New timer set; ", hoverOverNode)
+            };
+
+            // set new 'target' class;
             hoverOverNode = params.overNode;
-            // console.debug("New timer set; ", hoverOverNode) 
+
+            // console.debug("New hover over node: ", hoverOverNode) 
         }
     }
 };
