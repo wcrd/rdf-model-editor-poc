@@ -94,6 +94,17 @@ function addGridDropZone(params, targetGridApi, rowDropZoneParams={}) {
     params.api.addRowDropZone(dropZone);
 }
 
+/**
+ * Removes another ag-grid grid instance as a target for drag-and-drop operation from the current grid.
+ * @param params Event parameters from ag-grid; dispatched by current grid, generally from onGridReady
+ * @param targetGridApi Target grid api reference
+ * @returns null 
+ **/
+function removeGridDropZone(params, targetGridApi, rowDropZoneParams={}) {
+    const dropZone = targetGridApi.getRowDropZoneParams(rowDropZoneParams);
+  
+    params.api.removeRowDropZone(dropZone);
+}
 
 //
 // GENERAL OPS
@@ -120,5 +131,6 @@ export {
     classValueFormatter,
     setGridQuickFilter,
     addGridDropZone,
+    removeGridDropZone,
     refreshRows
 }
