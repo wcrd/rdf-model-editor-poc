@@ -32,6 +32,7 @@ function toggle_edit_mode(state=true){
             if(Object.keys(colsToUpdate).includes(def?.field)){
                 def.hide = !state;
                 def.editable = state;
+                def.rowDrag = state;
             }
         })
         return curr

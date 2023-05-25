@@ -46,7 +46,7 @@
     }
 
     $sourceGridColumnDefs = [
-        { rowDrag: true, valueGetter: 'node.id', headerName: 'src-id'}, // drag handle
+        { valueGetter: 'node.id', headerName: 'src-id'}, // drag handle
         { field: "IP Address", hide: true },
         { field: "BACnet Network", hide: true },
         { field: "BACnet Device Name" },
