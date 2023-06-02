@@ -5,7 +5,7 @@
 //
 
 import { getClassType } from "$lib/js/ontology-helpers.js"
-import { dragMode, sourceGridAPI } from '$lib/stores/store-grid-manager.js'
+import { dragMode, sourceGridAPI, sourceEditedNodes } from '$lib/stores/store-grid-manager.js'
 // import { sourceGridAPI } from '$lib/stores/'
 
 
@@ -82,9 +82,17 @@ function onRowDragEnd(params){
             params.nodes.forEach(node => {
                 node.data['edit-class'] = hoverOverNode.data.uri;
                 rowsToUpdate.push(node.data)
+
+                // record row for processing at edit mode termination
+                sourceEditedNodes.update(curr => {
+                    curr.add(node)
+                    return curr
+                })
             })
             // apply updates to model grid
             sourceGridAPI._updateGrid({ update: rowsToUpdate })
+
+            
 
         }
 

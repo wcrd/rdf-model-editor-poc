@@ -134,6 +134,7 @@
             $sourceEditedNodes.add(event.node)
             // console.debug(event)
         },
+        // onRowDataUpdated: params => { console.debug("Source grid: row data updated.", params)},
         context: {
             gridName: "source"
         }
