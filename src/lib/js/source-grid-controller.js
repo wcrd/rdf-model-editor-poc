@@ -3,7 +3,11 @@ import { sourceGridColumnDefs, sourceGridAPI, sourceEditedNodes } from "$lib/sto
 import { get_linked_class, get_linked_parent, get_linked_root_parent } from "$lib/js/grid-data-helpers";
 import { modelGridAPI } from "$lib/stores/store-model-grid";
 import { moveToPath, generatePoint } from '$lib/js/entity-operations'
-import { addSourceLink } from '$lib/js/shared-transactions.js' 
+import { addSourceLink } from '$lib/js/shared-transactions.js'
+import { addGridDropZone, removeGridDropZone } from "$lib/js/common-grid";
+import { sourceOntDragHandlers } from "$lib/js/row-dragging/src-ont";
+import { ontSourceDragHandlers } from '$lib/js/row-dragging/ont-src';
+import { ontologyAPI } from '$lib/stores/store-ontology-grids'
 
 
 function toggle_edit_mode(state=true){
@@ -32,6 +36,7 @@ function toggle_edit_mode(state=true){
             if(Object.keys(colsToUpdate).includes(def?.field)){
                 def.hide = !state;
                 def.editable = state;
+                def.rowDrag = state;
             }
         })
         return curr
@@ -42,6 +47,15 @@ function toggle_edit_mode(state=true){
         curr.defaultColDef.rowDrag = !state;
         return curr
     })
+
+    // Add/Remove DragZoneTarget from Ontology Grid & Source Grid
+    if(state){
+        addGridDropZone({api: get(sourceGridAPI).api}, get(ontologyAPI).api, sourceOntDragHandlers)
+        addGridDropZone({api: get(ontologyAPI).api}, get(sourceGridAPI).api, ontSourceDragHandlers)
+    } else {
+        removeGridDropZone({api: get(sourceGridAPI).api}, get(ontologyAPI).api, sourceOntDragHandlers)
+        removeGridDropZone({api: get(ontologyAPI).api}, get(sourceGridAPI).api, ontSourceDragHandlers)
+    }
 }
 
 function copy_linked_column_values(target_func_obj){

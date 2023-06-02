@@ -19,7 +19,8 @@
 
 ## To Do
 Today:
-* BUG: Model to ont is not working when ont has a quick filter applied
+* Edit mode on src not working after class drag
+  * Not updating linked nodes.
 * Storage
 * Combo class selector -> this might not be required though; could do cell edit just opens the ontology panel? Adds a 'select' button in search box? On Enter or click class is applied?
 
