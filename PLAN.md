@@ -19,10 +19,9 @@
 
 ## To Do
 Today:
-* Edit mode on src not working after class drag
-  * Not updating linked nodes.
 * Storage
-* Combo class selector -> this might not be required though; could do cell edit just opens the ontology panel? Adds a 'select' button in search box? On Enter or click class is applied?
+* Model Ont needs to remember state b/w refresh calls
+* (HOLD) Combo class selector -> this might not be required though; could do cell edit just opens the ontology panel? Adds a 'select' button in search box? On Enter or click class is applied?
 
 Current:
 * Create entities that are newly defined from source (and points)
