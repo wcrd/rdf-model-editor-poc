@@ -40,6 +40,10 @@
     let source_filter_input;
     let ontology_filter_input;
 
+    // UI
+    let lastSaved = null;
+    let isSaving = false;
+
 
     // MOVE LATER
     // Filtering
@@ -99,23 +103,50 @@
         api.expandAll();
     }
 
+    // persistance
+    async function saveToDB(){
+        isSaving = true;
+        try {
+            await setData($modelGridAPI.api, "modelGrid");
+            await setData($sourceGridAPI.api, "sourceGrid");
+            lastSaved = new Date().toString()
+        } catch(e){
+            console.log("Failed to save!!", e)
+        }
+        isSaving = false;
+    }
+
 
 </script>
 
 <div class="h-screen w-full flex flex-col">
-    <div id="controller-bar-container" class="h-8 bg-red-100 flex flex-row p-1 gap-x-1">
-        <p>MAIN BAR (TBC)</p>
-        <button class="btn-subtle !py-0" on:click={()=>showModal=true}>Test Modal</button>
-        <div class="border-slate-500 border rounded-xl px-2 flex flex-row">
-            <p class="pr-2">
-                Drag Mode:
-            </p>
-            <p>{$dragMode}</p>
+    <div id="controller-bar-container" class="h-8 bg-red-100 flex flex-row p-1 gap-x-1 justify-between">
+        <div class="flex flex-row gap-x-1">
+            <p>MAIN BAR (TBC)</p>
+            <button class="btn-subtle !py-0" on:click={()=>showModal=true}>Test Modal</button>
+            <div class="border-slate-500 border rounded-xl px-2 flex flex-row">
+                <p class="pr-2">
+                    Drag Mode:
+                </p>
+                <p>{$dragMode}</p>
+            </div>
+            <div class="flex flex-row gap-x-1">
+                <p class="px-2">Model+Source:</p>
+                <button class="btn-default !py-0" on:click={()=>jsonImportExport.export_all()}>Export JSON</button>
+                <button class="btn-default !py-0" on:click={() => launchModal(JsonUploadModal)}>Import JSON</button>
+            </div>
         </div>
         <div class="flex flex-row gap-x-1">
-            <p class="px-2">Model+Source:</p>
-            <button class="btn-default !py-0" on:click={()=>jsonImportExport.export_all()}>Export JSON</button>
-            <button class="btn-default !py-0" on:click={() => launchModal(JsonUploadModal)}>Import JSON</button>
+            <button class="btn-default !py-0" on:click={() => saveToDB()}>
+                {#if isSaving}
+                ...spinner
+                {:else}
+                Save
+                {/if}
+            </button>
+            <div class="w-96 overflow-x-hidden">
+                <p>Last saved: <span>{lastSaved}</span></p>
+            </div>
         </div>
     </div>
     <div id="grids-container" class="h-full flex flex-row">
