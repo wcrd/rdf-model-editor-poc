@@ -2,6 +2,8 @@
     import ModelBuilder from "$lib/components/model-builder.svelte";
     import SourceGrid from "$lib/components/source-grid.svelte";
     import jsonImportExport from '$lib/js/json-import-export.js'
+
+    import { db } from "$lib/js/db"
     
     import Modal from "$lib/components/modal.svelte";
     import SimpleModal from "$lib/components/modals/modal-simple.svelte"
