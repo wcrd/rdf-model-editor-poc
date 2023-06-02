@@ -110,6 +110,11 @@
             </p>
             <p>{$dragMode}</p>
         </div>
+        <div class="flex flex-row gap-x-1">
+            <p class="px-2">Model+Source:</p>
+            <button class="btn-default !py-0" on:click={()=>jsonImportExport.export_all()}>Export JSON</button>
+            <button class="btn-default !py-0" on:click={() => launchModal(JsonUploadModal)}>Import JSON</button>
+        </div>
     </div>
     <div id="grids-container" class="h-full flex flex-row">
         <div id="model-ontology-panel" class="w-1/4 max-w-md h-full flex flex-col" class:hidden={model_ontology_hidden || model_hidden}>
@@ -128,9 +133,8 @@
             <div id="model-button-bar" class="h-12 w-full flex flex-row align-middle p-2 justify-between gap-x-1">
                 <div class="flex flex-row gap-x-1 flex-grow">
                     <button class="btn-subtle" on:click={()=>model_ontology_hidden=!model_ontology_hidden}>[>]</button>
-                    <button class="btn-default" on:click={()=>jsonImportExport.export_all()}>Export JSON</button>
-                    <button class="btn-default"on:click={() => launchModal(JsonUploadModal)}>Import JSON</button>
-                    
+                    <button class="btn-default" on:click={()=>expandRows($modelGridAPI.api)}>+</button>
+                    <button class="btn-default" on:click={()=>collapseRows($modelGridAPI.api)}>-</button>
                     <div class="border rounded border-blue-500 flex-grow">
                         <input class="w-full outline-none" type="search" id="model-filter-text-box" bind:value={model_filter_input} placeholder="Filter..." on:input={()=>setGridQuickFilter($modelGridAPI.api, model_filter_input, true)}>
                     </div>
