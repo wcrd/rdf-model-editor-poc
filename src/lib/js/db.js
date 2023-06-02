@@ -5,8 +5,8 @@ export const db = new Dexie('modelBuilderDB');
 
 // define tables and schemas
 db.version(1).stores({
-    modelGrid: "++id",
-    sourceGrid: "++id"
+    modelGrid: "",
+    sourceGrid: ""
 })
 
 // instantiate db in browser

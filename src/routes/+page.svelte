@@ -3,7 +3,7 @@
     import SourceGrid from "$lib/components/source-grid.svelte";
     import jsonImportExport from '$lib/js/json-import-export.js'
 
-    import { db } from "$lib/js/db"
+    import { setData } from "$lib/js/grid-persistance/grid2indexedDB"
     
     import Modal from "$lib/components/modal.svelte";
     import SimpleModal from "$lib/components/modals/modal-simple.svelte"

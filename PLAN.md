@@ -20,6 +20,7 @@
 ## To Do
 Today:
 * Storage
+  * Upgrade methods and grids to track changes, then only push changes rows into IndexDB to save iterating the whole table.
 * Model Ont needs to remember state b/w refresh calls
 * (HOLD) Combo class selector -> this might not be required though; could do cell edit just opens the ontology panel? Adds a 'select' button in search box? On Enter or click class is applied?
 
