@@ -27,15 +27,13 @@ Today:
 Current:
 * Import model
 * Import sources
-* Add point
 * Add entity from template
 * Unnest entity to root
 * Auto match selection (from source) when dragging onto an entity from template
 * Source edit -> add to existing entity by label, if no dups. This will be easiest way to use scripts.
-* Create entities that are newly defined from source (and points)
-  * Move into entity, if exists, or if newly created.
+
 * Process updates to parent objects in edit mode as part of applying update routine.
-* Need to cleanup the apply_updates logic. It is too messy. Process_Parent probably needs a re-write
+* ( Review this - may have already been done) Need to cleanup the apply_updates logic. It is too messy. Process_Parent probably needs a re-write
   * CASES:
     * src not in model; adding point to existing entity
     * Removing parent from src; currently nothing happens due to no-op.
