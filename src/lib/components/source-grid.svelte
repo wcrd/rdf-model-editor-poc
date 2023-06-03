@@ -4,6 +4,8 @@
     import "ag-grid-community/styles/ag-grid.css"; // Core grid CSS, always needed
     import "ag-grid-community/styles/ag-theme-alpine.css"; // Optional theme CSS
 
+    import { getData } from '$lib/js/grid-persistance/grid2indexedDB'
+
     import { sourceData, sourceGridColumnDefs, sourceEditedNodes } from '$lib/stores/store-grid-manager.js'
 
     // import { addGridDropZone } from '$lib/js/drag-and-drop.js'
@@ -88,11 +90,19 @@
 
     // let rowData = [];
     function onGridReady(params) {
-        fetch("/test-src-data.json")
-            .then((resp) => resp.json())
-            .then((data) => (
-                $sourceData = data.map(row => ({...row, type: "src"}) )
-            )); // add the type to the imported data. In future will run dedicated import function here.
+        // fetch("/test-src-data.json")
+        //     .then((resp) => resp.json())
+        //     .then((data) => (
+        //         $sourceData = data.map(row => ({...row, type: "src"}) )
+        //     )); // add the type to the imported data. In future will run dedicated import function here.
+        
+        getData("sourceGrid").then(res => {
+            if(res){
+                console.log("Loaded source data from prior session.")
+                $sourceData = res.map(row => row.rowData)
+            } else console.log("No prior source data found.")
+        }).catch(()=>console.debug("Error fetching source data from prior session."))
+
         // add row drop zone
         // setting delay to make sure other grid is intitalised
         // TODO: update this to be more robust.
