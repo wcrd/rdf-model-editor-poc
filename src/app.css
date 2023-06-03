@@ -21,3 +21,7 @@
 .row-assigned {
     @apply bg-green-50 !important;
 }
+
+.btn-success {
+    @apply border hover:border-green-700 border-green-500 bg-green-500 text-white font-bold py-1 px-1 rounded
+}

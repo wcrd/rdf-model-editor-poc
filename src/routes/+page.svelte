@@ -122,7 +122,10 @@
 <div class="h-screen w-full flex flex-col">
     <div id="controller-bar-container" class="h-8 bg-red-100 flex flex-row p-1 gap-x-1 justify-between">
         <div class="flex flex-row gap-x-1">
-            <p>MAIN BAR (TBC)</p>
+            <div class="flex flex-row gap-x-2 mr-2">
+                <p class="font-bold italic">bmg.fyi</p>
+                <p>Model Builder</p>
+            </div>
             <button class="btn-subtle !py-0" on:click={()=>showModal=true}>Test Modal</button>
             <div class="border-slate-500 border rounded-xl px-2 flex flex-row">
                 <p class="pr-2">
@@ -130,14 +133,15 @@
                 </p>
                 <p>{$dragMode}</p>
             </div>
-            <div class="flex flex-row gap-x-1">
-                <p class="px-2">Model+Source:</p>
-                <button class="btn-default !py-0" on:click={()=>jsonImportExport.export_all()}>Export JSON</button>
-                <button class="btn-default !py-0" on:click={() => launchModal(JsonUploadModal)}>Import JSON</button>
-            </div>
         </div>
         <div class="flex flex-row gap-x-1">
-            <button class="btn-default !py-0" on:click={() => saveToDB()}>
+            <div class="flex flex-row gap-x-1">
+                <p class="px-2">Save File:</p>
+                <button class="btn-default !py-0" on:click={()=>jsonImportExport.export_all()}>Export</button>
+                <button class="btn-default !py-0" on:click={() => launchModal(JsonUploadModal)}>Import</button>
+            </div>
+            <span>|</span>
+            <button class="btn-success !py-0" on:click={() => saveToDB()}>
                 {#if isSaving}
                 ...spinner
                 {:else}

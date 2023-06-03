@@ -30,6 +30,7 @@ Current:
 * Import sources
 * Add point
 * Add entity from template
+* Unnest entity to root
 * Auto match selection (from source) when dragging onto an entity from template
 * Source edit -> add to existing entity by label, if no dups. This will be easiest way to use scripts.
 * Create entities that are newly defined from source (and points)
