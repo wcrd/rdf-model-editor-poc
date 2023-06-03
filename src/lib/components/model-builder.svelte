@@ -7,6 +7,8 @@
 
     import { createEventDispatcher } from 'svelte'
 
+    import { getData } from '$lib/js/grid-persistance/grid2indexedDB'
+
     import { modelGridAPI, modelData, modelClassSet, potentialParent, potentialInsertNode } from '$lib/stores/store-model-grid.js'
     import { removeSourceLinks } from '$lib/js/shared-transactions.js'
     import { modelOntologyData, ontologyAPI } from '$lib/stores/store-ontology-grids.js'
@@ -42,10 +44,16 @@
 
     // let rowData = [];
     function onGridReady(params) {
-        fetch("/fake-data.json")
-            .then((resp) => resp.json())
-            .then((data) => ($modelData = data))
-            .then(() => modelClassSet.refresh());
+        // fetch("/fake-data.json")
+        //     .then((resp) => resp.json())
+        //     .then((data) => ($modelData = data))
+        //     .then(() => modelClassSet.refresh());
+        getData("modelGrid").then(res => {
+            if(res){
+                console.log("Loaded model from prior session.")
+                $modelData = res.map(row => row.rowData)
+            } else console.log("No prior models found.")
+        }).catch(()=>console.debug("Error fetching model from prior session."))
         
         setTimeout(() => addGridDropZone(
             params, 

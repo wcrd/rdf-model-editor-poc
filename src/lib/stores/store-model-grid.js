@@ -1,5 +1,7 @@
 import { writable, get, derived } from "svelte/store";
 
+// import { db } from '$lib/js/db'
+
 //
 // Store to house references to Model Grid variables
 // Contains custom business logic for the Model Grid
@@ -79,6 +81,16 @@ const modelClassSet = {
 const potentialParent = writable();
 const potentialInsertNode = writable();
 
+// //
+// // INDEXEDDB: Special store to save in-memory grid to IndexedDB for use on page refresh/crash
+// //
+// function createIndexedDBStore(dbKey, initialValue=null){
+
+//     // standard store; use for default methods if needed.
+//     const store = writable(initialValue);
+
+
+// }
 
 export { modelGridAPI, modelData, modelGridColumnDefs, modelClassSet, potentialParent, potentialInsertNode }
 
