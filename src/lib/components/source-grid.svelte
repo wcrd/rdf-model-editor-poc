@@ -7,6 +7,7 @@
     import { getData } from '$lib/js/grid-persistance/grid2indexedDB'
 
     import { sourceData, sourceGridColumnDefs, sourceEditedNodes } from '$lib/stores/store-grid-manager.js'
+    import { modelGridAPI } from '$lib/stores/store-model-grid.js'
 
     // import { addGridDropZone } from '$lib/js/drag-and-drop.js'
     import { addGridDropZone } from '$lib/js/common-grid.js'
@@ -17,7 +18,7 @@
 
 
     // get target grid dropzone
-    export let targetGrid;
+    // export let targetGrid;
     // filter button state
     export let filterMode;
     $: externalFilterChanged(filterMode)
@@ -99,7 +100,7 @@
         getData("sourceGrid").then(res => {
             if(res){
                 console.log("Loaded source data from prior session.")
-                $sourceData = res.map(row => row.rowData)
+                $sourceData = res.map(row => ({...row.rowData, type: "src"}))
             } else console.log("No prior source data found.")
         }).catch(()=>console.debug("Error fetching source data from prior session."))
 
@@ -108,7 +109,7 @@
         // TODO: update this to be more robust.
         setTimeout(() => addGridDropZone(
                 params, 
-                targetGrid.api, 
+                $modelGridAPI.api, 
                 srcModelDragParams,
             ), 1000)   
     };

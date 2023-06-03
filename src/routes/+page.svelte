@@ -226,7 +226,7 @@
                     {/if}
                 </div>
             </div>
-            <SourceGrid bind:gridOptions={$sourceGridAPI} targetGrid={$modelGridAPI} filterMode={srcViewFilterMode} {modelNodesToFilter}/>
+            <SourceGrid bind:gridOptions={$sourceGridAPI} filterMode={srcViewFilterMode} {modelNodesToFilter}/>
         </div>
         <div id="full-ontology-panel" class="w-1/4 max-w-md h-full flex flex-col" class:hidden={full_ontology_hidden}>
             <div id="full-ontology-button-bar" class="h-12 w-full flex flex-row align-middle p-2 justify-between gap-x-1">
