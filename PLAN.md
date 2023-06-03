@@ -52,6 +52,9 @@ Ontology
 Storage
 * Add 'sync' to indexDB from store every x minutes. Provide force sync button.
 
+## Future Ideas
+* Using IndexedDB it is easy to have multiple models & source sets, could add a browser so users can swap between stored models without needing to import/export
+
 ## Structure Overhaul
 
 

@@ -21,7 +21,7 @@ function export_all(){
     get(sourceGridAPI).api.forEachNode(node => output.sources.data.push(node.data));
 
     // Generate data file target
-    const data = encodeURI(JSON.stringify(output));
+    const data = encodeURIComponent(JSON.stringify(output));
     // Autodownload (by creating hidden element)
     const hiddenElement = document.createElement('a');
     hiddenElement.href = 'data:text/json;charset=utf-8,'+ data;
