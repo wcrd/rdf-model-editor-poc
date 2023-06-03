@@ -30,6 +30,7 @@ Current:
 * Import sources
 * Add point
 * Add entity from template
+* Unnest entity to root
 * Auto match selection (from source) when dragging onto an entity from template
 * Source edit -> add to existing entity by label, if no dups. This will be easiest way to use scripts.
 * Create entities that are newly defined from source (and points)
@@ -50,6 +51,9 @@ Ontology
 
 Storage
 * Add 'sync' to indexDB from store every x minutes. Provide force sync button.
+
+## Future Ideas
+* Using IndexedDB it is easy to have multiple models & source sets, could add a browser so users can swap between stored models without needing to import/export
 
 ## Structure Overhaul
 
