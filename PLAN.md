@@ -19,7 +19,6 @@
 
 ## To Do
 Today:
-* JSON export is broken - failing on #?
 * (LEAVE FOR NOW) Storage
   * Upgrade methods and grids to track changes, then only push changes rows into IndexDB to save iterating the whole table.
 * Model Ont needs to remember state b/w refresh calls

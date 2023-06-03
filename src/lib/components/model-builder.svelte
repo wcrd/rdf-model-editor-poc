@@ -136,9 +136,13 @@
     function getContextMenuItems(params){
         const result = [
             {
-                name: "Add Entity Here",
+                name: "Add Entity here",
                 // action: () => addNewEntityRow(params.api, params.node)
                 action: () => modelGridAPI.addEntityRow(params.node)
+            },
+            {
+                name: "Add Point here",
+                action: () => modelGridAPI.addPointRow(params.node)
             },
             {
                 name: "Delete selected rows",
