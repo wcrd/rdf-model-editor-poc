@@ -120,23 +120,24 @@
 </script>
 
 <div class="h-screen w-full flex flex-col">
-    <div id="controller-bar-container" class="h-8 bg-red-100 flex flex-row p-1 gap-x-1 justify-between">
+    <div id="controller-bar-container" class="h-8 bg-neutral-200 border-b border-black flex flex-row p-1 gap-x-1 justify-between">
         <div class="flex flex-row gap-x-1">
             <div class="flex flex-row gap-x-2 mr-2">
                 <p class="font-bold italic">bmg.fyi</p>
                 <p>Model Builder</p>
             </div>
-            <button class="btn-subtle !py-0" on:click={()=>showModal=true}>Test Modal</button>
-            <div class="border-slate-500 border rounded-xl px-2 flex flex-row">
-                <p class="pr-2">
+            <span>|</span>
+            <!-- <button class="btn-subtle !py-0" on:click={()=>showModal=true}>Test Modal</button> -->
+            <div class="border-slate-700 border rounded-xl px-2 flex flex-row text-slate-500">
+                <p class="pr-2 font-semibold italic">
                     Drag Mode:
                 </p>
-                <p>{$dragMode}</p>
+                <p>{$dragMode || "none" }</p>
             </div>
         </div>
         <div class="flex flex-row gap-x-1">
             <div class="flex flex-row gap-x-1">
-                <p class="px-2">Save File:</p>
+                <p class="px-1 italic">Save File:</p>
                 <button class="btn-default !py-0" on:click={()=>jsonImportExport.export_all()}>Export</button>
                 <button class="btn-default !py-0" on:click={() => launchModal(JsonUploadModal)}>Import</button>
             </div>
@@ -149,7 +150,7 @@
                 {/if}
             </button>
             <div class="w-96 overflow-x-hidden">
-                <p>Last saved: <span>{lastSaved}</span></p>
+                <p class="font-semibold">Last saved: <span class="font-normal italic">{lastSaved || "not saved"}</span></p>
             </div>
         </div>
     </div>
