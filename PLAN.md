@@ -19,12 +19,19 @@
 
 ## To Do
 Today:
-* Storage
+* JSON export is broken - failing on #?
+* (LEAVE FOR NOW) Storage
   * Upgrade methods and grids to track changes, then only push changes rows into IndexDB to save iterating the whole table.
 * Model Ont needs to remember state b/w refresh calls
 * (HOLD) Combo class selector -> this might not be required though; could do cell edit just opens the ontology panel? Adds a 'select' button in search box? On Enter or click class is applied?
 
 Current:
+* Import model
+* Import sources
+* Add point
+* Add entity from template
+* Auto match selection (from source) when dragging onto an entity from template
+* Source edit -> add to existing entity by label, if no dups. This will be easiest way to use scripts.
 * Create entities that are newly defined from source (and points)
   * Move into entity, if exists, or if newly created.
 * Process updates to parent objects in edit mode as part of applying update routine.
