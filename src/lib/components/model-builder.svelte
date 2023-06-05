@@ -19,6 +19,8 @@
     import { SrcCellRenderer } from '$lib/ag-grid-components/gridCellRenderers.js'
     import { classValueFormatter, addGridDropZone } from '$lib/js/common-grid.js'
 
+    import { subMenu as templateSubMenu } from '$lib/ag-grid-components/templateSubMenu'
+
     const dispatch = createEventDispatcher()
 
     const cellClassRules = {
@@ -156,6 +158,11 @@
                     modelGridAPI._updateGrid({remove: allRows})
                     // removeSourceFor(srcGrid.api, allRows)
                 }
+            },
+            'separator',
+            {
+                name: "Create entity from template",
+                subMenu: templateSubMenu
             },
             'separator',
             {
