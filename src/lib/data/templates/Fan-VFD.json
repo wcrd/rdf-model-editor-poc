@@ -1,0 +1,33 @@
+{
+    "template": "Fan",
+    "label": "Fan (Basic)",
+    "shape": [
+        {
+            "_id": "",
+            "relationship": "https://brickschema.org/schema/Brick#hasPoint",
+            "type": "point",
+            "entity": {
+                "class": "https://brickschema.org/schema/Brick#Start_Stop_Command"
+            },
+            "id_path": []
+        },
+        {
+            "_id": "",
+            "relationship": "https://brickschema.org/schema/Brick#hasPoint",
+            "type": "point",
+            "entity": {
+                "class": "https://brickschema.org/schema/Brick#Speed_Sensor"
+            },
+            "id_path": []
+        },
+        {
+            "_id": "",
+            "relationship": "https://brickschema.org/schema/Brick#hasPoint",
+            "type": "point",
+            "entity": {
+                "class": "https://brickschema.org/schema/Brick#Speed_Command"
+            },
+            "id_path": []
+        }
+    ]
+}

@@ -8,10 +8,21 @@ function createShapesDataStore(){
     async function getData(){
         if(!shapes_loaded){
             console.log("Loading shapes data.")
-            // convert to glob loop to fetch all
-            const response = await fetch('/templates/VAV.json');
+            // get all shapes from shapes dir
+            const shapeFiles = import.meta.glob('$lib/data/templates/*.json');
+            // console.log(shapeFiles)
+            const shapeData = []
+            for (const fp in shapeFiles){
+                await shapeFiles[fp]()
+                    .then(({default: shape}) => processTemplateFile(shape))
+                    .then(res => shapeData.push(...res))
+            }
+            store.set(shapeData)
+
+            // old single process
+            // const response = await fetch('/templates/VAV-FP.json');
             // process
-            store.set(await processTemplateFile(response))
+            // store.set(await processTemplateFile(response))
             // fin
             shapes_loaded = true;
         }
@@ -23,8 +34,7 @@ function createShapesDataStore(){
     }
 }
 
-async function processTemplateFile(response){
-    const data = await response.json();
+async function processTemplateFile(data){
     const output_data = []
 
     // set shape header

@@ -34,7 +34,7 @@
             headerName: "Shape",
             sortable: true,
             cellRendererParams: {
-                suppressCount: false,
+                suppressCount: true,
                 innerRenderer: ShapesCellRenderer
             },
             filter: 'agTextColumnFilter',

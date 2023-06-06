@@ -1,0 +1,33 @@
+{
+    "template": "VAV",
+    "label": "VAV (Basic)",
+    "shape": [
+        {
+            "_id": 1,
+            "relationship": "https://brickschema.org/schema/Brick#hasPart",
+            "type": "entity",
+            "entity": {
+                "class": "https://brickschema.org/schema/Brick#Damper"
+            },
+            "id_path": [] 
+        },
+        {
+            "_id": "",
+            "relationship": "https://brickschema.org/schema/Brick#hasPoint",
+            "type": "point",
+            "entity": {
+                "class": "https://brickschema.org/schema/Brick#Start_Stop_Command"
+            },
+            "id_path": []
+        },
+        {
+            "_id": "",
+            "relationship": "https://brickschema.org/schema/Brick#hasPoint",
+            "type": "point",
+            "entity": {
+                "class": "https://brickschema.org/schema/Brick#Position_Sensor"
+            },
+            "id_path": [1]
+        }
+    ]
+}

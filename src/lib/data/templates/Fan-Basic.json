@@ -1,22 +1,13 @@
 {
-    "template": "VAV",
-    "label": "VAV (Basic)",
+    "template": "Fan",
+    "label": "Fan (VFD)",
     "shape": [
         {
-            "_id": 1,
+            "_id": "1",
             "relationship": "https://brickschema.org/schema/Brick#hasPart",
             "type": "entity",
             "entity": {
-                "class": "https://brickschema.org/schema/Brick#Damper"
-            },
-            "id_path": [] 
-        },
-        {
-            "_id": 2,
-            "relationship": "https://brickschema.org/schema/Brick#hasPart",
-            "type": "entity",
-            "entity": {
-                "class": "https://brickschema.org/schema/Brick#Fan"
+                "class": "https://brickschema.org/schema/Brick#VFD"
             },
             "id_path": []
         },
@@ -34,18 +25,9 @@
             "relationship": "https://brickschema.org/schema/Brick#hasPoint",
             "type": "point",
             "entity": {
-                "class": "https://brickschema.org/schema/Brick#Start_Stop_Command"
+                "class": "https://brickschema.org/schema/Brick#Speed_Sensor"
             },
-            "id_path": [2]
-        },
-        {
-            "_id": "",
-            "relationship": "https://brickschema.org/schema/Brick#hasPoint",
-            "type": "point",
-            "entity": {
-                "class": "https://brickschema.org/schema/Brick#Position_Sensor"
-            },
-            "id_path": [1]
+            "id_path": []
         },
         {
             "_id": "",
@@ -54,7 +36,34 @@
             "entity": {
                 "class": "https://brickschema.org/schema/Brick#Speed_Command"
             },
-            "id_path": [2]
+            "id_path": []
+        },
+        {
+            "_id": "",
+            "relationship": "https://brickschema.org/schema/Brick#hasPoint",
+            "type": "point",
+            "entity": {
+                "class": "https://brickschema.org/schema/Brick#Start_Stop_Command"
+            },
+            "id_path": [1]
+        },
+        {
+            "_id": "",
+            "relationship": "https://brickschema.org/schema/Brick#hasPoint",
+            "type": "point",
+            "entity": {
+                "class": "https://switchautomation.com/schemas/BrickExtension#Override_Mode"
+            },
+            "id_path": [1]
+        },
+        {
+            "_id": "",
+            "relationship": "https://brickschema.org/schema/Brick#hasPoint",
+            "type": "point",
+            "entity": {
+                "class": "https://brickschema.org/schema/Brick#Frequency_Sensor"
+            },
+            "id_path": [1]
         }
     ]
 }
