@@ -46,6 +46,7 @@ async function processTemplateFile(response){
     // console.debug(ids)
     for (let condition of data.shape){
         output_data.push({
+            relationship: condition.relationship,
             type: condition.type,
             uri: condition.entity.class,
             path: [data.template, data.label, ...condition.id_path.map(i => ids[i]), condition.entity.class]

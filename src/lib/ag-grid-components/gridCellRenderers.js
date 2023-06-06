@@ -71,3 +71,49 @@ export class ParentCellRenderer {
     return false;
   }
 }
+
+
+export class ShapesCellRenderer {
+  // init method gets the details of the cell to be renderer
+  init(params) {
+    // render container
+    this.eGui = document.createElement('div');
+    // default val
+    this.eGui.innerHTML = '';
+    // check for data
+    // console.debug("render: ", params)
+    // if data and object has some values, then lets render, else return value
+    if(params.value && params?.data){
+      if(params.data.type=="template"){
+        this.eGui.innerHTML =
+          `
+          <span class="rounded-xl bg-green-100 text-xs p-1 mr-2">
+            🧩 Shape
+          </span> 
+          ${params.value}
+          `
+      }
+      else if(["entity", "point"].includes(params.data.type)){
+        const cls_str = classValueFormatter({value: params.data.uri})
+        const rel_str = classValueFormatter({value: params.data.relationship})
+        this.eGui.innerHTML = 
+          `
+            <span class="rounded-xl bg-blue-100 text-xs p-1 mr-2">
+                ${rel_str}
+            </span> 
+            ${cls_str}
+            `
+      }
+    } else {
+      this.eGui.innerHTML = params.value
+    }
+  }
+
+  getGui() {
+    return this.eGui;
+  }
+
+  refresh(params) {
+    return false;
+  }
+}

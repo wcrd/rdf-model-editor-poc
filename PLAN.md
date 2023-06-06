@@ -19,6 +19,8 @@
 
 ## To Do
 Today:
+* Shape & ontology grid
+  * Add better method to track active grid; update buttons and filter to reference this.
 * (LEAVE FOR NOW) Storage
   * Upgrade methods and grids to track changes, then only push changes rows into IndexDB to save iterating the whole table.
 * Model Ont needs to remember state b/w refresh calls

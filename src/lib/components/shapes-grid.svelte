@@ -9,6 +9,8 @@
     import { modelGridAPI } from '$lib/stores/store-model-grid.js'
     import { classValueRenderer, addGridDropZone } from '$lib/js/common-grid.js'
     // import { ontModelDragParams } from '$lib/js/row-dragging/ont-model.js'
+    import { ShapesCellRenderer } from "$lib/ag-grid-components/gridCellRenderers"
+
 
     // import { createEventDispatcher } from 'svelte'
     // const dispatch = createEventDispatcher()
@@ -31,10 +33,10 @@
         autoGroupColumnDef: {
             headerName: "Shape",
             sortable: true,
-            // cellRendererParams: {
-            //     suppressCount: true,
-            //     innerRenderer: classValueRenderer
-            // },
+            cellRendererParams: {
+                suppressCount: false,
+                innerRenderer: ShapesCellRenderer
+            },
             filter: 'agTextColumnFilter',
             resizable: true,
             // checkboxSelection: true,
