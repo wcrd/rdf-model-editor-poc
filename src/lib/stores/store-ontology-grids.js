@@ -48,18 +48,21 @@ export const modelOntologyGroupState = {
 // }
 
 let ontology_data_loading = false; // track if getData() has already been called to prevent double call
+let ontology_data_loaded = false;
 
 function createOntologyDataStore(){
     const store = writable([]);
 
     async function getData(){
         if(ontology_data_loading) { console.log("Ontology data already loading."); return } 
+        if(ontology_data_loaded) { console.log("Ontology data already loaded."); return  }
         console.log("Loading ontologies.")
         ontology_data_loading = true;
         const response = await fetch('/ontology.json');
         store.set(await response.json())
         ontology_data_loading = false;
         console.log("Loading ontologies complete.")
+        ontology_data_loaded = true;
     }
 
     return {

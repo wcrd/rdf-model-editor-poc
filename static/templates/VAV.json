@@ -21,7 +21,7 @@
             "id_path": []
         },
         {
-            "id": "",
+            "_id": "",
             "relationship": "https://brickschema.org/schema/Brick#hasPoint",
             "type": "point",
             "entity": {
@@ -30,7 +30,7 @@
             "id_path": []
         },
         {
-            "id": "",
+            "_id": "",
             "relationship": "https://brickschema.org/schema/Brick#hasPoint",
             "type": "point",
             "entity": {
@@ -39,7 +39,7 @@
             "id_path": [2]
         },
         {
-            "id": "",
+            "_id": "",
             "relationship": "https://brickschema.org/schema/Brick#hasPoint",
             "type": "point",
             "entity": {
@@ -48,11 +48,11 @@
             "id_path": [1]
         },
         {
-            "id": "",
+            "_id": "",
             "relationship": "https://brickschema.org/schema/Brick#hasPoint",
             "type": "point",
             "entity": {
-                "class": "https://brickschema.org/schema/Brick#Speed_Command",
+                "class": "https://brickschema.org/schema/Brick#Speed_Command"
             },
             "id_path": [2]
         }
