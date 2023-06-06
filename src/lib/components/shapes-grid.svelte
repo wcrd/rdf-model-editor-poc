@@ -4,24 +4,25 @@
     import "ag-grid-community/styles/ag-grid.css"; // Core grid CSS, always needed
     import "ag-grid-community/styles/ag-theme-alpine.css"; // Optional theme CSS
 
-    import { ontologyData, ontologyAPI } from '$lib/stores/store-ontology-grids.js'
+    // import { ontologyData, ontologyAPI } from '$lib/stores/store-ontology-grids.js'
+    import { shapeData } from "$lib/stores/store-shape-grid"
     import { modelGridAPI } from '$lib/stores/store-model-grid.js'
     import { classValueRenderer, addGridDropZone } from '$lib/js/common-grid.js'
-    import { ontModelDragParams } from '$lib/js/row-dragging/ont-model.js'
+    // import { ontModelDragParams } from '$lib/js/row-dragging/ont-model.js'
 
     // import { createEventDispatcher } from 'svelte'
     // const dispatch = createEventDispatcher()
 
     async function onGridReady(params){
-        ontologyData.getData();
+        // ontologyData.getData();
         // modelOntologyData.refresh($modelClassSet);
         // Add model grid as valid drag-drop target
         // TODO: make more robust and move into parent; I don't like importing all the grid apis into each grid module.
-        setTimeout(()=>addGridDropZone(
-                params, 
-                $modelGridAPI.api,
-                ontModelDragParams
-            ), 1000)
+        // setTimeout(()=>addGridDropZone(
+        //         params, 
+        //         $modelGridAPI.api,
+        //         ontModelDragParams
+        //     ), 1000)
     }
 
     export let gridOptions = {
@@ -35,7 +36,7 @@
             }
         },
         autoGroupColumnDef: {
-            headerName: "Class",
+            headerName: "Shape",
             sortable: true,
             cellRendererParams: {
                 suppressCount: true,
@@ -53,17 +54,16 @@
             flex: 1,
             resizable: true
         },
-        rowSelection:'multiple',
+        rowSelection: false,
         rowData: null,
-        groupSelectsChildren: true,
         context: {
-            gridName: "ontology"
+            gridName: "shapes"
         }
     };
 
 
 </script>
 
-<div id="modelOntologyGrid" class="ag-theme-alpine h-full w-full">
-    <AgGridSvelte bind:rowData={$ontologyData} {onGridReady} {gridOptions}/>
+<div id="shapeGrid" class="ag-theme-alpine h-full w-full">
+    <AgGridSvelte bind:rowData={$shapeData} {onGridReady} {gridOptions}/>
 </div>

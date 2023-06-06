@@ -19,6 +19,8 @@
     import { modelOntologyAPI, ontologyAPI } from '$lib/stores/store-ontology-grids.js'
     import OntologyGrid from "$lib/components/ontology-grid.svelte";
     import { setGridQuickFilter } from "$lib/js/common-grid.js"
+    import ShapesGrid from "$lib/components/shapes-grid.svelte";
+
 
     let srcViewFilterMode = 'all'
     let modelNodesToFilter;
@@ -30,6 +32,7 @@
     let full_ontology_hidden = true;
     // mode variables
     let source_edit_mode = false;
+    let ont_view_mode = "class";
 
     // filter variables
     let filter_classes = []; // classes to filter the model to
@@ -235,11 +238,19 @@
                     <button class="btn-default" on:click={()=>expandRows($ontologyAPI.api)}>+</button>
                     <button class="btn-default" on:click={()=>collapseRows($ontologyAPI.api)}>-</button>
                 </div>
-                <div class="border rounded border-blue-500 flex-grow">
+                <div class="border rounded border-blue-500 flex-grow flex flex-row">
                     <input class="w-full outline-none" type="search" id="ontology-filter-text-box" bind:value={ontology_filter_input} placeholder="Filter..." on:input={()=>setGridQuickFilter($ontologyAPI.api, ontology_filter_input, true)}>
                 </div>
+                <div>
+                    <button class="btn-default" class:btn-selected={ont_view_mode=="class"} on:click={()=>ont_view_mode="class"}>C</button>
+                    <button class="btn-default" class:btn-selected={ont_view_mode=="shape"} on:click={()=>ont_view_mode="shape"}>S</button>
+                </div>
             </div>
+            {#if ont_view_mode == "shape"}
+            <ShapesGrid />
+            {:else}
             <OntologyGrid bind:gridOptions={$ontologyAPI} />
+            {/if}
         </div>
     </div>
 </div>
