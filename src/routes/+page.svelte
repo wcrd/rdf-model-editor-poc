@@ -245,13 +245,22 @@
                 <div>
                     <button class="btn-default" class:btn-selected={ont_view_mode=="class"} on:click={()=>ont_view_mode="class"}>C</button>
                     <button class="btn-default" class:btn-selected={ont_view_mode=="shape"} on:click={()=>ont_view_mode="shape"}>S</button>
+                    <button class="btn-default" class:btn-selected={ont_view_mode=="all"} on:click={()=>ont_view_mode="all"}>C+S</button>
                 </div>
             </div>
-            {#if ont_view_mode == "shape"}
-            <ShapesGrid bind:gridOptions={$shapeAPI}/>
-            {:else}
-            <OntologyGrid bind:gridOptions={$ontologyAPI} />
-            {/if}
+            <!-- {#if ont_view_mode == "shape"} -->
+            <!-- USING HIDDEN CLASS instead as it allows for dropzones to remain set when component is hidden -->
+            <!-- Might be less efficent, but saves me needing to write a grid/drag controller to manage vis and dragging in the short term -->
+            <div class="flex flex-col h-full">
+                <div class="h-full" class:hidden={ont_view_mode == "class"}>
+                    <ShapesGrid bind:gridOptions={$shapeAPI} />
+                </div>
+                <!-- {:else} -->
+                <div class="h-full" class:hidden={ont_view_mode == "shape"}>
+                    <OntologyGrid bind:gridOptions={$ontologyAPI} />
+                </div>
+                <!-- {/if} -->
+            </div>
         </div>
     </div>
 </div>
