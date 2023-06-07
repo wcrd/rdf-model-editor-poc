@@ -30,12 +30,13 @@ function onRowDragMove(params){
     // check we are over something useful
     if(params.overNode){
         // get class type to check drag is compatible
-        const classType = getClassType(params.overNode.data);
+        // const classType = getClassType(params.overNode.data);
+        // console.debug(params.overNode.data)
 
         // if new hover node AND class is valid for dragged
         if(
             params.overNode != hoverOverNode
-            && classType == "Point"
+            && params.overNode.data.type == "point"
         ){
             // if row not expanded, long hover will expand it
             if(!params.overNode?.expanded){
@@ -75,8 +76,8 @@ function onRowDragEnd(params){
     if(hoverOverNode){
         // double check class is valid for dragged model nodes
         // get class type to check drag is compatible
-        const classType = getClassType(hoverOverNode.data);
-        if(classType == "Point"){
+        // const classType = getClassType(hoverOverNode.data);
+        if(hoverOverNode.data.type == "point"){
             const rowsToUpdate = [];
             // for each node, update class
             params.nodes.forEach(node => {

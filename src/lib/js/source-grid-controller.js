@@ -59,6 +59,8 @@ function toggle_edit_mode(state=true){
     } else {
         removeGridDropZone({api: get(sourceGridAPI).api}, get(ontologyAPI).api, sourceOntDragHandlers)
         removeGridDropZone({api: get(ontologyAPI).api}, get(sourceGridAPI).api, ontSourceDragHandlers)
+        removeGridDropZone({api: get(sourceGridAPI).api}, get(shapeAPI).api, sourceShapeDragHandlers)
+
     }
 }
 
