@@ -7,7 +7,9 @@ import { addSourceLink } from '$lib/js/shared-transactions.js'
 import { addGridDropZone, removeGridDropZone } from "$lib/js/common-grid";
 import { sourceOntDragHandlers } from "$lib/js/row-dragging/src-ont";
 import { ontSourceDragHandlers } from '$lib/js/row-dragging/ont-src';
+import { sourceShapeDragHandlers } from '$lib/js/row-dragging/src-shape.js'
 import { ontologyAPI } from '$lib/stores/store-ontology-grids'
+import { shapeAPI } from "$lib/stores/store-shape-grid";
 
 
 function toggle_edit_mode(state=true){
@@ -48,10 +50,12 @@ function toggle_edit_mode(state=true){
         return curr
     })
 
-    // Add/Remove DragZoneTarget from Ontology Grid & Source Grid
+    // Add/Remove DragZoneTarget from Ontology Grid & Source Grid & Shapes grid
     if(state){
         addGridDropZone({api: get(sourceGridAPI).api}, get(ontologyAPI).api, sourceOntDragHandlers)
         addGridDropZone({api: get(ontologyAPI).api}, get(sourceGridAPI).api, ontSourceDragHandlers)
+        addGridDropZone({api: get(sourceGridAPI).api}, get(shapeAPI).api, sourceShapeDragHandlers)
+        
     } else {
         removeGridDropZone({api: get(sourceGridAPI).api}, get(ontologyAPI).api, sourceOntDragHandlers)
         removeGridDropZone({api: get(ontologyAPI).api}, get(sourceGridAPI).api, ontSourceDragHandlers)

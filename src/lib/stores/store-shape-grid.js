@@ -68,3 +68,5 @@ async function processTemplateFile(data){
 
 
 export const shapeData = createShapesDataStore();
+// api ref
+export const shapeAPI = writable();

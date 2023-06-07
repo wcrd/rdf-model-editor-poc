@@ -20,6 +20,7 @@
     import OntologyGrid from "$lib/components/ontology-grid.svelte";
     import { setGridQuickFilter } from "$lib/js/common-grid.js"
     import ShapesGrid from "$lib/components/shapes-grid.svelte";
+    import { shapeAPI } from "$lib/stores/store-shape-grid"
 
 
     let srcViewFilterMode = 'all'
@@ -247,7 +248,7 @@
                 </div>
             </div>
             {#if ont_view_mode == "shape"}
-            <ShapesGrid />
+            <ShapesGrid bind:gridOptions={$shapeAPI}/>
             {:else}
             <OntologyGrid bind:gridOptions={$ontologyAPI} />
             {/if}

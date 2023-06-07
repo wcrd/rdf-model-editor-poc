@@ -21,6 +21,10 @@
 Today:
 * Shape & ontology grid
   * Add better method to track active grid; update buttons and filter to reference this.
+  * Add and remove dropZones
+  * Add function buttons to assign class only, or class path - this need thinking
+    * Can set if nothing is set && a subject is assigned (need to know how to nest)
+      * How do we handle multiple fans in same entity?
 * (LEAVE FOR NOW) Storage
   * Upgrade methods and grids to track changes, then only push changes rows into IndexDB to save iterating the whole table.
 * Model Ont needs to remember state b/w refresh calls

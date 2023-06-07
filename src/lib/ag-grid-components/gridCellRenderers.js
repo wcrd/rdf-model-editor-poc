@@ -87,7 +87,7 @@ export class ShapesCellRenderer {
       if(params.data.type=="template"){
         this.eGui.innerHTML =
           `
-          <span class="rounded-xl bg-green-100 p-1 mr-2">
+          <span class="rounded-xl bg-green-100 text-xs p-1 mr-2">
             🧩 Shape
           </span> 
           ${params.value}
