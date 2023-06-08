@@ -19,10 +19,12 @@
 
 ## To Do
 Today:
+* UPDATE SHAPE PROCESSING
+  * Use DualDamper VAV shape -> need to path by id, at the moment it is by class which doesn't allow for multiple components. Using the id path will also make it easier for the context menu to generate the shape in the model.
 * Shape & ontology grid
   * Add better method to track active grid; update buttons and filter to reference this.
-  * Add and remove dropZones
   * Add function buttons to assign class only, or class path - this need thinking
+    * Add buttons to component to control this
     * Can set if nothing is set && a subject is assigned (need to know how to nest)
       * How do we handle multiple fans in same entity?
 * (LEAVE FOR NOW) Storage
