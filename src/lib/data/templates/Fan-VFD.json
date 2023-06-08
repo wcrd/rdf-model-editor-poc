@@ -1,6 +1,9 @@
 {
     "template": "Fan",
     "label": "Fan (Basic)",
+    "entity": {
+        "class": "https://brickschema.org/schema/Brick#Fan"
+    },
     "shape": [
         {
             "_id": "",

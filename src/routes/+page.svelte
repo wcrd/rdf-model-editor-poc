@@ -239,7 +239,7 @@
                     <button class="btn-default" on:click={()=>expandRows($ontologyAPI.api)}>+</button>
                     <button class="btn-default" on:click={()=>collapseRows($ontologyAPI.api)}>-</button>
                 </div>
-                <div class="border rounded border-blue-500 flex-grow flex flex-row">
+                <div class="border rounded border-blue-500 grow shrink flex flex-row">
                     <input class="w-full outline-none" type="search" id="ontology-filter-text-box" bind:value={ontology_filter_input} placeholder="Filter..." on:input={()=>setGridQuickFilter($ontologyAPI.api, ontology_filter_input, true)}>
                 </div>
                 <div>

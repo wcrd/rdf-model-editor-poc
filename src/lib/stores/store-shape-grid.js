@@ -42,7 +42,8 @@ async function processTemplateFile(data){
         "label": data.label, // name of the shape
         "template": data.template, // shape target category (label)
         "type": "template",
-        "path": [data.template, data.label]
+        "path": [data.template, data.label],
+        "uri": data.entity.class // this is the root class for the entity defined by this shape
     })
 
     // process shape
@@ -59,7 +60,9 @@ async function processTemplateFile(data){
             relationship: condition.relationship,
             type: condition.type,
             uri: condition.entity.class,
-            path: [data.template, data.label, ...condition.id_path.map(i => ids[i]), condition.entity.class]
+            path: [data.template, data.label, ...condition.id_path.map(i => ids[i]), condition.entity.class],
+            // this is useful for other features (quick way to track what shape a row belongs to)
+            label: data.label
         })
     }
 

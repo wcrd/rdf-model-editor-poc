@@ -1,6 +1,9 @@
 {
     "template": "VAV",
     "label": "VAV (Fan Powered)",
+    "entity": {
+        "class": "https://brickschema.org/schema/Brick#VAV"
+    },
     "shape": [
         {
             "_id": 1,

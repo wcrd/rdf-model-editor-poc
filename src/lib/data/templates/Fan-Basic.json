@@ -1,6 +1,9 @@
 {
     "template": "Fan",
     "label": "Fan (VFD)",
+    "entity": {
+        "class": "https://brickschema.org/schema/Brick#Fan"
+    },
     "shape": [
         {
             "_id": "1",

@@ -138,7 +138,8 @@
     function getContextMenuItems(params){
         const result = [
             {
-                name: "Add Entity here (Shift+Enter)",
+                name: "Add Entity here",
+                shortcut: "Shift+Enter",
                 // action: () => addNewEntityRow(params.api, params.node)
                 action: () => modelGridAPI.addEntityRow(params.node)
             },
@@ -183,7 +184,8 @@
             },
             'separator',
             {
-                name: "Add selection to new Entity (Ctrl+Shift+Enter)",
+                name: "Add selection to new Entity",
+                shortcut: "Ctrl+Shift+Enter",
                 disabled: true,
                 action: () => console.log("Created new entity and added selected items.")
             },

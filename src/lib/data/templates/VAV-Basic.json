@@ -1,6 +1,9 @@
 {
     "template": "VAV",
     "label": "VAV (Basic)",
+    "entity": {
+        "class": "https://brickschema.org/schema/Brick#VAV"
+    },
     "shape": [
         {
             "_id": 1,
