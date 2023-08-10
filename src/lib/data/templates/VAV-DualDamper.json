@@ -24,7 +24,7 @@
             "id_path": [] 
         },
         {
-            "_id": "",
+            "_id": 3,
             "relationship": "https://brickschema.org/schema/Brick#hasPoint",
             "type": "point",
             "entity": {
@@ -33,7 +33,7 @@
             "id_path": []
         },
         {
-            "_id": "",
+            "_id": 4,
             "relationship": "https://brickschema.org/schema/Brick#hasPoint",
             "type": "point",
             "entity": {
@@ -42,7 +42,7 @@
             "id_path": [1]
         },
         {
-            "_id": "",
+            "_id": 5,
             "relationship": "https://brickschema.org/schema/Brick#hasPoint",
             "type": "point",
             "entity": {

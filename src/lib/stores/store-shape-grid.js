@@ -47,20 +47,22 @@ async function processTemplateFile(data){
     })
 
     // process shape
-    // get refs
-    const ids = data.shape.reduce((m, r) => {
-        if(r._id!=""){
-            m[r._id] = r.entity.class
-        }
-        return m
-    }, {})
+    // get refs - USED to use this to get the class path; but since we have repeats we have swapped to using ID.
+    // Delete this when ready.
+    // const ids = data.shape.reduce((m, r) => {
+    //     if(r._id!=""){
+    //         m[r._id] = r.entity.class
+    //     }
+    //     return m
+    // }, {})
     // console.debug(ids)
     for (let condition of data.shape){
         output_data.push({
             relationship: condition.relationship,
             type: condition.type,
             uri: condition.entity.class,
-            path: [data.template, data.label, ...condition.id_path.map(i => ids[i]), condition.entity.class],
+            // path: [data.template, data.label, ...condition.id_path.map(i => ids[i]), condition.entity.class],
+            path: [data.template, data.label, ...condition.id_path, condition._id],
             // this is useful for other features (quick way to track what shape a row belongs to)
             label: data.label
         })
