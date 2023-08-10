@@ -163,7 +163,7 @@
             'separator',
             {
                 name: "Create entity from template",
-                subMenu: templateSubMenu
+                subMenu: templateSubMenu(params, modelGridAPI)
             },
             'separator',
             {

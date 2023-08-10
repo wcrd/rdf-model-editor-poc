@@ -64,7 +64,8 @@ async function processTemplateFile(data){
             // path: [data.template, data.label, ...condition.id_path.map(i => ids[i]), condition.entity.class],
             path: [data.template, data.label, ...condition.id_path, condition._id],
             // this is useful for other features (quick way to track what shape a row belongs to)
-            label: data.label
+            label: data.label,
+            id: condition._id
         })
     }
 
