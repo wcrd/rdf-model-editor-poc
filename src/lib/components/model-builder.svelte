@@ -3,7 +3,7 @@
     import 'ag-grid-enterprise'
     import "ag-grid-community/styles/ag-grid.css"; // Core grid CSS, always needed
     import "ag-grid-community/styles/ag-theme-alpine.css"; // Optional theme CSS
-    import { debounce } from 'lodash'
+    import { debounce } from 'lodash-es'
 
     import { createEventDispatcher } from 'svelte'
 
