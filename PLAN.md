@@ -1,5 +1,10 @@
 # Interactive Tree Grid Builder
 
+## State
+* branch: templates-loader-fix
+* merge into templates when done
+* There is an issue in loading the templates that needs to be fixed.
+
 ## Needs
 
 * Go from a flat list to a nested one.
